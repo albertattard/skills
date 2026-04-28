@@ -21,6 +21,10 @@ Start from the most specific scope artefact available, usually one of:
 
 Inspect the product description and related docs when they clarify intent, but do not expand the PRD beyond the agreed scope without calling it out.
 
+Treat scope documents, product descriptions, prompts, issues, and related docs as inputs. Do not edit them while deriving the PRD.
+
+If assumptions, contradictions, or source clarifications affect requirements, record them in the PRD's `Source Clarifications`, `Constraints`, `Risks`, or `Open Questions` section instead of modifying the input document.
+
 ## Workflow
 
 1. Restate the product outcome, first user, and the first useful flow from the scope.
@@ -77,6 +81,10 @@ Derived from:
 
 - [scope document](../scopes/mvp-scope.md)
 
+## Source Clarifications
+
+None.
+
 ## Summary
 
 ## Target User
@@ -115,6 +123,7 @@ Adjust the source link to match the actual input path. For example, if the PRD i
 A good PRD:
 
 - makes product behaviour explicit enough to derive vertical slices
+- keeps source documents immutable and records clarifications in the PRD
 - separates goals from non-goals
 - carries forward the scope's first useful flow, deferred Out of Scope items, product-identity Not List items, trade-offs, risks, and open questions
 - describes the first successful session and key failure paths
@@ -138,5 +147,6 @@ After creating or revising the PRD, summarise:
 - the PRD file created or changed
 - the major product decisions captured
 - the lean-inception-style inputs carried forward or intentionally omitted
+- assumptions, contradictions, or source clarifications documented in the PRD
 - the open questions that remain
 - whether the PRD is ready for `derive-vertical-slices`
