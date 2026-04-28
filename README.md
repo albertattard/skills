@@ -10,7 +10,7 @@ the shared workflow rather than fit only one example.
 
 ## Skills
 
-The repository currently provides five skills:
+The repository currently provides six skills:
 
 - `create-scope`: clarifies a product idea, challenges ambiguity, captures the
   first useful flow, and writes a scoped Markdown artefact.
@@ -22,6 +22,9 @@ The repository currently provides five skills:
   context into a production readiness and release sequencing plan.
 - `derive-implementation-tasks`: turns vertical slices, production-readiness
   planning, and repository context into ordered implementation task documents.
+- `implement-task`: implements one generated implementation task at a time,
+  checking readiness and dependencies, preferring coarse behavioural tests tied
+  to acceptance criteria, and validating the focused code change.
 
 Together, these skills support this workflow:
 
@@ -32,6 +35,7 @@ product description
   -> vertical slices
   -> path to production
   -> implementation tasks
+  -> implemented task
 ```
 
 ## Repository Layout
@@ -49,7 +53,8 @@ product description
     |-- derive-implementation-tasks/
     |-- derive-path-to-production/
     |-- derive-product-requirements-document/
-    `-- derive-vertical-slices/
+    |-- derive-vertical-slices/
+    `-- implement-task/
 ```
 
 - `skills/` contains the reusable Codex skill definitions and their agent

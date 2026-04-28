@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Task"
+  short_description: "Implement one generated task"
+  default_prompt: "Use $implement-task to implement the selected docs/tasks task with scoped behavioral tests and validation."
