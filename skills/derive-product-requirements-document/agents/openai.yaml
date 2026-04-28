@@ -1,0 +1,4 @@
+interface:
+  display_name: "Derive Product Requirements Document"
+  short_description: "Turn agreed scope into a practical PRD"
+  default_prompt: "Use $derive-product-requirements-document to convert the agreed scope and lean-inception-style decisions into a product requirements document."
