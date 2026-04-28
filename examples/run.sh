@@ -31,6 +31,7 @@ fi
 
 SOURCE_DIR="${EXAMPLES_DIR}/${EXAMPLE}"
 RUNBOOK="${SOURCE_DIR}/sw-runbook.yaml"
+PRODUCT_DESCRIPTION="${SOURCE_DIR}/product-description.md"
 TARGET_DIR="/tmp/${EXAMPLE}"
 
 if [[ ! -f "${RUNBOOK}" ]]; then
@@ -40,10 +41,17 @@ if [[ ! -f "${RUNBOOK}" ]]; then
   exit 2
 fi
 
+if [[ ! -f "${PRODUCT_DESCRIPTION}" ]]; then
+  echo "Missing product description: ${PRODUCT_DESCRIPTION}" >&2
+  exit 2
+fi
+
 # Recreate the target directory to simulate running the runbook in a clean environment.
 rm -rf "${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}"
 cp "${RUNBOOK}" "${TARGET_DIR}/sw-runbook.yaml"
+mkdir -p "${TARGET_DIR}/docs/product"
+cp "${PRODUCT_DESCRIPTION}" "${TARGET_DIR}/docs/product/description.md"
 
 # Copy the skills which are referred to from the runbook.
 mkdir -p "${TARGET_DIR}/.fixtures"
