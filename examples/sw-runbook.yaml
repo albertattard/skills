@@ -780,7 +780,7 @@ entries:
       codex exec --full-auto <<'EOF'
       Use $capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adr/.
 
-      Do not ask follow-up questions. If a candidate is durable and the decision is clear from the source artefacts and repository context, create an accepted ADR. If a candidate is durable but the decision is unresolved, create a proposed ADR and record the uncertainty. If a candidate is not ADR-worthy, leave it in its source context and mention that in the final summary.
+      Use the answers in @.fixtures/prompts/architecture-decision-answers.md without asking follow-up questions. If a candidate is durable and the decision is clear from the source artefacts and repository context, create an accepted ADR. If a candidate is durable but the decision is unresolved, create a proposed ADR and record the uncertainty. If a candidate is not ADR-worthy, leave it in its source context and mention that in the final summary.
       EOF
     output:
       caption: |
