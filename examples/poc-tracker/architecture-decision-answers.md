@@ -1,21 +1,44 @@
-Q: Which architecture decisions should be recorded as ADRs for the first release?
-A: Record ADRs for durable technical choices that materially constrain implementation tasks:
+Q: Why should the PoC Tracker first release produce a container image instead of a host-specific deployment package?
+A: The first release target is a small internal web deployment, but the actual production pull and rollout are explicitly out of scope. A container image is the right release artefact because it gives the internal product or platform team a portable, repeatable handoff without forcing the runbook to choose the final runtime platform. The ADR should record that the application is built and validated as a container image, while production deployment mechanics remain outside the MVP.
 
-- Use a container image as the release artefact and publish it to GitHub Container Registry.
-- Use GitHub Actions as the CI/CD pipeline for tests, container build, functional tests, and image publishing.
-- Use Playwright for Java for functional tests against the running container.
-- Persist the application database file on a runtime-mounted persistent volume under `/opt/application/data`.
+Q: Why use a Java application built with Maven for PoC Tracker?
+A: The production path standardises on Java 25, Maven for building, testing, packaging, and verification, and a Java 25 runtime container. Keeping the application in the Java 25/Maven stack gives the first release one build toolchain for unit tests, application packaging, integration tests, and CI. The ADR should record Java 25 with Maven as the application stack for the MVP and avoid introducing a separate frontend or backend build ecosystem unless a later product requirement justifies it.
 
-Do not create ADRs for routine task sequencing, UI details, documentation index updates, or deferred production pull/deployment steps that are explicitly out of scope.
+Q: Why use Spring Boot for the PoC Tracker application?
+A: PoC Tracker is a small internal web application that needs server-rendered manager workflows, form handling for manually maintained PoCs, persistence, health checks, structured logging, and Maven-based packaging without introducing a separate frontend or backend platform. Spring Boot fits that shape because it provides a conventional Java web application runtime, integrates naturally with Maven tests and packaging, and supports operational endpoints needed by the path-to-production plan. The ADR should record Spring Boot as the application framework for the MVP, while keeping richer frontend or distributed-service architecture decisions out of scope.
 
-Q: What ADR status should unattended runs use?
-A: Use `Accepted` when the decision is explicit in the path-to-production plan or source artefacts. Use `Proposed` only when the source artefacts identify a durable architecture decision but leave the actual choice unresolved.
+Q: Why use the Oracle no-fee JDK 25 runtime image for the container?
+A: The path to production names `container-registry.oracle.com/java/jdk-no-fee-term:25.0.3` as the runtime base image, so the release should standardise on that image instead of leaving the Java runtime ambiguous. This keeps the container runtime aligned with the Maven-built Java application and gives the internal product or platform team a concrete base image to scan, cache, and reproduce. The ADR should record the Oracle no-fee JDK 25 image as the first-release runtime base and treat future JDK or base-image changes as a separate decision.
 
-Q: Which candidate decisions should remain open instead of becoming accepted ADRs?
-A: Keep backup and restore handling for the persistent volume outside the accepted ADR set because it is explicitly out of scope for the MVP. If the model records it, it should be a proposed ADR or open question, not an accepted implementation constraint.
+Q: Why use GitHub Actions instead of another CI/CD system for this PoC Tracker release?
+A: The example repository already assumes GitHub-hosted source control and publishes the image to GitHub Container Registry. GitHub Actions keeps the release path in the same platform as the source and registry, lets the workflow use the built-in `GITHUB_TOKEN` where possible, and avoids introducing a separate CI/CD service for a small internal MVP. The ADR should note that this is a pragmatic first-release choice, not a claim that GitHub Actions is the organisation-wide deployment standard.
 
-Q: How should ADRs relate to downstream implementation tasks?
-A: Implementation tasks should reference only the ADRs that materially constrain them. Container delivery tasks should reference the container image and GitHub Actions ADRs. Functional testing tasks should reference the Playwright for Java ADR. Persistence and configuration tasks should reference the persistent volume ADR.
+Q: Why publish the container image to GitHub Container Registry?
+A: GitHub Container Registry fits the PoC Tracker release because the image is produced by GitHub Actions from the same repository, can be tagged with the short Git commit hash, and can be handed off to the internal product or platform team without adding another registry integration. The ADR should record GHCR as the first release image registry and keep the exact image name flexible if the repository name changes.
+
+Q: Why tag PoC Tracker images with the short Git commit hash?
+A: Managers and operators need traceability from a running or published image back to the exact source version that produced it. Short commit hash tags also support reproducibility because the team can rebuild from the referenced commit and compare the resulting artefact with the published image when investigating a release. Short commit hash tags are enough for the MVP because the release path stops at publishing the image and rollback planning is limited to retaining previous image tags. The ADR should record commit-hash image tags as the traceability and reproducibility mechanism for the first release.
+
+Q: Why persist the PoC Tracker database as a file on a mounted volume under `/opt/application/data`?
+A: The MVP needs durable internal business data for PoCs, customers, owners, state changes, and journal entries, but it should stay small and avoid introducing an external database service before the first manager triage workflow proves value. The first release assumes a single running application container, not multiple replicas, so a file-backed H2 database on one runtime-mounted persistent volume is acceptable and avoids the coordination problems that would appear with concurrent containers. An H2 database file on the mounted volume keeps the app simple while surviving container restarts. The ADR should record H2 file persistence, `/opt/application/data` as the runtime data directory, the single-container assumption as a constraint, and backup/restore outside the accepted first-release decision.
+
+Q: Why avoid selecting a separate JavaScript frontend stack for the MVP?
+A: The manager triage workflow needs searchable portfolio visibility, stale/blocked indicators, PoC context, manual PoC edits, journal entries, and state changes, but the source artefacts do not require a rich standalone frontend application. Because the release path is already Maven- and Java-centred, adding a separate JavaScript frontend build would increase delivery and CI complexity without being required to prove the first workflow. The ADR should record that the MVP should keep the UI in the Java application stack unless implementation discovers a concrete interaction need that justifies a separate frontend decision.
+
+Q: Why use Playwright for Java for functional tests instead of the Node.js Playwright package?
+A: The PoC Tracker build and validation path is Maven-based. Using Playwright for Java keeps functional tests inside the Java/Maven toolchain, lets CI expose `./mvnw verify`, and avoids adding a separate Node.js test runtime just to validate the containerised web flow. Playwright tests should run against the container during Maven integration tests, use `@Tag("e2e")`, be excluded from unit test runs, and be included only in the integration-test phase. The ADR should record Playwright for Java as the `e2e` functional-test driver for manager triage, stale PoC calculation, create/edit flows, journal entries, and state transitions.
+
+Q: Why does the PoC Tracker MVP use manager selection instead of real authentication?
+A: The MVP is intended to prove the internal manager triage workflow, not production-grade identity management. Managers select their name from a dropdown so PoC ownership, journal entries, and state changes can be attributed without adding authentication infrastructure. This is acceptable only because the first release is an internal deployment and public access is out of scope. The ADR should record manager selection as an MVP identity simplification and note that real authentication is a future decision before broader production use.
+
+Q: Why is public access and external integration out of scope for the first release?
+A: The application stores internal business data about PoCs, customers, owners, and journal history. The first release is meant to prove manager triage inside the organisation before adding public exposure, exports, notifications, CRM sync, chat integration, customer portals, or workflow tools. The ADR should record the internal-only exposure boundary and no-external-integration constraint where they affect deployment, data handling, API design, or task scope.
+
+Q: Which architecture candidates should not become accepted ADRs for this example?
+A: Do not create accepted ADRs for production pull/deployment steps, runtime rollout, persistent volume backup and restore, external integrations, notifications, assignment workflow, public access, richer workflow management, or a separate JavaScript frontend stack. Those are explicitly out of scope, deferred, or not required by the current source artefacts. If the model records any of them, they should remain open questions or proposed ADRs, not accepted implementation constraints.
+
+Q: How should ADRs constrain downstream implementation tasks?
+A: Application setup tasks should reference the Java 25/Maven stack, Spring Boot, and JDK runtime ADRs. Container delivery tasks should reference the container image, GHCR, GitHub Actions, and commit-hash tagging ADRs. Functional testing tasks should reference the Playwright for Java `e2e` integration-test ADR. Persistence and configuration tasks should reference the H2 mounted database file ADR. Identity-related tasks should reference the manager-selection ADR. Exposure, API, or data-handling tasks should reference the internal-only and no-external-integration ADR. Product UI or domain tasks should reference an ADR only when the architecture decision materially affects their scope, dependencies, validation, or implementation approach.
 
 Q: Should the ADR step ask follow-up questions?
 A: No. The runbook must run unattended. Use the source artefacts, repository context, and these answers. When a durable decision is unresolved, create a proposed ADR or leave the candidate in its source context and mention it in the final summary.
