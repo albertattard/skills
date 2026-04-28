@@ -87,7 +87,7 @@ entries:
 
       ## Ubiquitous Language
 
-      Product, scope, requirements, and slice documents should use the project's ubiquitous language consistently.
+      Product, scope, requirements, slices, and production-readiness documents should use the project's ubiquitous language consistently.
 
       When introducing, changing, or discovering ambiguity in a domain-significant term, update `docs/domain/ubiquitous-language.md` or record the ambiguity as an open question in the relevant product artefact.
 
@@ -568,4 +568,131 @@ entries:
       git commit \
         --message 'Add vertical slices' \
         --message 'Split the MVP requirements into ordered, user-visible implementation slices.'
+    indent: 3
+
+  - type: Heading
+    level: H2
+    title: Derive Path to Production
+
+  - type: Markdown
+    contents: |
+      1. Create a repository-scoped `derive-path-to-production` skill.
+
+         This skill helps the model turn the Product Requirements Document (PRD),
+         vertical slices, and repository context into a production readiness and
+         release sequencing plan under `docs/production/`. The plan should identify
+         the first releasable increment, release sequence, validation gates, rollback
+         expectations, observability, configuration, data, security, operational
+         ownership, risks, and open questions.
+
+  - type: Command
+    commands: |
+      cp -R '.fixtures/skills/derive-path-to-production' '.codex/skills/'
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      (*Optional*) Show the generated skill metadata.
+    indent: 3
+
+  - type: Command
+    commands: |
+      tree --dirsfirst --sort=name '.codex/skills/derive-path-to-production'
+    output:
+      caption: |
+        The generated skill
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      2. Commit the skill.
+
+          In an interactive run, you can ask the model to analyse the modified files,
+          create a commit message, and commit them using the following prompt.
+
+          ```text
+          commit changes
+          ```
+
+          The runbook uses manual Git commands so this step remains reproducible in
+          environments where Codex cannot write to Git metadata.
+
+  - type: Command
+    commands: |
+      git add '.codex/skills/derive-path-to-production'
+      git commit \
+        --message 'Add path to production skill' \
+        --message 'Extend the reusable product workflow with a step that turns implementation slices into a production readiness and release sequencing plan.'
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      3. Apply the `derive-path-to-production` skill to obtain the first production
+         readiness plan.
+
+  - type: Command
+    commands: |
+      codex exec --full-auto <<'EOF'
+      Use $derive-path-to-production to convert @docs/requirements/product-requirements-document.md and @docs/slices/ into a production readiness and release sequencing plan.
+      EOF
+    output:
+      caption: |
+        The model’s output
+      rewrite:
+        - type: limit_lines
+          last: 20
+    timeout: 3 minutes
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      4. Ask the model to apply the documentation index rules from `AGENTS.md`.
+
+  - type: Command
+    commands: |
+      codex exec --full-auto <<'EOF'
+      Create any missing `README.md` files required by the documentation.
+      EOF
+    output:
+      caption: |
+        The model’s output
+      rewrite:
+        - type: limit_lines
+          last: 20
+    timeout: 1 minute
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      (*Optional*) List the files under the `docs` directory
+    indent: 3
+
+  - type: Command
+    commands: |
+      tree --dirsfirst --sort=name 'docs'
+    output:
+      caption: |
+        The documentation files
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      5. Commit changes
+
+          In an interactive run, you can ask the model to analyse the modified files,
+          create a commit message, and commit them using the following prompt.
+
+          ```text
+          commit changes
+          ```
+
+          The runbook uses manual Git commands so this step remains reproducible in
+          environments where Codex cannot write to Git metadata.
+
+  - type: Command
+    commands: |
+      git add 'docs/'
+      git commit \
+        --message 'Add path to production' \
+        --message 'Capture the production readiness and release sequencing plan for the first releasable increment.'
     indent: 3
