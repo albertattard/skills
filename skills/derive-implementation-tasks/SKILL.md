@@ -17,6 +17,7 @@ Start from the most specific delivery artefacts available:
 
 - `docs/slices/*.md`
 - `docs/production/*.md`
+- `docs/adr/*.md`
 - `docs/requirements/*.md`
 - `docs/scopes/*.md`
 - user-provided task planning notes, capability or release grouping notes, or tracker conventions
@@ -30,7 +31,7 @@ Inspect repository context when it clarifies implementation work:
 - migration, seed, data, configuration, and environment conventions
 - existing issue or task templates
 
-Treat scope, PRD, slice, and production documents as source artefacts. Do not edit them while deriving tasks.
+Treat scope, PRD, slice, production, and ADR documents as source artefacts. Do not edit them while deriving tasks.
 
 If source assumptions, contradictions, or missing decisions affect task readiness, record them in the task files or final summary instead of modifying source artefacts.
 
@@ -38,24 +39,26 @@ If source assumptions, contradictions, or missing decisions affect task readines
 
 1. Restate the first releasable increment from the slice sequence and path-to-production plan.
 2. Inspect repository context for implementation boundaries, test commands, delivery conventions, and existing task or issue formats.
-3. Derive ordered tasks from vertical slices first, keeping each task tied to a user-visible or independently verifiable outcome.
-4. Add production-readiness tasks only when they are required by the path-to-production plan for the first releasable increment.
-5. Keep tasks independently grabbable: one task should be small enough for one developer or agent to implement without owning unrelated future scope.
-6. Avoid horizontal task breakdowns such as "build UI", "add data model", "wire API", or "write tests" unless the task is clearly tied to a slice outcome or release-readiness gate.
-7. Record dependencies explicitly. If a task cannot start until another task lands, mark it as blocked instead of hiding the ordering in prose.
-8. Mark each task with a clear readiness value:
+3. Inspect ADRs under `docs/adr/` and treat accepted or proposed architecture decisions as implementation constraints.
+4. Derive ordered tasks from vertical slices first, keeping each task tied to a user-visible or independently verifiable outcome.
+5. Add production-readiness tasks only when they are required by the path-to-production plan for the first releasable increment.
+6. Reference ADRs in a task only when they materially affect that task's scope, dependencies, acceptance criteria, validation, or implementation constraints.
+7. Keep tasks independently grabbable: one task should be small enough for one developer or agent to implement without owning unrelated future scope.
+8. Avoid horizontal task breakdowns such as "build UI", "add data model", "wire API", or "write tests" unless the task is clearly tied to a slice outcome or release-readiness gate.
+9. Record dependencies explicitly. If a task cannot start until another task lands, mark it as blocked instead of hiding the ordering in prose.
+10. Mark each task with a clear readiness value:
    - `ready-for-agent`: enough context exists for a developer or coding agent to implement it.
    - `needs-human-decision`: blocked by product, release, security, data, ownership, or operational ambiguity.
    - `blocked-by-task`: cannot start until another generated task is complete.
    - `manual-only`: requires credentials, access, deployment approval, production operation, or external-system action.
-9. Assign each task to a capability area. Prefer product or domain capabilities such as `user-management`, `request-review`, `reporting`, or `notifications`. Use technical capability areas such as `infrastructure`, `deployment`, or `observability` only when the work does not naturally belong to one product capability or is shared across multiple capabilities.
-10. Keep task files in one ordered sequence by default. Use the task index to provide grouped views by capability area, source slice or production workstream, type, and readiness.
-11. Choose the task index structure based on expected growth, not only the current task count. If the source artefacts imply the task set may grow large, start with capability, source, type, and readiness groupings even when the initial task set is small.
-12. Add capability sub-index files under `docs/tasks/capabilities/` when the main index becomes hard to scan or when the project already has clear capability areas. Capability sub-indexes are additive navigation aids; do not move or renumber existing task files to introduce them.
-13. Use `decision` tasks for unresolved choices that block implementation. When the choice is architecture-significant, make the task outcome an ADR created with `$capture-architecture-decisions`, not just a prose answer in the task file.
-14. Ask the user before writing files when task granularity, release boundaries, missing decisions, tracker format, capability grouping, or remote issue publication materially changes the plan and the user has not asked to proceed with assumptions.
-15. When running non-interactively or when the user asks to avoid follow-up questions, choose the smallest conservative task breakdown that fits the source artefacts and repository context, then record assumptions and unresolved decisions in the affected tasks.
-16. Write or update task files under `docs/tasks/`, and keep the directory `README.md` current when files are added, moved, or deleted.
+11. Assign each task to a capability area. Prefer product or domain capabilities such as `user-management`, `request-review`, `reporting`, or `notifications`. Use technical capability areas such as `infrastructure`, `deployment`, or `observability` only when the work does not naturally belong to one product capability or is shared across multiple capabilities.
+12. Keep task files in one ordered sequence by default. Use the task index to provide grouped views by capability area, source slice or production workstream, type, and readiness.
+13. Choose the task index structure based on expected growth, not only the current task count. If the source artefacts imply the task set may grow large, start with capability, source, type, and readiness groupings even when the initial task set is small.
+14. Add capability sub-index files under `docs/tasks/capabilities/` when the main index becomes hard to scan or when the project already has clear capability areas. Capability sub-indexes are additive navigation aids; do not move or renumber existing task files to introduce them.
+15. Use `decision` tasks for unresolved choices that block implementation. When the choice is architecture-significant, make the task outcome an ADR created with `$capture-architecture-decisions`, not just a prose answer in the task file.
+16. Ask the user before writing files when task granularity, release boundaries, missing decisions, tracker format, capability grouping, or remote issue publication materially changes the plan and the user has not asked to proceed with assumptions.
+17. When running non-interactively or when the user asks to avoid follow-up questions, choose the smallest conservative task breakdown that fits the source artefacts and repository context, then record assumptions and unresolved decisions in the affected tasks.
+18. Write or update task files under `docs/tasks/`, and keep the directory `README.md` current when files are added, moved, or deleted.
 
 Do not create remote GitHub, Jira, Linear, or other tracker issues unless the user explicitly asks for remote issue creation.
 
@@ -85,6 +88,7 @@ Derived from:
 
 - [vertical slices](../slices/README.md)
 - [path to production](../production/path-to-production.md)
+- [architecture decision records](../adr/README.md)
 
 ## Task Sequence
 
@@ -180,6 +184,7 @@ Derived from:
 
 - [slice title](../slices/0001-slice-title.md)
 - [path to production](../production/path-to-production.md)
+- [ADR title](../adr/0001-adr-title.md)
 
 ## Type
 
@@ -224,6 +229,8 @@ Describe the observable product behaviour or release-readiness result in one or 
 
 Omit `Notes` only when there is nothing useful to say.
 
+Include ADR source links only for tasks that are materially constrained by those ADRs.
+
 Use `None` for dependencies when the task can start immediately.
 
 ## Quality Bar
@@ -231,6 +238,7 @@ Use `None` for dependencies when the task can start immediately.
 A good implementation task:
 
 - traces back to a vertical slice, path-to-production workstream, validation gate, or recorded decision
+- references relevant ADRs when architecture decisions constrain the work
 - has one clear outcome and a bounded scope
 - is independently grabbable by one developer or coding agent
 - preserves vertical slice intent instead of splitting work by technical layer
