@@ -5,7 +5,7 @@ usage() {
   cat >&2 <<'EOF'
 Usage: examples/run.sh <example-name>
 
-Runs examples/<example-name>/sw-runbook.yaml from a clean temporary directory.
+Runs examples/sw-runbook.yaml with inputs from examples/<example-name> in a clean temporary directory.
 EOF
 }
 
@@ -30,15 +30,20 @@ if [[ ! "${EXAMPLE}" =~ ^[A-Za-z0-9._-]+$ ]]; then
 fi
 
 SOURCE_DIR="${EXAMPLES_DIR}/${EXAMPLE}"
-RUNBOOK="${SOURCE_DIR}/sw-runbook.yaml"
+RUNBOOK="${EXAMPLES_DIR}/sw-runbook.yaml"
 PRODUCT_DESCRIPTION="${SOURCE_DIR}/product-description.md"
 CREATE_SCOPE_ANSWERS="${SOURCE_DIR}/create-scope-answers.md"
 TARGET_DIR="/tmp/${EXAMPLE}"
 
-if [[ ! -f "${RUNBOOK}" ]]; then
+if [[ ! -d "${SOURCE_DIR}" ]]; then
   echo "Unknown example: ${EXAMPLE}" >&2
   echo "Use one of:" >&2
   list_examples >&2
+  exit 2
+fi
+
+if [[ ! -f "${RUNBOOK}" ]]; then
+  echo "Missing shared runbook: ${RUNBOOK}" >&2
   exit 2
 fi
 
