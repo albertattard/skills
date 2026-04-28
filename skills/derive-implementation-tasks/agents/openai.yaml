@@ -1,0 +1,4 @@
+interface:
+  display_name: "Derive Implementation Tasks"
+  short_description: "Turn slices and release plans into tasks"
+  default_prompt: "Use $derive-implementation-tasks to convert the vertical slices, path-to-production plan, and repository context into ordered implementation task Markdown files."

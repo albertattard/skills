@@ -10,7 +10,7 @@ the shared workflow rather than fit only one example.
 
 ## Skills
 
-The repository currently provides four skills:
+The repository currently provides five skills:
 
 - `create-scope`: clarifies a product idea, challenges ambiguity, captures the
   first useful flow, and writes a scoped Markdown artefact.
@@ -20,6 +20,8 @@ The repository currently provides four skills:
   slice documents.
 - `derive-path-to-production`: turns requirements, slices, and repository
   context into a production readiness and release sequencing plan.
+- `derive-implementation-tasks`: turns vertical slices, production-readiness
+  planning, and repository context into ordered implementation task documents.
 
 Together, these skills support this workflow:
 
@@ -29,6 +31,7 @@ product description
   -> product requirements document
   -> vertical slices
   -> path to production
+  -> implementation tasks
 ```
 
 ## Repository Layout
@@ -43,6 +46,7 @@ product description
 |   `-- wort-werk/
 `-- skills/
     |-- create-scope/
+    |-- derive-implementation-tasks/
     |-- derive-path-to-production/
     |-- derive-product-requirements-document/
     `-- derive-vertical-slices/
