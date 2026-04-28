@@ -26,8 +26,8 @@ Inspect the product description and related docs when they clarify intent, but d
 1. Restate the product outcome, first user, and the first useful flow from the scope.
 2. Carry forward the scope's Out of Scope and Not List sections as PRD `Non-Goals`; distinguish deferred relevant work from ideas that are outside the product identity.
 3. Translate trade-off decisions into constraints or decision notes that can guide later slicing.
-4. Extract the core user journey and required user-visible behaviours.
-5. Convert requirements into observable acceptance criteria.
+4. Extract the first successful session and key failure paths from the first useful flow.
+5. Convert requirements, the first successful session, and key failure paths into observable acceptance criteria.
 6. Capture success measures that reflect user value, not vanity metrics.
 7. Record constraints, risks, and open questions, including assumptions raised during scoping.
 8. Preserve domain-significant terms from the scope and check whether `docs/domain/ubiquitous-language.md` needs an update or an ambiguity note.
@@ -41,7 +41,7 @@ When the scope contains lean-inception-style outputs, map them into the PRD inst
 
 - Vision, elevator pitch, or product intent -> `Summary`, `Problem`, and `Goals`.
 - First user, persona, or beneficiary -> `Target User`.
-- first useful flow -> `User Journeys`, `Functional Requirements`, and `Acceptance Criteria`.
+- first useful flow -> `User Journeys`, including the first successful session and key failure paths, plus `Functional Requirements` and `Acceptance Criteria`.
 - Out of Scope -> `Non-Goals`, labelled or grouped as deferred relevant work when useful.
 - Not List -> `Non-Goals`, labelled or grouped as product-identity guardrails when useful.
 - Trade-off sliders or decision priorities -> `Constraints` or explicit product decisions.
@@ -89,9 +89,13 @@ Derived from:
 
 ## User Journeys
 
+Include the first successful session and the key failure paths the first useful flow must handle.
+
 ## Functional Requirements
 
 ## Acceptance Criteria
+
+Cover both the first successful session and key failure paths with observable criteria.
 
 ## Success Measures
 
@@ -113,6 +117,7 @@ A good PRD:
 - makes product behaviour explicit enough to derive vertical slices
 - separates goals from non-goals
 - carries forward the scope's first useful flow, deferred Out of Scope items, product-identity Not List items, trade-offs, risks, and open questions
+- describes the first successful session and key failure paths
 - describes user-visible requirements rather than implementation tasks
 - includes acceptance criteria that can be verified
 - preserves open questions instead of pretending they are answered
