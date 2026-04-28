@@ -25,16 +25,23 @@ Use a scope document only when the PRD step is intentionally skipped:
 
 Inspect nearby docs when they clarify intent, but do not expand scope beyond the selected source without calling it out.
 
+Treat PRDs, scope documents, and other source artefacts as inputs. Do not edit them while deriving slices.
+
+If assumptions, contradictions, or source clarifications affect slicing, record them in the generated slice files or final summary instead of modifying the input document.
+
 ## Workflow
 
 1. Restate the core outcome from the PRD or selected source document.
 2. Use the first useful flow as the starting point for the first implementation slice.
-3. Derive ordered slices where each slice adds one meaningful user-visible capability.
-4. Push technical setup, scaffolding, data modelling, tests, and styling into slices only when needed to deliver that slice.
-5. Challenge horizontal slices such as "build UI", "add data model", "wire storage", or "set up persistence"; rewrite them as end-to-end outcomes.
-6. Ask the user before writing files if slice boundaries, count, or ordering materially affect product direction.
-7. Include a `Source` section in each slice file that links to the PRD or source document used as input.
-8. Write one Markdown file per slice under `docs/slices/`.
+3. Use PRD risks, constraints, and open questions to shape slice boundaries.
+4. Derive ordered slices where each slice adds one meaningful user-visible capability.
+5. Push technical setup, scaffolding, data modelling, tests, and styling into slices only when needed to deliver that slice.
+6. Challenge horizontal slices such as "build UI", "add data model", "wire storage", or "set up persistence"; rewrite them as end-to-end outcomes.
+7. Ask the user before writing files if slice boundaries, count, ordering, assumptions, or contradictions materially affect product direction.
+8. Include a `Source` section in each slice file that links to the PRD or source document used as input.
+9. Write one Markdown file per slice under `docs/slices/`.
+
+Do not create a slice that depends on an unresolved product decision unless the slice records that dependency clearly.
 
 ## File Naming
 
@@ -72,13 +79,17 @@ Describe the user-visible result in one or two sentences.
 
 - List tempting work that should remain out of this slice.
 
+## Assumptions and Source Notes
+
+- Capture assumptions, contradictions, source clarifications, unresolved decisions, risks, or open questions that affect this slice.
+
 ## Acceptance Criteria
 
 - Use observable criteria that can be manually verified or tested.
 
 ## Notes
 
-- Capture dependencies, sequencing, risks, or open questions.
+- Capture dependencies, sequencing, or implementation notes that do not fit the sections above.
 ```
 
 Omit `Notes` only when there is nothing useful to say.
@@ -93,6 +104,8 @@ A good slice:
 - can be demonstrated independently
 - has a clear observable user outcome
 - is small enough to implement without dragging in unrelated future scope
+- respects known PRD risks, constraints, and open questions
+- documents assumptions, contradictions, and unresolved decisions that affect the slice
 - leaves the codebase in a coherent state
 
 A poor slice:
@@ -101,6 +114,7 @@ A poor slice:
 - cannot be observed by a user
 - exists mainly to prepare for imagined future work
 - bundles several unrelated outcomes together
+- hides a contradiction or unresolved product decision
 
 ## Output
 
@@ -108,4 +122,5 @@ After creating or revising slice files, summarise:
 
 - slice files created or changed
 - the recommended first implementation slice
+- assumptions or contradictions documented in the output
 - any scope decisions or open questions that still need user confirmation
