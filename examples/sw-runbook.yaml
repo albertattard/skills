@@ -789,7 +789,7 @@ entries:
       rewrite:
         - type: limit_lines
           last: 20
-    timeout: 3 minutes
+    timeout: 10 minutes
     indent: 3
 
   - type: Markdown
