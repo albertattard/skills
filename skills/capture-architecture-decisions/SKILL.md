@@ -40,33 +40,41 @@ Treat source artefacts as inputs. Do not rewrite scope, PRD, slice, production, 
 1. Identify the architecture decision being made or reviewed.
 2. Check `docs/adrs/` for existing ADRs before creating a new one.
 3. If an existing ADR is still valid, reference it instead of duplicating it.
-4. If the decision changes a previous ADR, create a new ADR with status `Accepted` or `Proposed` and mark the old ADR as `Superseded by [NNNN-title](NNNN-title.md)`.
+4. If the decision changes a previous ADR, create a new ADR with status `Accepted` or `Proposed` and mark the old ADR as `Superseded`, including a `Superseded By` link to the new ADR.
 5. Ask the user before writing when the decision, status, or selected option cannot be determined safely from context.
 6. When running non-interactively or when the user asks to avoid follow-up questions, choose `Proposed` status for unresolved decisions and record the uncertainty in `Context` or `Consequences`.
-7. Write ADRs under `docs/adrs/` using zero-padded numeric prefixes and kebab-case titles.
-8. Keep `docs/adrs/README.md` current when ADRs are added, renamed, or superseded.
+7. Use the current date in `DD.MM.YYYY` format for `Created On` and `Updated On` unless the source artefact clearly provides the decision date. For a new ADR, set `Created On` and `Updated On` to the same date. When changing status later, preserve `Created On` and update `Updated On`.
+8. Use `ADR-NNNN` as the decision number, where `NNNN` is a zero-padded sequence number.
+9. Use the full `ADR-NNNN` identifier everywhere the decision is referenced: filename, title, status metadata, ADR index, supersession links, task source links, and final summaries.
+10. Write ADRs under `docs/adrs/` using the decision number and kebab-case title.
+11. Keep `docs/adrs/README.md` current when ADRs are added, renamed, or superseded.
 
 ## File Naming
 
 Use the next available sequence number:
 
 ```text
-docs/adrs/0001-use-postgresql-for-primary-storage.md
-docs/adrs/0002-publish-events-through-outbox.md
+docs/adrs/ADR-0001-use-postgresql-for-primary-storage.md
+docs/adrs/ADR-0002-publish-events-through-outbox.md
 ```
 
-Do not renumber existing ADRs.
+Do not renumber existing ADRs. Do not use bare numeric identifiers such as `0001` for ADRs; use the full `ADR-0001` form everywhere.
 
 ## ADR Template
 
 Use this Michael Nygard-style structure for every ADR:
 
 ```markdown
-# NNNN. Decision Title
+# ADR-NNNN. Decision Title
 
 ## Status
 
-Proposed | Accepted | Deprecated | Superseded by [NNNN. Decision Title](NNNN-title.md)
+|                     |            |
+| ------------------- | ---------- |
+| **Status**          | Accepted   |
+| **Created On**      | DD.MM.YYYY |
+| **Updated On**      | DD.MM.YYYY |
+| **Decision Number** | ADR-NNNN   |
 
 ## Context
 
@@ -81,7 +89,21 @@ State the chosen architecture decision directly.
 Describe the positive, negative, and neutral consequences. Include follow-up work, migration impact, operational impact, and risks when relevant.
 ```
 
-Keep the core sections intact. Do not add custom sections unless the repository already has an ADR convention that requires them.
+For superseded ADRs, use this `Status` table shape:
+
+```markdown
+## Status
+
+|                     |                                              |
+| ------------------- | -------------------------------------------- |
+| **Status**          | Superseded                                   |
+| **Created On**      | DD.MM.YYYY                                   |
+| **Updated On**      | DD.MM.YYYY                                   |
+| **Superseded By**   | [ADR-NNNN](./ADR-NNNN-new-decision-title.md) |
+| **Decision Number** | ADR-NNNN                                     |
+```
+
+Keep the core sections intact. Do not add custom sections unless the repository already has an ADR convention that requires them. The `Status` section must use the metadata table form. Valid status values are `Proposed`, `Accepted`, `Deprecated`, or `Superseded`.
 
 ## ADR Index
 
@@ -94,10 +116,10 @@ Use this structure for `docs/adrs/README.md`:
 
 | ADR | Status | Decision |
 | --- | --- | --- |
-| [0001. Decision Title](0001-decision-title.md) | Accepted | One sentence summary. |
+| [ADR-0001. Decision Title](ADR-0001-decision-title.md) | Accepted | One sentence summary. |
 ```
 
-Include superseded ADRs in the index so the decision history remains traceable.
+Use the status value from each ADR's metadata table in the index. Include superseded ADRs in the index so the decision history remains traceable.
 
 ## Quality Bar
 

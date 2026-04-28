@@ -184,7 +184,7 @@ Derived from:
 
 - [slice title](../slices/0001-slice-title.md)
 - [path to production](../production/path-to-production.md)
-- [ADR title](../adrs/0001-adr-title.md)
+- [ADR title](../adrs/ADR-0001-adr-title.md)
 
 ## Type
 
