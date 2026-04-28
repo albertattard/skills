@@ -127,7 +127,7 @@ One concise paragraph describing the product outcome.
 
 ## Target User
 
-## first useful flow
+## First Useful Flow
 
 ## In Scope
 
