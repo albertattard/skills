@@ -259,17 +259,7 @@ entries:
       codex exec --full-auto <<'EOF'
       Use $create-scope to clarify @docs/product/description.md before we create requirements or scaffold the application and create the `docs/scopes/mvp-scope.md`.
 
-      In this case, don’t ask me questions and use the answers shown below instead. In case you still have further questions, use your best judgement and keep things simple.
-
-      Q: Who is the first real user we are designing for: an absolute beginner learning German from scratch, or a learner who already knows basic vocabulary but struggles with grammar like articles and cases?
-      A: This application is targeted for absolute beginners learning German from scratch. More experienced users can too use the application as it provides different levels. The first level will be very easy and assumes no prior knowledge of the German Language, while subsequent levels may depend on previous levels.
-
-      Q: What is the smallest first-level behaviour that would prove the app is useful for absolute beginners: learning definite articles with nouns (der, die, das), learning basic vocabulary from images, or forming very simple sentences?
-      A: The first level would be learning definite articles with nouns (der, die, das). The learner will be shown an image of a noun, such as an apple, and will be provided the three articles (der, die, das). The noun is also pronounced, such as “Apfel”, so that the learner can combine the image, audio and word together simulating real life learning as much as possible. When the learner selects the right article, the audio of the article followed by the noun is played, such as “der Apfel”. If the learner selects the wrong article, the correct article is highlighted and the learner has to go again. When the learner is shown the next noun only after they select the correct article and the audio has finished playing.
-
-      Q: What should count as completing the first level: answering a fixed set of nouns correctly once, reaching a mastery threshold after repeated practice, or simply progressing through a short guided lesson with no score?
-      A: Completion for the first level would be correctly answering 25 distinct nouns. Each level will have its own threshold which may change over time as we learn more about the experience. But for the MVP, we can assume that once the learner answers 25 distinct nouns the first level is marked as complete. The learner can always go back to a level at any point in time and practice as much as they like.
-      I would like to stress out an important point here. Why we would like to keep score so that the learner does not feel overwhelmed by starting a level that may be too hard for them, the learner should not be encouraged to grid or collect points. The goal should be learning. So prefer, “learnt 10 nouns” over “collected 10 points”.
+      Use the answers in @.fixtures/prompts/create-scope-answers.md without asking follow-up questions. If further clarification is still needed, use your best judgement and keep things simple.
       EOF
     output:
       caption: |

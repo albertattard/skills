@@ -32,6 +32,7 @@ fi
 SOURCE_DIR="${EXAMPLES_DIR}/${EXAMPLE}"
 RUNBOOK="${SOURCE_DIR}/sw-runbook.yaml"
 PRODUCT_DESCRIPTION="${SOURCE_DIR}/product-description.md"
+CREATE_SCOPE_ANSWERS="${SOURCE_DIR}/create-scope-answers.md"
 TARGET_DIR="/tmp/${EXAMPLE}"
 
 if [[ ! -f "${RUNBOOK}" ]]; then
@@ -46,12 +47,21 @@ if [[ ! -f "${PRODUCT_DESCRIPTION}" ]]; then
   exit 2
 fi
 
+if grep -q '@\.fixtures/prompts/create-scope-answers\.md' "${RUNBOOK}" && [[ ! -f "${CREATE_SCOPE_ANSWERS}" ]]; then
+  echo "Missing create-scope answers: ${CREATE_SCOPE_ANSWERS}" >&2
+  exit 2
+fi
+
 # Recreate the target directory to simulate running the runbook in a clean environment.
 rm -rf "${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}"
 cp "${RUNBOOK}" "${TARGET_DIR}/sw-runbook.yaml"
 mkdir -p "${TARGET_DIR}/docs/product"
 cp "${PRODUCT_DESCRIPTION}" "${TARGET_DIR}/docs/product/description.md"
+if [[ -f "${CREATE_SCOPE_ANSWERS}" ]]; then
+  mkdir -p "${TARGET_DIR}/.fixtures/prompts"
+  cp "${CREATE_SCOPE_ANSWERS}" "${TARGET_DIR}/.fixtures/prompts/create-scope-answers.md"
+fi
 
 # Copy the skills which are referred to from the runbook.
 mkdir -p "${TARGET_DIR}/.fixtures"
@@ -61,7 +71,9 @@ cat <<'EOF' > "${TARGET_DIR}/.fixtures/AGENTS.md"
 
 This directory is out of scope for normal repository work.
 
-Do not inspect, summarize, edit, or rely on files in this directory under any circumstances.
+Do not inspect, summarize, edit, or rely on files in this directory unless a runbook or user prompt explicitly references a file here.
+
+When a file in this directory is explicitly referenced, use only that referenced file and do not browse the surrounding fixture tree.
 EOF
 
 (cd "${TARGET_DIR}"
