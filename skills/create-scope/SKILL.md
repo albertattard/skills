@@ -13,12 +13,13 @@ Create enough shared understanding to define a scope and act deliberately. Prefe
 
 1. Restate the proposed work in concrete terms.
 2. Run the idea-readiness gate before writing scope:
+  - product intent, stated as one concise paragraph
   - problem being solved
   - first user or beneficiary
   - desired outcome
   - the first useful flow that would prove value
   - major assumptions or unresolved decisions
-3. Check whether the clarified intent changes the product description. If it does, update the relevant product description artefact before or alongside the scope.
+3. Define the product intent as one concise paragraph in the scope output.
 4. Identify assumptions, missing decisions, and terms that could mean more than one thing.
 5. Define Out of Scope as relevant work that may belong to the product later but is deferred from the current scope.
 6. Create a Not List for adjacent ideas that may appear to fit the product but are explicitly not part of what this product or solution is.
@@ -36,6 +37,14 @@ When a domain-significant term affects product behaviour, user experience, domai
 - If the term is clear and important, add or update it in `docs/domain/ubiquitous-language.md`.
 - If the term is ambiguous, record the ambiguity as an open question in the relevant product artefact.
 - If creating a new documentation directory or Markdown file, keep the corresponding `README.md` index current.
+
+## Source Documents
+
+Treat product descriptions, prompts, issues, and other source artefacts as inputs. Do not edit them while creating scope.
+
+If clarification changes or contradicts a source artefact, record the clarified understanding in the scope document's `Source Clarifications` section instead of modifying the input document.
+
+Use `None.` for `Source Clarifications` when the source artefact does not need correction, contradiction handling, or interpretation notes.
 
 ## Question Style
 
@@ -60,6 +69,7 @@ Poor questions:
 When enough clarity exists, summarise:
 
 - the agreed goal
+- the product intent
 - the current constraints
 - the first useful flow
 - the trade-offs and risks captured
@@ -104,6 +114,14 @@ Use this structure:
 Derived from:
 
 - [product description](../product/description.md)
+
+## Source Clarifications
+
+None.
+
+## Intent
+
+One concise paragraph describing the product outcome.
 
 ## Goal
 
