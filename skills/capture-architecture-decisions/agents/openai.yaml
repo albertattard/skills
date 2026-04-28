@@ -1,0 +1,4 @@
+interface:
+  display_name: "Capture Architecture Decisions"
+  short_description: "Record ADRs from architecture choices"
+  default_prompt: "Use $capture-architecture-decisions to identify and write architecture decision records for the architectural choices in the current work."

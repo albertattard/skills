@@ -52,9 +52,10 @@ If source assumptions, contradictions, or missing decisions affect task readines
 10. Keep task files in one ordered sequence by default. Use the task index to provide grouped views by capability area, source slice or production workstream, type, and readiness.
 11. Choose the task index structure based on expected growth, not only the current task count. If the source artefacts imply the task set may grow large, start with capability, source, type, and readiness groupings even when the initial task set is small.
 12. Add capability sub-index files under `docs/tasks/capabilities/` when the main index becomes hard to scan or when the project already has clear capability areas. Capability sub-indexes are additive navigation aids; do not move or renumber existing task files to introduce them.
-13. Ask the user before writing files when task granularity, release boundaries, missing decisions, tracker format, capability grouping, or remote issue publication materially changes the plan and the user has not asked to proceed with assumptions.
-14. When running non-interactively or when the user asks to avoid follow-up questions, choose the smallest conservative task breakdown that fits the source artefacts and repository context, then record assumptions and unresolved decisions in the affected tasks.
-15. Write or update task files under `docs/tasks/`, and keep the directory `README.md` current when files are added, moved, or deleted.
+13. Use `decision` tasks for unresolved choices that block implementation. When the choice is architecture-significant, make the task outcome an ADR created with `$capture-architecture-decisions`, not just a prose answer in the task file.
+14. Ask the user before writing files when task granularity, release boundaries, missing decisions, tracker format, capability grouping, or remote issue publication materially changes the plan and the user has not asked to proceed with assumptions.
+15. When running non-interactively or when the user asks to avoid follow-up questions, choose the smallest conservative task breakdown that fits the source artefacts and repository context, then record assumptions and unresolved decisions in the affected tasks.
+16. Write or update task files under `docs/tasks/`, and keep the directory `README.md` current when files are added, moved, or deleted.
 
 Do not create remote GitHub, Jira, Linear, or other tracker issues unless the user explicitly asks for remote issue creation.
 

@@ -10,8 +10,10 @@ the shared workflow rather than fit only one example.
 
 ## Skills
 
-The repository currently provides six skills:
+The repository currently provides seven skills:
 
+- `capture-architecture-decisions`: identifies durable architecture choices and
+  records Michael Nygard-style Architecture Decision Records (ADRs).
 - `create-scope`: clarifies a product idea, challenges ambiguity, captures the
   first useful flow, and writes a scoped Markdown artefact.
 - `derive-product-requirements-document`: turns an agreed scope into a practical
@@ -36,6 +38,9 @@ product description
   -> path to production
   -> implementation tasks
   -> implemented task
+
+architecture decision candidates
+  -> architecture decision records
 ```
 
 ## Repository Layout
@@ -49,6 +54,7 @@ product description
 |   |-- poc-tracker/
 |   `-- wort-werk/
 `-- skills/
+    |-- capture-architecture-decisions/
     |-- create-scope/
     |-- derive-implementation-tasks/
     |-- derive-path-to-production/

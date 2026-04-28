@@ -43,9 +43,10 @@ If source assumptions, contradictions, or missing decisions affect release readi
 6. Capture readiness workstreams for environments, CI/CD, configuration, data, security and privacy, observability, rollback, support, and operational ownership.
 7. Define validation gates that prove the release is ready, including tests, manual checks, smoke checks, migration checks, and rollback checks where relevant.
 8. Record risks and open questions that could block release or create operational failure.
-9. Ask the user before writing files when the production target, operational owner, compliance posture, data handling, or release strategy materially changes the plan and the user has not asked to proceed with assumptions.
-10. When running non-interactively or when the user asks to avoid follow-up questions, choose the smallest conservative assumptions that fit the source artefacts and repository context, then record those assumptions and unresolved decisions in the production plan.
-11. Write or update the production plan under `docs/production/`, and keep the directory `README.md` current when files are added, moved, or deleted.
+9. Flag production-significant architecture decisions as ADR candidates, including deployment topology, persistence strategy, integration pattern, security boundary, observability approach, rollback strategy, and operational ownership model.
+10. Ask the user before writing files when the production target, operational owner, compliance posture, data handling, or release strategy materially changes the plan and the user has not asked to proceed with assumptions.
+11. When running non-interactively or when the user asks to avoid follow-up questions, choose the smallest conservative assumptions that fit the source artefacts and repository context, then record those assumptions and unresolved decisions in the production plan.
+12. Write or update the production plan under `docs/production/`, and keep the directory `README.md` current when files are added, moved, or deleted.
 
 Do not create a path to production that pretends unresolved deployment, data, security, or operational decisions are settled.
 

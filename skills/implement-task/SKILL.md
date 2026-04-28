@@ -55,7 +55,8 @@ Do not implement adjacent work merely because it is nearby. If the selected task
 6. Repeat the behaviour-by-behaviour loop until the task's acceptance criteria are covered.
 7. Refactor only while tests are green, and only to reduce real complexity, clarify boundaries, or align with established local patterns.
 8. Run the task's validation commands and any focused tests needed for the touched area.
-9. Report changed files, validation results, acceptance criteria covered by tests, manual checks performed or still required, and unresolved follow-up work.
+9. If implementation requires a new durable architecture decision, stop and challenge the task unless the decision is already captured in an ADR or the user explicitly asks to make and capture it. Use `$capture-architecture-decisions` for the ADR before or alongside the implementation work.
+10. Report changed files, validation results, acceptance criteria covered by tests, manual checks performed or still required, and unresolved follow-up work.
 
 When a test-first loop is not useful, explain why in the final summary. Examples include documentation-only work, manual operations, wiring that cannot run locally, or changes where the repository has no practical deterministic test surface.
 
@@ -120,6 +121,7 @@ Before the final response, check:
 - Did it expose implementation details through names, types, parameters, files, or module boundaries?
 - Is there a simpler interface that would hide more complexity?
 - Are important assumptions captured in code, tests, comments, or the final summary?
+- Did this task introduce or change an architecture decision that should be captured in `docs/adr/`?
 - Did the implementation avoid dragging in future scope?
 
 Address issues found during the review when the fix is within the selected task and tests remain green.

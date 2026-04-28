@@ -37,9 +37,10 @@ If assumptions, contradictions, or source clarifications affect slicing, record 
 4. Derive ordered slices where each slice adds one meaningful user-visible capability.
 5. Push technical setup, scaffolding, data modelling, tests, and styling into slices only when needed to deliver that slice.
 6. Challenge horizontal slices such as "build UI", "add data model", "wire storage", or "set up persistence"; rewrite them as end-to-end outcomes.
-7. Ask the user before writing files if slice boundaries, count, ordering, assumptions, or contradictions materially affect product direction.
-8. Include a `Source` section in each slice file that links to the PRD or source document used as input.
-9. Write one Markdown file per slice under `docs/slices/`.
+7. Carry architecture-significant constraints into `Assumptions and Source Notes`, and flag ADR candidates when slice boundaries depend on durable implementation, data, integration, or deployment choices.
+8. Ask the user before writing files if slice boundaries, count, ordering, assumptions, or contradictions materially affect product direction.
+9. Include a `Source` section in each slice file that links to the PRD or source document used as input.
+10. Write one Markdown file per slice under `docs/slices/`.
 
 Do not create a slice that depends on an unresolved product decision unless the slice records that dependency clearly.
 

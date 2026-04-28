@@ -26,9 +26,10 @@ Create enough shared understanding to define a scope and act deliberately. Prefe
 7. Capture trade-offs as ranked decision priorities that can guide later choices, for example user clarity > small scope > polish > extensibility.
 8. Capture risks that could break the user experience, invalidate the scope, or cause scope expansion.
 9. Inspect local context when it can answer a question: files, docs, existing code, git state, configs, scripts, and tests.
-10. Ask exactly one question at a time when the answer cannot be determined safely.
-11. Push back when a request is too broad, contradictory, premature, not ready for scoping, or not yet tied to a user outcome.
-12. Continue until the next action is clear enough to execute or the user explicitly stops.
+10. When scoping settles or exposes a durable architecture choice, record it as an ADR candidate in `Decisions` or `Open Questions` instead of burying it in prose. Use `$capture-architecture-decisions` when the user asks to capture ADRs or when the current task is explicitly architecture decision capture.
+11. Ask exactly one question at a time when the answer cannot be determined safely.
+12. Push back when a request is too broad, contradictory, premature, not ready for scoping, or not yet tied to a user outcome.
+13. Continue until the next action is clear enough to execute or the user explicitly stops.
 
 ## Domain Language
 

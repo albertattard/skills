@@ -35,9 +35,10 @@ If assumptions, contradictions, or source clarifications affect requirements, re
 6. Capture success measures that reflect user value, not vanity metrics.
 7. Record constraints, risks, and open questions, including assumptions raised during scoping.
 8. Preserve domain-significant terms from the scope and check whether `docs/domain/ubiquitous-language.md` needs an update or an ambiguity note.
-9. Ask the user when the PRD would otherwise require inventing a product decision.
-10. Include a `Source` section that links to the scope document used as input.
-11. Write or update the PRD as Markdown under `docs/requirements/`, and keep the directory `README.md` current when files are added, moved, or deleted.
+9. Preserve architecture-significant choices as constraints or explicit decision notes, and flag them as ADR candidates when they establish durable implementation, data, integration, deployment, or operational constraints.
+10. Ask the user when the PRD would otherwise require inventing a product decision.
+11. Include a `Source` section that links to the scope document used as input.
+12. Write or update the PRD as Markdown under `docs/requirements/`, and keep the directory `README.md` current when files are added, moved, or deleted.
 
 ## Lean Inception Inputs
 
@@ -51,6 +52,7 @@ When the scope contains lean-inception-style outputs, map them into the PRD inst
 - Trade-off sliders or decision priorities -> `Constraints` or explicit product decisions.
 - Heaven/Hell, risks, or failure scenarios -> `Risks`, `Success Measures`, and relevant acceptance criteria.
 - Open questions and ambiguous terms -> `Open Questions` and, when domain-significant, ubiquitous language updates.
+- Architecture-significant decisions -> `Constraints` or explicit decision notes, plus ADR candidates for `$capture-architecture-decisions` when they materially constrain future implementation.
 
 ## File Naming
 
