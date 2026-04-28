@@ -20,12 +20,14 @@ Create enough shared understanding to define a scope and act deliberately. Prefe
   - major assumptions or unresolved decisions
 3. Check whether the clarified intent changes the product description. If it does, update the relevant product description artefact before or alongside the scope.
 4. Identify assumptions, missing decisions, and terms that could mean more than one thing.
-5. Capture trade-offs as ranked decision priorities that can guide later choices, for example user clarity > small scope > polish > extensibility.
-6. Capture risks that could break the user experience, invalidate the scope, or cause scope expansion.
-7. Inspect local context when it can answer a question: files, docs, existing code, git state, configs, scripts, and tests.
-8. Ask exactly one question at a time when the answer cannot be determined safely.
-9. Push back when a request is too broad, contradictory, premature, not ready for scoping, or not yet tied to a user outcome.
-10. Continue until the next action is clear enough to execute or the user explicitly stops.
+5. Define Out of Scope as relevant work that may belong to the product later but is deferred from the current scope.
+6. Create a Not List for adjacent ideas that may appear to fit the product but are explicitly not part of what this product or solution is.
+7. Capture trade-offs as ranked decision priorities that can guide later choices, for example user clarity > small scope > polish > extensibility.
+8. Capture risks that could break the user experience, invalidate the scope, or cause scope expansion.
+9. Inspect local context when it can answer a question: files, docs, existing code, git state, configs, scripts, and tests.
+10. Ask exactly one question at a time when the answer cannot be determined safely.
+11. Push back when a request is too broad, contradictory, premature, not ready for scoping, or not yet tied to a user outcome.
+12. Continue until the next action is clear enough to execute or the user explicitly stops.
 
 ## Domain Language
 
@@ -65,6 +67,20 @@ When enough clarity exists, summarise:
 - any domain language updates or unresolved term ambiguities
 - the next concrete action
 
+## Out of Scope
+
+Explicitly capture relevant product work that is deliberately deferred from the current scope.
+
+Use Out of Scope for features, workflows, user groups, platforms, integrations, operational responsibilities, quality levels, or technical capabilities that may be useful for this product later but should not be built now.
+
+## Not List
+
+Explicitly capture what this product or solution is not, even when those ideas appear adjacent, useful, or superficially aligned.
+
+Use the Not List to protect product identity and prevent category drift. Include adjacent product categories, solution types, audiences, responsibilities, operating models, or capabilities that should not become part of this product.
+
+Do not treat Not List items as deferred backlog. Revisit them only if the product direction changes.
+
 ## Scope Documents
 
 For product, project, or feature scoping work, create or update the scope artefact once enough clarity exists unless the user explicitly asks for discussion only. Write scope documents under `docs/scopes/`.
@@ -97,7 +113,9 @@ Derived from:
 
 ## In Scope
 
-## Out Of Scope
+## Out of Scope
+
+## Not List
 
 ## Trade-Offs
 

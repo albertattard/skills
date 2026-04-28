@@ -24,7 +24,7 @@ Inspect the product description and related docs when they clarify intent, but d
 ## Workflow
 
 1. Restate the product outcome, first user, and the first useful flow from the scope.
-2. Carry forward the Not List as PRD non-goals; do not let excluded future ideas become current requirements.
+2. Carry forward the scope's Out of Scope and Not List sections as PRD `Non-Goals`; distinguish deferred relevant work from ideas that are outside the product identity.
 3. Translate trade-off decisions into constraints or decision notes that can guide later slicing.
 4. Extract the core user journey and required user-visible behaviours.
 5. Convert requirements into observable acceptance criteria.
@@ -42,7 +42,8 @@ When the scope contains lean-inception-style outputs, map them into the PRD inst
 - Vision, elevator pitch, or product intent -> `Summary`, `Problem`, and `Goals`.
 - First user, persona, or beneficiary -> `Target User`.
 - first useful flow -> `User Journeys`, `Functional Requirements`, and `Acceptance Criteria`.
-- Not List or out-of-scope decisions -> `Non-Goals`.
+- Out of Scope -> `Non-Goals`, labelled or grouped as deferred relevant work when useful.
+- Not List -> `Non-Goals`, labelled or grouped as product-identity guardrails when useful.
 - Trade-off sliders or decision priorities -> `Constraints` or explicit product decisions.
 - Heaven/Hell, risks, or failure scenarios -> `Risks`, `Success Measures`, and relevant acceptance criteria.
 - Open questions and ambiguous terms -> `Open Questions` and, when domain-significant, ubiquitous language updates.
@@ -111,7 +112,7 @@ A good PRD:
 
 - makes product behaviour explicit enough to derive vertical slices
 - separates goals from non-goals
-- carries forward the scope's first useful flow, Not List, trade-offs, risks, and open questions
+- carries forward the scope's first useful flow, deferred Out of Scope items, product-identity Not List items, trade-offs, risks, and open questions
 - describes user-visible requirements rather than implementation tasks
 - includes acceptance criteria that can be verified
 - preserves open questions instead of pretending they are answered
