@@ -314,7 +314,7 @@ entries:
       rewrite:
         - type: limit_lines
           last: 20
-    timeout: 5 minutes
+    timeout: 3 minutes
     indent: 3
 
   - type: Markdown
@@ -332,7 +332,7 @@ entries:
       rewrite:
         - type: limit_lines
           last: 20
-    timeout: 2 minutes
+    timeout: 1 minute
     indent: 3
 
   - type: Markdown
@@ -436,7 +436,7 @@ entries:
       rewrite:
         - type: limit_lines
           last: 20
-    timeout: 5 minutes
+    timeout: 3 minutes
     indent: 3
 
   - type: Markdown
@@ -561,7 +561,7 @@ entries:
       rewrite:
         - type: limit_lines
           last: 20
-    timeout: 5 minutes
+    timeout: 3 minutes
     indent: 3
 
   - type: Markdown

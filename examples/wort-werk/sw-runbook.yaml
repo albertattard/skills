@@ -304,7 +304,7 @@ entries:
       rewrite:
         - type: limit_lines
           last: 20
-    timeout: 5 minutes
+    timeout: 3 minutes
     indent: 3
 
   - type: Markdown
@@ -322,7 +322,7 @@ entries:
       rewrite:
         - type: limit_lines
           last: 20
-    timeout: 2 minutes
+    timeout: 1 minute
     indent: 3
 
   - type: Markdown
@@ -372,155 +372,7 @@ entries:
 
   - type: Command
     commands: |
-      mkdir -p '.codex/skills/derive-product-requirements-document/agents'
-
-      # Create the skill file
-      cat <<'EOF' > '.codex/skills/derive-product-requirements-document/SKILL.md'
-      ---
-      name: derive-product-requirements-document
-      description: Use when Codex needs to convert an agreed product scope, MVP scope, or clarified feature scope into a Product Requirements Document before deriving vertical slices or implementation plans. The skill expands scope and lean-inception-style decisions into product-facing requirements, goals, non-goals, user journeys, acceptance criteria, success measures, constraints, risks, and open questions without inventing unresolved product decisions.
-      ---
-
-      # Derive Product Requirements Document
-
-      ## Overview
-
-      Turn an agreed scope into a practical Product Requirements Document that is detailed enough to guide slicing and implementation.
-
-      Prefer clarity over ceremony. The PRD should preserve product intent, carry forward lean-inception-style decisions, expose unresolved decisions, and avoid technical design unless a technical constraint changes product requirements.
-
-      ## Inputs
-
-      Start from the most specific scope artefact available, usually one of:
-
-      - `docs/scopes/*.md`
-      - a clarified feature scope
-      - a user-provided scope document
-
-      Inspect the product description and related docs when they clarify intent, but do not expand the PRD beyond the agreed scope without calling it out.
-
-      ## Workflow
-
-      1. Restate the product outcome, first user, and smallest useful behaviour from the scope.
-      2. Carry forward the Not List as PRD non-goals; do not let excluded future ideas become current requirements.
-      3. Translate trade-off decisions into constraints or decision notes that can guide later slicing.
-      4. Extract the core user journey and required user-visible behaviours.
-      5. Convert requirements into observable acceptance criteria.
-      6. Capture success measures that reflect user value, not vanity metrics.
-      7. Record constraints, risks, and open questions, including assumptions raised during scoping.
-      8. Preserve domain-significant terms from the scope and check whether `docs/domain/ubiquitous-language.md` needs an update or an ambiguity note.
-      9. Ask the user when the PRD would otherwise require inventing a product decision.
-      10. Include a `Source` section that links to the scope document used as input.
-      11. Write or update the PRD as Markdown under `docs/requirements/`, and keep the directory `README.md` current when files are added, moved, or deleted.
-
-      ## Lean Inception Inputs
-
-      When the scope contains lean-inception-style outputs, map them into the PRD instead of creating separate ceremony sections:
-
-      - Vision, elevator pitch, or product intent -> `Summary`, `Problem`, and `Goals`.
-      - First user, persona, or beneficiary -> `Target User`.
-      - Smallest useful behaviour or core learning loop -> `User Journeys`, `Functional Requirements`, and `Acceptance Criteria`.
-      - Not List or out-of-scope decisions -> `Non-Goals`.
-      - Trade-off sliders or decision priorities -> `Constraints` or explicit product decisions.
-      - Heaven/Hell, risks, or failure scenarios -> `Risks`, `Success Measures`, and relevant acceptance criteria.
-      - Open questions and ambiguous terms -> `Open Questions` and, when domain-significant, ubiquitous language updates.
-
-      ## File Naming
-
-      Use a focussed, kebab-case filename:
-
-      ```text
-      docs/requirements/product-requirements-document.md
-      ```
-
-      For a scoped feature PRD, use the feature name:
-
-      ```text
-      docs/requirements/article-practice-prd.md
-      ```
-
-      Avoid scattering one PRD across multiple files unless the product is large enough to justify it.
-
-      ## PRD Template
-
-      Use this structure:
-
-      ```markdown
-      # Product Requirements Document
-
-      ## Source
-
-      Derived from:
-
-      - [scope document](../scopes/mvp-scope.md)
-
-      ## Summary
-
-      ## Target User
-
-      ## Problem
-
-      ## Goals
-
-      ## Non-Goals
-
-      ## User Journeys
-
-      ## Functional Requirements
-
-      ## Acceptance Criteria
-
-      ## Success Measures
-
-      ## Constraints
-
-      ## Risks
-
-      ## Open Questions
-      ```
-
-      Keep sections concise. If a section does not apply, say why or omit it when that improves clarity.
-
-      Adjust the source link to match the actual input path. For example, if the PRD is created at `docs/requirements/product-requirements-document.md` from `docs/scopes/mvp-scope.md`, link to `../scopes/mvp-scope.md`.
-
-      ## Quality Bar
-
-      A good PRD:
-
-      - makes product behaviour explicit enough to derive vertical slices
-      - separates goals from non-goals
-      - carries forward the scope's smallest useful behaviour, Not List, trade-offs, risks, and open questions
-      - describes user-visible requirements rather than implementation tasks
-      - includes acceptance criteria that can be verified
-      - preserves open questions instead of pretending they are answered
-
-      A poor PRD:
-
-      - restates the scope without adding decision clarity
-      - hides unresolved assumptions
-      - drops scope decisions that should constrain implementation
-      - turns into a technical architecture document
-      - includes future ideas as current requirements
-      - uses success metrics that do not reflect user learning or user value
-
-      ## Output
-
-      After creating or revising the PRD, summarise:
-
-      - the PRD file created or changed
-      - the major product decisions captured
-      - the lean-inception-style inputs carried forward or intentionally omitted
-      - the open questions that remain
-      - whether the PRD is ready for `derive-vertical-slices`
-      EOF
-
-      # Create the metadata used by Codex-style clients how to present the skill in the UI
-      cat <<'EOF' > '.codex/skills/derive-product-requirements-document/agents/openai.yaml'
-      interface:
-        display_name: "Derive Product Requirements Document"
-        short_description: "Turn agreed scope into a practical PRD"
-        default_prompt: "Use $derive-product-requirements-document to convert the agreed scope and lean-inception-style decisions into a product requirements document."
-      EOF
+      cp -R '.fixtures/skills/derive-product-requirements-document' '.codex/skills/'
     indent: 3
 
   - type: Markdown
@@ -574,7 +426,7 @@ entries:
       rewrite:
         - type: limit_lines
           last: 20
-    timeout: 5 minutes
+    timeout: 3 minutes
     indent: 3
 
   - type: Markdown
@@ -645,130 +497,7 @@ entries:
 
   - type: Command
     commands: |
-      mkdir -p '.codex/skills/derive-vertical-slices/agents'
-
-      # Create the skill file
-      cat <<'EOF' > '.codex/skills/derive-vertical-slices/SKILL.md'
-      ---
-      name: derive-vertical-slices
-      description: Use when Codex needs to convert a Product Requirements Document into ordered vertical slice Markdown files. Prefer PRDs under docs/requirements/ as input; use scope documents only when the PRD step is intentionally skipped. The skill derives user-visible end-to-end slices, avoids horizontal technical task breakdowns, asks for clarification when slice boundaries are ambiguous, and writes slice documents under docs/slices/.
-      ---
-
-      # Derive Vertical Slices
-
-      ## Overview
-
-      Turn a Product Requirements Document into small, ordered vertical slices that can be implemented and reviewed one at a time.
-
-      Prefer user-visible outcomes over technical layers. A slice should be demoable or verifiable independently, even when it is intentionally thin.
-
-      ## Inputs
-
-      Start from the most specific requirements artefact available:
-
-      - `docs/requirements/*.md`
-
-      Use a scope document only when the PRD step is intentionally skipped:
-
-      - `docs/scopes/*.md`
-      - a clarified feature description
-      - a user-provided scope document
-
-      Inspect nearby docs when they clarify intent, but do not expand scope beyond the selected source without calling it out.
-
-      ## Workflow
-
-      1. Restate the core outcome from the PRD or selected source document.
-      2. Identify the smallest end-to-end behaviour that proves the core loop.
-      3. Derive ordered slices where each slice adds one meaningful user-visible capability.
-      4. Push technical setup, scaffolding, data modelling, tests, and styling into slices only when needed to deliver that slice.
-      5. Challenge horizontal slices such as "build UI", "add data model", "wire storage", or "set up persistence"; rewrite them as end-to-end outcomes.
-      6. Ask the user before writing files if slice boundaries, count, or ordering materially affect product direction.
-      7. Include a `Source` section in each slice file that links to the PRD or source document used as input.
-      8. Write one Markdown file per slice under `docs/slices/`.
-
-      ## File Naming
-
-      Use zero-padded numeric prefixes and kebab-case titles:
-
-      ```text
-      docs/slices/0001-create-poc-proposal.md
-      docs/slices/0002-filter-pocs-by-state.md
-      ```
-
-      Keep each file focused on one slice.
-
-      ## Slice Template
-
-      Use this structure for each slice:
-
-      ```markdown
-      # Slice Title
-
-      ## Source
-
-      Derived from:
-
-      - [product requirements document](../requirements/product-requirements-document.md)
-
-      ## Outcome
-
-      Describe the user-visible result in one or two sentences.
-
-      ## Includes
-
-      - List behaviour, content, UI, state, and verification needed for this slice.
-
-      ## Excludes
-
-      - List tempting work that should remain out of this slice.
-
-      ## Acceptance Criteria
-
-      - Use observable criteria that can be manually verified or tested.
-
-      ## Notes
-
-      - Capture dependencies, sequencing, risks, or open questions.
-      ```
-
-      Omit `Notes` only when there is nothing useful to say.
-
-      Adjust the source link to match the actual input path. For example, if a slice is created at `docs/slices/0001-create-poc-proposal.md` from `docs/requirements/product-requirements-document.md`, link to `../requirements/product-requirements-document.md`.
-
-      ## Quality Bar
-
-      A good slice:
-
-      - cuts through the experience end to end
-      - can be demonstrated independently
-      - has a clear user or learner outcome
-      - is small enough to implement without dragging in unrelated future scope
-      - leaves the codebase in a coherent state
-
-      A poor slice:
-
-      - is only a technical layer
-      - cannot be observed by a user
-      - exists mainly to prepare for imagined future work
-      - bundles several unrelated outcomes together
-
-      ## Output
-
-      After creating or revising slice files, summarise:
-
-      - slice files created or changed
-      - the recommended first implementation slice
-      - any scope decisions or open questions that still need user confirmation
-      EOF
-
-      # Create the metadata used by Codex-style clients to present the skill in the UI
-      cat <<'EOF' > '.codex/skills/derive-vertical-slices/agents/openai.yaml'
-      interface:
-        display_name: "Derive Vertical Slices"
-        short_description: "Turn requirements into vertical slices"
-        default_prompt: "Use $derive-vertical-slices to convert the product requirements document into ordered Markdown vertical slice files."
-      EOF
+      cp -R '.fixtures/skills/derive-vertical-slices' '.codex/skills/'
     indent: 3
 
   - type: Markdown
@@ -822,7 +551,7 @@ entries:
       rewrite:
         - type: limit_lines
           last: 20
-    timeout: 5 minutes
+    timeout: 3 minutes
     indent: 3
 
   - type: Markdown
