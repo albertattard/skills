@@ -1,0 +1,4 @@
+interface:
+  display_name: "Derive Vertical Slices"
+  short_description: "Turn requirements into vertical slices"
+  default_prompt: "Use $derive-vertical-slices to convert the product requirements document into ordered Markdown vertical slice files."
