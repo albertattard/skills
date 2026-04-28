@@ -23,7 +23,7 @@ Inspect the product description and related docs when they clarify intent, but d
 
 ## Workflow
 
-1. Restate the product outcome, first user, and smallest useful behaviour from the scope.
+1. Restate the product outcome, first user, and the first useful flow from the scope.
 2. Carry forward the Not List as PRD non-goals; do not let excluded future ideas become current requirements.
 3. Translate trade-off decisions into constraints or decision notes that can guide later slicing.
 4. Extract the core user journey and required user-visible behaviours.
@@ -41,7 +41,7 @@ When the scope contains lean-inception-style outputs, map them into the PRD inst
 
 - Vision, elevator pitch, or product intent -> `Summary`, `Problem`, and `Goals`.
 - First user, persona, or beneficiary -> `Target User`.
-- Smallest useful behaviour or core learning loop -> `User Journeys`, `Functional Requirements`, and `Acceptance Criteria`.
+- first useful flow -> `User Journeys`, `Functional Requirements`, and `Acceptance Criteria`.
 - Not List or out-of-scope decisions -> `Non-Goals`.
 - Trade-off sliders or decision priorities -> `Constraints` or explicit product decisions.
 - Heaven/Hell, risks, or failure scenarios -> `Risks`, `Success Measures`, and relevant acceptance criteria.
@@ -111,7 +111,7 @@ A good PRD:
 
 - makes product behaviour explicit enough to derive vertical slices
 - separates goals from non-goals
-- carries forward the scope's smallest useful behaviour, Not List, trade-offs, risks, and open questions
+- carries forward the scope's first useful flow, Not List, trade-offs, risks, and open questions
 - describes user-visible requirements rather than implementation tasks
 - includes acceptance criteria that can be verified
 - preserves open questions instead of pretending they are answered
@@ -123,7 +123,7 @@ A poor PRD:
 - drops scope decisions that should constrain implementation
 - turns into a technical architecture document
 - includes future ideas as current requirements
-- uses success metrics that do not reflect user learning or user value
+- uses success metrics that do not reflect user value or operational value
 
 ## Output
 

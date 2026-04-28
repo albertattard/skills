@@ -1,4 +1,4 @@
 interface:
   display_name: "Create Scope"
   short_description: "Clarify scope before building"
-  default_prompt: "Use $create-scope to clarify the idea, smallest useful behaviour, trade-offs, risks, scope, and decisions before implementation."
+  default_prompt: "Use $create-scope to clarify the idea, first useful flow, trade-offs, risks, scope, and decisions before implementation."

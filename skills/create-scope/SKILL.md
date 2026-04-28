@@ -1,6 +1,6 @@
 ---
 name: create-scope
-description: Use when a user proposes a product idea, project, feature, architecture, implementation plan, or ambiguous change and Codex should clarify the idea and create a clear scope before acting. The skill challenges vague assumptions, inspects available local context, asks one focussed question at a time when answers cannot be discovered, and continues until the problem, first user, smallest useful behaviour, trade-offs, risks, constraints, decisions, and next actions are clear enough to proceed.
+description: Use when a user proposes a product idea, project, feature, architecture, implementation plan, or ambiguous change and Codex should clarify the idea and create a clear scope before acting. The skill challenges vague assumptions, inspects available local context, asks one focussed question at a time when answers cannot be discovered, and continues until the problem, first user, first useful flow, trade-offs, risks, constraints, decisions, and next actions are clear enough to proceed.
 ---
 
 # Create Scope
@@ -16,11 +16,11 @@ Create enough shared understanding to define a scope and act deliberately. Prefe
   - problem being solved
   - first user or beneficiary
   - desired outcome
-  - smallest useful behaviour that would prove value
+  - the first useful flow that would prove value
   - major assumptions or unresolved decisions
 3. Check whether the clarified intent changes the product description. If it does, update the relevant product description artefact before or alongside the scope.
 4. Identify assumptions, missing decisions, and terms that could mean more than one thing.
-5. Capture trade-offs as ranked decision priorities that can guide later choices, for example learning clarity > small scope > polish > extensibility.
+5. Capture trade-offs as ranked decision priorities that can guide later choices, for example user clarity > small scope > polish > extensibility.
 6. Capture risks that could break the user experience, invalidate the scope, or cause scope expansion.
 7. Inspect local context when it can answer a question: files, docs, existing code, git state, configs, scripts, and tests.
 8. Ask exactly one question at a time when the answer cannot be determined safely.
@@ -42,10 +42,10 @@ Ask questions that change the plan. Avoid asking for preferences that can be inf
 Good questions:
 
 - "Who is the first real user of this workflow?"
-- "What is the smallest behaviour that would prove this feature is useful?"
-- "Should this be optimised for local learning, production deployment, or both?"
+- "What is the first useful flow that would prove this feature is useful?"
+- "Should this be optimised for local experimentation, production deployment, or both?"
 - "What failure case must the first version handle?"
-- "Which priority wins when learning clarity, delivery speed, polish, and extensibility conflict?"
+- "Which priority wins when user clarity, delivery speed, polish, and extensibility conflict?"
 
 Poor questions:
 
@@ -59,7 +59,7 @@ When enough clarity exists, summarise:
 
 - the agreed goal
 - the current constraints
-- the smallest useful behaviour
+- the first useful flow
 - the trade-offs and risks captured
 - the decisions made
 - any domain language updates or unresolved term ambiguities
@@ -93,7 +93,7 @@ Derived from:
 
 ## Target User
 
-## Smallest Useful Behaviour
+## first useful flow
 
 ## In Scope
 

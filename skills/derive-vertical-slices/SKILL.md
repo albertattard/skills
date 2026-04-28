@@ -28,7 +28,7 @@ Inspect nearby docs when they clarify intent, but do not expand scope beyond the
 ## Workflow
 
 1. Restate the core outcome from the PRD or selected source document.
-2. Identify the smallest end-to-end behaviour that proves the core loop.
+2. Use the first useful flow as the starting point for the first implementation slice.
 3. Derive ordered slices where each slice adds one meaningful user-visible capability.
 4. Push technical setup, scaffolding, data modelling, tests, and styling into slices only when needed to deliver that slice.
 5. Challenge horizontal slices such as "build UI", "add data model", "wire storage", or "set up persistence"; rewrite them as end-to-end outcomes.
