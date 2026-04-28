@@ -161,7 +161,7 @@ entries:
 
   - type: Command
     commands: |
-      tree --sort=name 'docs'
+      tree --dirsfirst --sort=name 'docs'
     output:
       caption: |
         The documentation files
@@ -213,7 +213,7 @@ entries:
 
   - type: Command
     commands: |
-      tree --sort=name '.codex/skills/create-scope'
+      tree --dirsfirst --sort=name '.codex/skills/create-scope'
     output:
       caption: |
         The generated skill
@@ -295,7 +295,7 @@ entries:
 
   - type: Command
     commands: |
-      tree --sort=name 'docs'
+      tree --dirsfirst --sort=name 'docs'
     output:
       caption: |
         The documentation files
@@ -345,7 +345,7 @@ entries:
 
   - type: Command
     commands: |
-      tree --sort=name '.codex/skills/derive-product-requirements-document'
+      tree --dirsfirst --sort=name '.codex/skills/derive-product-requirements-document'
     output:
       caption: |
         The generated skill
@@ -417,7 +417,7 @@ entries:
 
   - type: Command
     commands: |
-      tree --sort=name 'docs'
+      tree --dirsfirst --sort=name 'docs'
     output:
       caption: |
         The documentation files
@@ -470,7 +470,7 @@ entries:
 
   - type: Command
     commands: |
-      tree --sort=name '.codex/skills/derive-vertical-slices'
+      tree --dirsfirst --sort=name '.codex/skills/derive-vertical-slices'
     output:
       caption: |
         The generated skill
@@ -542,7 +542,7 @@ entries:
 
   - type: Command
     commands: |
-      tree --sort=name 'docs'
+      tree --dirsfirst --sort=name 'docs'
     output:
       caption: |
         The documentation files
