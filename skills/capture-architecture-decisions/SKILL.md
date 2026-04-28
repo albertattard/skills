@@ -28,7 +28,7 @@ Do not create an ADR for routine implementation details, local refactors, naming
 
 Inspect the most relevant local context before writing:
 
-- existing ADRs under `docs/adr/`
+- existing ADRs under `docs/adrs/`
 - scope, PRD, slice, production, and task artefacts under `docs/`
 - source code, tests, configuration, deployment files, migrations, and package manifests
 - user-provided architecture notes, prompts, issues, diagrams, or review comments
@@ -38,21 +38,21 @@ Treat source artefacts as inputs. Do not rewrite scope, PRD, slice, production, 
 ## Workflow
 
 1. Identify the architecture decision being made or reviewed.
-2. Check `docs/adr/` for existing ADRs before creating a new one.
+2. Check `docs/adrs/` for existing ADRs before creating a new one.
 3. If an existing ADR is still valid, reference it instead of duplicating it.
 4. If the decision changes a previous ADR, create a new ADR with status `Accepted` or `Proposed` and mark the old ADR as `Superseded by [NNNN-title](NNNN-title.md)`.
 5. Ask the user before writing when the decision, status, or selected option cannot be determined safely from context.
 6. When running non-interactively or when the user asks to avoid follow-up questions, choose `Proposed` status for unresolved decisions and record the uncertainty in `Context` or `Consequences`.
-7. Write ADRs under `docs/adr/` using zero-padded numeric prefixes and kebab-case titles.
-8. Keep `docs/adr/README.md` current when ADRs are added, renamed, or superseded.
+7. Write ADRs under `docs/adrs/` using zero-padded numeric prefixes and kebab-case titles.
+8. Keep `docs/adrs/README.md` current when ADRs are added, renamed, or superseded.
 
 ## File Naming
 
 Use the next available sequence number:
 
 ```text
-docs/adr/0001-use-postgresql-for-primary-storage.md
-docs/adr/0002-publish-events-through-outbox.md
+docs/adrs/0001-use-postgresql-for-primary-storage.md
+docs/adrs/0002-publish-events-through-outbox.md
 ```
 
 Do not renumber existing ADRs.
@@ -85,7 +85,7 @@ Keep the core sections intact. Do not add custom sections unless the repository 
 
 ## ADR Index
 
-Use this structure for `docs/adr/README.md`:
+Use this structure for `docs/adrs/README.md`:
 
 ```markdown
 # Architecture Decision Records

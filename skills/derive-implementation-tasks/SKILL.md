@@ -17,7 +17,7 @@ Start from the most specific delivery artefacts available:
 
 - `docs/slices/*.md`
 - `docs/production/*.md`
-- `docs/adr/*.md`
+- `docs/adrs/*.md`
 - `docs/requirements/*.md`
 - `docs/scopes/*.md`
 - user-provided task planning notes, capability or release grouping notes, or tracker conventions
@@ -39,7 +39,7 @@ If source assumptions, contradictions, or missing decisions affect task readines
 
 1. Restate the first releasable increment from the slice sequence and path-to-production plan.
 2. Inspect repository context for implementation boundaries, test commands, delivery conventions, and existing task or issue formats.
-3. Inspect ADRs under `docs/adr/` and treat accepted or proposed architecture decisions as implementation constraints.
+3. Inspect ADRs under `docs/adrs/` and treat accepted or proposed architecture decisions as implementation constraints.
 4. Derive ordered tasks from vertical slices first, keeping each task tied to a user-visible or independently verifiable outcome.
 5. Add production-readiness tasks only when they are required by the path-to-production plan for the first releasable increment.
 6. Reference ADRs in a task only when they materially affect that task's scope, dependencies, acceptance criteria, validation, or implementation constraints.
@@ -88,7 +88,7 @@ Derived from:
 
 - [vertical slices](../slices/README.md)
 - [path to production](../production/path-to-production.md)
-- [architecture decision records](../adr/README.md)
+- [architecture decision records](../adrs/README.md)
 
 ## Task Sequence
 
@@ -184,7 +184,7 @@ Derived from:
 
 - [slice title](../slices/0001-slice-title.md)
 - [path to production](../production/path-to-production.md)
-- [ADR title](../adr/0001-adr-title.md)
+- [ADR title](../adrs/0001-adr-title.md)
 
 ## Type
 

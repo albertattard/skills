@@ -121,7 +121,7 @@ Before the final response, check:
 - Did it expose implementation details through names, types, parameters, files, or module boundaries?
 - Is there a simpler interface that would hide more complexity?
 - Are important assumptions captured in code, tests, comments, or the final summary?
-- Did this task introduce or change an architecture decision that should be captured in `docs/adr/`?
+- Did this task introduce or change an architecture decision that should be captured in `docs/adrs/`?
 - Did the implementation avoid dragging in future scope?
 
 Address issues found during the review when the fix is within the selected task and tests remain green.

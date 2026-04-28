@@ -717,7 +717,7 @@ entries:
 
          This skill helps the model scan the generated planning artefacts for ADR
          candidates and turn durable architecture choices into Architecture
-         Decision Records (ADRs) under `docs/adr/`. This checkpoint runs after
+         Decision Records (ADRs) under `docs/adrs/`. This checkpoint runs after
          the path-to-production plan because production readiness exposes the
          deployment, data, security, observability, integration, and operational
          trade-offs that are most likely to need ADRs.
@@ -768,7 +768,7 @@ entries:
          into architecture decision records.
 
          ```text
-         Use $capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adr/.
+         Use $capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adrs/.
          ```
 
          The runbook asks the model to avoid follow-up questions because it needs
@@ -778,7 +778,7 @@ entries:
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
-      Use $capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adr/.
+      Use $capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adrs/.
 
       Use the answers in @.fixtures/prompts/architecture-decision-answers.md without asking follow-up questions. If a candidate is durable and the decision is clear from the source artefacts and repository context, create an accepted ADR. If a candidate is durable but the decision is unresolved, create a proposed ADR and record the uncertainty. If a candidate is not ADR-worthy, leave it in its source context and mention that in the final summary.
       EOF
@@ -905,7 +905,7 @@ entries:
          implementation task plan.
 
          ```text
-         Use $derive-implementation-tasks to convert @docs/slices/, @docs/production/path-to-production.md, and @docs/adr/ into ordered implementation task Markdown files.
+         Use $derive-implementation-tasks to convert @docs/slices/, @docs/production/path-to-production.md, and @docs/adrs/ into ordered implementation task Markdown files.
          ```
 
          The runbook asks the model to avoid follow-up questions because it needs
@@ -916,7 +916,7 @@ entries:
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
-      Use $derive-implementation-tasks to convert @docs/slices/, @docs/production/path-to-production.md, and @docs/adr/ into ordered implementation task Markdown files.
+      Use $derive-implementation-tasks to convert @docs/slices/, @docs/production/path-to-production.md, and @docs/adrs/ into ordered implementation task Markdown files.
 
       Use the answers in @.fixtures/prompts/implementation-tasks-answers.md without asking follow-up questions. Do not create remote tracker issues. Write local Markdown task files under @docs/tasks/. Treat relevant ADRs as implementation constraints and reference them only in tasks they materially affect. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the affected task files.
       EOF
