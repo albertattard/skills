@@ -34,6 +34,7 @@ RUNBOOK="${EXAMPLES_DIR}/sw-runbook.yaml"
 PRODUCT_DESCRIPTION="${SOURCE_DIR}/product-description.md"
 CREATE_SCOPE_ANSWERS="${SOURCE_DIR}/create-scope-answers.md"
 PATH_TO_PRODUCTION_ANSWERS="${SOURCE_DIR}/path-to-production-answers.md"
+IMPLEMENTATION_TASKS_ANSWERS="${SOURCE_DIR}/implementation-tasks-answers.md"
 TARGET_DIR="/tmp/${EXAMPLE}"
 
 if [[ ! -d "${SOURCE_DIR}" ]]; then
@@ -63,6 +64,11 @@ if grep -q '@\.fixtures/prompts/path-to-production-answers\.md' "${RUNBOOK}" && 
   exit 2
 fi
 
+if grep -q '@\.fixtures/prompts/implementation-tasks-answers\.md' "${RUNBOOK}" && [[ ! -f "${IMPLEMENTATION_TASKS_ANSWERS}" ]]; then
+  echo "Missing implementation-tasks answers: ${IMPLEMENTATION_TASKS_ANSWERS}" >&2
+  exit 2
+fi
+
 # Recreate the target directory to simulate running the runbook in a clean environment.
 rm -rf "${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}"
@@ -76,6 +82,10 @@ fi
 if [[ -f "${PATH_TO_PRODUCTION_ANSWERS}" ]]; then
   mkdir -p "${TARGET_DIR}/.fixtures/prompts"
   cp "${PATH_TO_PRODUCTION_ANSWERS}" "${TARGET_DIR}/.fixtures/prompts/path-to-production-answers.md"
+fi
+if [[ -f "${IMPLEMENTATION_TASKS_ANSWERS}" ]]; then
+  mkdir -p "${TARGET_DIR}/.fixtures/prompts"
+  cp "${IMPLEMENTATION_TASKS_ANSWERS}" "${TARGET_DIR}/.fixtures/prompts/implementation-tasks-answers.md"
 fi
 
 # Copy the skills which are referred to from the runbook.
