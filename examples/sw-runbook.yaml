@@ -630,10 +630,20 @@ entries:
       3. Apply the `derive-path-to-production` skill to obtain the first production
          readiness plan.
 
+         ```text
+         Use $derive-path-to-production to convert @docs/requirements/product-requirements-document.md and @docs/slices/ into a production readiness and release sequencing plan.
+         ```
+
+         The runbook provides production answers up front because it needs to run
+         unattended. In an interactive session, you can use the prompt alone and
+         answer the questions one by one.
+
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
       Use $derive-path-to-production to convert @docs/requirements/product-requirements-document.md and @docs/slices/ into a production readiness and release sequencing plan.
+
+      Use the answers in @.fixtures/prompts/path-to-production-answers.md without asking follow-up questions. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the production plan.
       EOF
     output:
       caption: |
