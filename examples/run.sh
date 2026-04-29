@@ -6,6 +6,7 @@ usage() {
 Usage: examples/run.sh <example-name>
 
 Runs examples/sw-runbook.yaml with inputs from examples/<example-name> in a clean temporary directory.
+Writes a shareable copy of the completed example to examples/dist/<example-name>.
 EOF
 }
 
@@ -37,6 +38,9 @@ PATH_TO_PRODUCTION_ANSWERS="${SOURCE_DIR}/path-to-production-answers.md"
 ARCHITECTURE_DECISION_ANSWERS="${SOURCE_DIR}/architecture-decision-answers.md"
 IMPLEMENTATION_TASKS_ANSWERS="${SOURCE_DIR}/implementation-tasks-answers.md"
 TARGET_DIR="/tmp/${EXAMPLE}"
+DIST_ROOT="${EXAMPLES_DIR}/dist"
+DIST_DIR="${DIST_ROOT}/${EXAMPLE}"
+DIST_ARCHIVE="${DIST_ROOT}/${EXAMPLE}.zip"
 
 if [[ ! -d "${SOURCE_DIR}" ]]; then
   echo "Unknown example: ${EXAMPLE}" >&2
@@ -75,6 +79,12 @@ if grep -q '@\.fixtures/prompts/implementation-tasks-answers\.md' "${RUNBOOK}" &
   exit 2
 fi
 
+# Ignore all the things within the dist directory
+mkdir -p "${DIST_ROOT}"
+cat <<'EOF' > "${DIST_ROOT}/.gitignore"
+*
+EOF
+
 # Recreate the target directory to simulate running the runbook in a clean environment.
 rm -rf "${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}"
@@ -112,10 +122,22 @@ When a file in this directory is explicitly referenced, use only that referenced
 EOF
 
 (cd "${TARGET_DIR}"
+
  # Run the runbook.
  sw --verbose
 
- cp "${TARGET_DIR}/README.md" "${SOURCE_DIR}/README.md"
+ # Create the distribution directory.
+ rm -rf "${DIST_DIR}"
+ mkdir -p "${DIST_DIR}/.fixtures" "${DIST_DIR}/docs/product"
+ cp "${TARGET_DIR}/.fixtures/AGENTS.md" "${DIST_DIR}/.fixtures/AGENTS.md"
+ if [[ -d "${TARGET_DIR}/.fixtures/prompts" ]]; then
+  cp -R "${TARGET_DIR}/.fixtures/prompts" "${DIST_DIR}/.fixtures/prompts"
+ fi
+ cp -R "${REPO_ROOT}/skills" "${DIST_DIR}/.fixtures/skills"
+ cp "${PRODUCT_DESCRIPTION}" "${DIST_DIR}/docs/product/description.md"
+ cp "${TARGET_DIR}/README.md" "${DIST_DIR}/README.md"
+ rm -f "${DIST_ARCHIVE}"
+ (cd "${DIST_ROOT}" && zip -qr "${DIST_ARCHIVE}" "${EXAMPLE}")
 
  # Open the editor.
  code .
