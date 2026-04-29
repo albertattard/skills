@@ -31,5 +31,8 @@ A: Mark tasks as `ready-for-agent` when the source artefacts and repository cont
 Q: What validation expectations should tasks include?
 A: Acceptance criteria must be observable and verifiable. Include automated test expectations when practical, including Spring MVC/domain tests for validation and ordering rules, Maven `./mvnw verify`, unit tests that exclude `e2e` tests, and Playwright for Java functional tests tagged with `@Tag("e2e")` against the locally running Spring Boot application during the Maven Failsafe integration-test phase. Use measurable thresholds only when they clarify behaviour, such as matching total agenda minutes to workshop duration.
 
+Q: What UI quality should the first release require?
+A: The application should have a simple, clean, deliberately styled server-rendered UI from the first user-facing page onward. Keep it lightweight and appropriate for a local laptop tool: readable typography, clear spacing, grouped sections, styled forms and buttons, visible status messages, usable empty states, and responsive behaviour for a narrow viewport. A plain browser-default page is not acceptable for the planning experience or facilitator view, even for the MVP.
+
 Q: Should remote tracker issues be created?
 A: No. Write local Markdown task files under `docs/tasks/` only. Do not create GitHub, Jira, Linear, or other remote tracker issues.
