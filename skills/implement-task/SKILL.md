@@ -32,6 +32,16 @@ Read nearby context only when it affects the selected task:
 
 Treat task, slice, production, requirement, and scope documents as source artefacts. Do not change them unless the selected task explicitly requires documentation updates or the task index must stay current after task-related file changes.
 
+## Preflight Gate
+
+Before inspecting task readiness or editing code, verify that the repository is in a trustworthy baseline state.
+
+1. Check the worktree status. If there are tracked or untracked non-ignored changes, stop and ask the user to commit, stash, discard, or otherwise handle them before implementation begins.
+2. Identify the repository's compile, test, and functional-test validation commands from project documentation, task validation guidance, build files, scripts, or established local conventions.
+3. Run the full baseline validation suite, including functional tests when the repository defines them. Do not proceed if compilation or tests fail, because later failures would be ambiguous between pre-existing defects and defects introduced by the selected task.
+
+If the repository does not define a compile, test, or functional-test command, record that gap as an assumption in the final summary and run the strongest available baseline validation instead.
+
 ## Readiness Gate
 
 Before editing code, inspect the selected task's `Readiness`, `Dependencies`, `Acceptance Criteria`, and `Validation` sections.
@@ -47,16 +57,17 @@ Do not implement adjacent work merely because it is nearby. If the selected task
 
 ## Implementation Workflow
 
-1. Restate the selected task, outcome, readiness, dependencies, and acceptance criteria.
-2. Inspect the repository enough to identify the affected module boundaries, existing patterns, and validation commands.
-3. Choose the first observable behaviour or release-readiness outcome from the acceptance criteria.
-4. Add or update a failing test before implementation when the behaviour can be tested locally and deterministically.
-5. Implement the smallest coherent change that makes the test pass.
-6. Repeat the behaviour-by-behaviour loop until the task's acceptance criteria are covered.
-7. Refactor only while tests are green, and only to reduce real complexity, clarify boundaries, or align with established local patterns.
-8. Run the task's validation commands and any focused tests needed for the touched area.
-9. If implementation requires a new durable architecture decision, stop and challenge the task unless the decision is already captured in an ADR or the user explicitly asks to make and capture it. Use `$capture-architecture-decisions` for the ADR before or alongside the implementation work.
-10. Report changed files, validation results, acceptance criteria covered by tests, manual checks performed or still required, and unresolved follow-up work.
+1. Run the preflight gate and stop if the worktree is dirty or baseline validation fails.
+2. Restate the selected task, outcome, readiness, dependencies, and acceptance criteria.
+3. Inspect the repository enough to identify the affected module boundaries, existing patterns, and validation commands.
+4. Choose the first observable behaviour or release-readiness outcome from the acceptance criteria.
+5. Add or update a failing test before implementation when the behaviour can be tested locally and deterministically.
+6. Implement the smallest coherent change that makes the test pass.
+7. Repeat the behaviour-by-behaviour loop until the task's acceptance criteria are covered.
+8. Refactor only while tests are green, and only to reduce real complexity, clarify boundaries, or align with established local patterns.
+9. Run the task's validation commands, any focused tests needed for the touched area, and the full repository validation suite again, including functional tests when the repository defines them.
+10. If implementation requires a new durable architecture decision, stop and challenge the task unless the decision is already captured in an ADR or the user explicitly asks to make and capture it. Use `$capture-architecture-decisions` for the ADR before or alongside the implementation work.
+11. Report changed files, validation results, acceptance criteria covered by tests, manual checks performed or still required, and unresolved follow-up work.
 
 When a test-first loop is not useful, explain why in the final summary. Examples include documentation-only work, manual operations, wiring that cannot run locally, or changes where the repository has no practical deterministic test surface.
 
