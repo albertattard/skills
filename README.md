@@ -52,6 +52,7 @@ architecture decision candidates
 |   |-- run.sh
 |   |-- sw-runbook.yaml
 |   |-- poc-tracker/
+|   |-- workshop-planner/
 |   `-- wort-werk/
 `-- skills/
     |-- capture-architecture-decisions/
@@ -76,6 +77,7 @@ Use the example runner with one of the available example names:
 
 ```sh
 examples/run.sh poc-tracker
+examples/run.sh workshop-planner
 examples/run.sh wort-werk
 ```
 
