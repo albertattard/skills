@@ -182,7 +182,7 @@ Use this structure for each task file:
 
 Derived from:
 
-- [slice title](../slices/0001-slice-title.md)
+- [SLICE-0001. Slice title](../slices/SLICE-0001-slice-title.md)
 - [path to production](../production/path-to-production.md)
 - [ADR title](../adrs/ADR-0001-adr-title.md)
 

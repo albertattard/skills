@@ -40,18 +40,22 @@ If assumptions, contradictions, or source clarifications affect slicing, record 
 7. Carry architecture-significant constraints into `Assumptions and Source Notes`, and flag ADR candidates when slice boundaries depend on durable implementation, data, integration, or deployment choices.
 8. Ask the user before writing files if slice boundaries, count, ordering, assumptions, or contradictions materially affect product direction.
 9. Include a `Source` section in each slice file that links to the PRD or source document used as input.
-10. Write one Markdown file per slice under `docs/slices/`.
+10. Use `SLICE-NNNN` as the slice number, where `NNNN` is a zero-padded sequence number.
+11. Use the full `SLICE-NNNN` identifier everywhere the slice is referenced: filename, title, source links, task source links, and final summaries.
+12. Write one Markdown file per slice under `docs/slices/`.
 
 Do not create a slice that depends on an unresolved product decision unless the slice records that dependency clearly.
 
 ## File Naming
 
-Use zero-padded numeric prefixes and kebab-case titles:
+Use the next available sequence number:
 
 ```text
-docs/slices/0001-submit-first-request.md
-docs/slices/0002-review-request-status.md
+docs/slices/SLICE-0001-submit-first-request.md
+docs/slices/SLICE-0002-review-request-status.md
 ```
+
+Do not renumber existing slices. When updating existing bare-numeric slice files, preserve their numeric sequence and rename only to add the `SLICE-` prefix when references can be updated. Do not use bare numeric identifiers such as `0001` for slices; use the full `SLICE-0001` form everywhere.
 
 Keep each file focused on one slice.
 
@@ -60,7 +64,7 @@ Keep each file focused on one slice.
 Use this structure for each slice:
 
 ```markdown
-# Slice Title
+# SLICE-NNNN. Slice Title
 
 ## Source
 
@@ -95,7 +99,7 @@ Describe the user-visible result in one or two sentences.
 
 Omit `Notes` only when there is nothing useful to say.
 
-Adjust the source link to match the actual input path. For example, if a slice is created at `docs/slices/0001-submit-first-request.md` from `docs/requirements/product-requirements-document.md`, link to `../requirements/product-requirements-document.md`.
+Adjust the source link to match the actual input path. For example, if a slice is created at `docs/slices/SLICE-0001-submit-first-request.md` from `docs/requirements/product-requirements-document.md`, link to `../requirements/product-requirements-document.md`.
 
 ## Quality Bar
 
