@@ -88,6 +88,8 @@ Prefer fewer larger-scope tests over many narrow tests.
 
 Use a red-green-refactor loop as a discipline, not as ceremony. One meaningful failing test per observable behaviour is usually better than many small tests that make the implementation harder to change.
 
+For browser-level tests that cover multi-step user flows, prefer a small domain-specific fluent driver or page object by default. The test should read like a scenario script, while the driver owns Playwright selectors, waits, repeated interactions, and product-state assertions. Name driver methods after user actions and observable product states, not DOM operations. Keep the driver small at first, and split it by screen or workflow only when one class starts mixing unrelated responsibilities.
+
 ## Design Bias
 
 Prefer changes that reduce cognitive load for the next maintainer.
