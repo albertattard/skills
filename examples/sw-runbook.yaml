@@ -984,7 +984,7 @@ entries:
 
   - type: Heading
     level: H2
-    title: Implement First Task
+    title: Implement Ready Tasks
 
   - type: Markdown
     contents: |
@@ -1035,50 +1035,114 @@ entries:
       3. Apply the `implement-task` skill to the first ready implementation task.
 
          ```text
-         Use $implement-task to implement the first ready task listed in @docs/tasks/README.md.
+         Use $implement-task to implement the next incomplete ready task listed in @docs/tasks/README.md.
          ```
 
          The skill is responsible for checking task readiness, dependencies, the
          clean worktree preflight, baseline validation, task-scoped tests, and
-         final full validation. If no task is ready, the model should stop and
-         report the dependency or decision that blocks implementation.
+         final full validation. After the task passes validation, the skill marks
+         the task as `done` and keeps the task indexes current.
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
-      Use $implement-task to implement the first ready task listed in @docs/tasks/README.md.
+      set -e
+
+      TASK_ID="$(awk -F'|' '
+        /TASK-[0-9]+/ && /ready-for-agent/ && $0 !~ /\|[[:space:]]*done[[:space:]]*\|/ {
+          if (match($0, /TASK-[0-9]+/)) {
+            print substr($0, RSTART, RLENGTH)
+            exit
+          }
+        }
+      ' 'docs/tasks/README.md')"
+
+      if [ -z "$TASK_ID" ]; then
+        echo "No incomplete ready tasks remain."
+        exit 0
+      fi
+
+      TASK_FILE="$(find 'docs/tasks' -maxdepth 1 -type f -name "${TASK_ID}-*.md" -print -quit)"
+      test -n "$TASK_FILE"
+
+      codex exec --full-auto <<EOF
+      Use \$implement-task to implement @$TASK_FILE.
       EOF
+
+      git add .
+      if git diff --cached --quiet; then
+        echo "No changes were produced for ${TASK_ID}; stopping to avoid repeating the same task."
+        exit 1
+      fi
+
+      git commit --message "Implement ${TASK_ID}"
     output:
       caption: |
         The model’s output
       rewrite:
         - type: limit_lines
-          last: 20
-    timeout: 20 minutes
+          last: 40
+    timeout: 30 minutes
     indent: 3
 
   - type: Markdown
     contents: |
-      4. Commit changes
+      4. Apply the `implement-task` skill to the remaining ready implementation
+         tasks.
 
-          In an interactive run, you can ask the model to analyse the modified
-          files, create a commit message, and commit them using the following
-          prompt.
-
-          ```text
-          commit changes
-          ```
-
-          The runbook uses manual Git commands so this step remains reproducible
-          in environments where Codex cannot write to Git metadata.
+         The runbook repeats the implementation process until no
+         `ready-for-agent` task remains with a non-`done` status. Each completed
+         task is committed separately with the task identifier in the commit
+         subject.
 
   - type: Command
     commands: |
-      TASK_ID="$(awk '/ready-for-agent/ { if (match($0, /TASK-[0-9]+/)) { print substr($0, RSTART, RLENGTH); exit } }' 'docs/tasks/README.md')"
-      test -n "$TASK_ID"
+      set -e
 
-      git add .
-      git commit \
-        --message "Implement ${TASK_ID}" \
-        --message "Execute ${TASK_ID} with scoped tests and validation so the generated plan begins moving into working software."
+      while true; do
+        TASK_ID="$(awk -F'|' '
+          /TASK-[0-9]+/ && /ready-for-agent/ && $0 !~ /\|[[:space:]]*done[[:space:]]*\|/ {
+            if (match($0, /TASK-[0-9]+/)) {
+              print substr($0, RSTART, RLENGTH)
+              exit
+            }
+          }
+        ' 'docs/tasks/README.md')"
+
+        if [ -z "$TASK_ID" ]; then
+          echo "No incomplete ready tasks remain."
+          break
+        fi
+
+        TASK_FILE="$(find 'docs/tasks' -maxdepth 1 -type f -name "${TASK_ID}-*.md" -print -quit)"
+        test -n "$TASK_FILE"
+
+        codex exec --full-auto <<EOF
+      Use \$implement-task to implement @$TASK_FILE.
+      EOF
+
+        git add .
+        if git diff --cached --quiet; then
+          echo "No changes were produced for ${TASK_ID}; stopping to avoid repeating the same task."
+          exit 1
+        fi
+
+        git commit \
+          --message "Implement ${TASK_ID}"
+      done
+    output:
+      caption: |
+        The model’s output
+      rewrite:
+        - type: limit_lines
+          last: 40
+    timeout: 120 minutes
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      5. Review the result.
+
+         Each implemented task is committed separately with the task identifier
+         in the commit subject. Tasks that still need a human decision, manual
+         action, or another generated task remain in `docs/tasks/`.
     indent: 3
