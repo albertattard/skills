@@ -104,6 +104,18 @@ Prefer changes that reduce cognitive load for the next maintainer.
 
 Before finishing, look for accidental complexity introduced by the change and simplify it while tests are green.
 
+## User Interface Bias
+
+When the selected task includes user-facing UI work, implement it modestly but intentionally.
+
+- Follow the task's UI acceptance criteria and validation guidance before adding broader polish.
+- Use the domain workflow to shape layout: put the primary action, current state, and next useful input where the user can scan them without reading instructions.
+- Prefer shared styles, an existing design system, or established local components over page-specific styling when more than one screen shares the same application shell.
+- Keep typography, spacing, colours, forms, buttons, status messages, empty states, and responsive behaviour consistent enough for repeated use.
+- Do not rely on browser-default foreground and background colours for user-facing screens.
+- Add automated assertions for durable UI contracts when practical, but do not treat text-only assertions as proof of visual quality.
+- Perform a manual browser or screenshot check for new or substantially changed screens when a local browser path is available, and record that check in the final summary.
+
 ## Scope Control
 
 Implement exactly one selected task.
