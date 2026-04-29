@@ -96,9 +96,9 @@ Derived from:
 
 ## Task Sequence
 
-| Task | Type | Readiness | Depends On |
-| --- | --- | --- | --- |
-| [TASK-0001. Task title](TASK-0001-task-title.md) | product | ready-for-agent | None |
+| Task | Status | Type | Readiness | Depends On |
+| --- | --- | --- | --- | --- |
+| [TASK-0001. Task title](TASK-0001-task-title.md) | todo | product | ready-for-agent | None |
 
 ## By Capability Area
 
@@ -160,9 +160,9 @@ Describe the product, domain, or shared technical capability this group covers.
 
 ## Tasks
 
-| Task | Type | Readiness | Depends On |
-| --- | --- | --- | --- |
-| [TASK-0001. Task title](../TASK-0001-task-title.md) | product | ready-for-agent | None |
+| Task | Status | Type | Readiness | Depends On |
+| --- | --- | --- | --- | --- |
+| [TASK-0001. Task title](../TASK-0001-task-title.md) | todo | product | ready-for-agent | None |
 
 ## Exit Criteria
 
@@ -183,6 +183,7 @@ Use this structure for each task file:
 ---
 id: TASK-NNNN
 title: Task Title
+status: todo
 type: product | production-readiness | validation | decision | manual-operation
 capability_area: user-management
 readiness: ready-for-agent | needs-human-decision | blocked-by-task | manual-only
@@ -224,6 +225,8 @@ Describe the observable product behaviour or release-readiness result in one or 
 ```
 
 Use `depends_on: []` when the task can start immediately. Use empty arrays (`[]`) for `related_sources` or `related_adrs` when there are no relevant links.
+
+Use `status: todo` for newly generated tasks. Implementation agents may change it to `done` after the task's acceptance criteria and validation pass.
 
 Omit `Notes` only when there is nothing useful to say.
 

@@ -21,7 +21,7 @@ Start from a specific task file, usually one of:
 - a task linked from `docs/tasks/README.md`
 - a user-provided task document that follows the implementation task structure
 
-Task files may store task metadata such as `id`, `title`, `type`, `capability_area`, `readiness`, `depends_on`, and related source references in YAML front matter instead of separate body sections.
+Task files may store task metadata such as `id`, `title`, `status`, `type`, `capability_area`, `readiness`, `depends_on`, and related source references in YAML front matter instead of separate body sections.
 
 Read nearby context only when it affects the selected task:
 
@@ -32,7 +32,7 @@ Read nearby context only when it affects the selected task:
 - existing tests that cover the affected behaviour
 - relevant source files and module boundaries
 
-Treat task, slice, production, requirement, and scope documents as source artefacts. Do not change them unless the selected task explicitly requires documentation updates or the task index must stay current after task-related file changes.
+Treat task, slice, production, requirement, and scope documents as source artefacts. Do not change them unless the selected task explicitly requires documentation updates, the selected task's completion status must be updated, or the task index must stay current after task-related file changes.
 
 ## Preflight Gate
 
@@ -46,8 +46,9 @@ If the repository does not define a compile, test, or functional-test command, r
 
 ## Readiness Gate
 
-Before editing code, inspect the selected task's readiness, dependencies, acceptance criteria, and validation guidance. Prefer YAML front matter fields such as `readiness` and `depends_on` when present; otherwise use body sections such as `Readiness` and `Dependencies`.
+Before editing code, inspect the selected task's status, readiness, dependencies, acceptance criteria, and validation guidance. Prefer YAML front matter fields such as `status`, `readiness`, and `depends_on` when present; otherwise use body sections such as `Readiness` and `Dependencies`.
 
+- `done`: stop and report that the task is already complete.
 - `ready-for-agent`: proceed when dependencies are satisfied.
 - `blocked-by-task`: stop unless the blocking task is already complete in the repository.
 - `needs-human-decision`: stop and ask for the missing decision unless the user explicitly provided it.
@@ -62,14 +63,15 @@ Do not implement adjacent work merely because it is nearby. If the selected task
 1. Run the preflight gate and stop if the worktree is dirty or baseline validation fails.
 2. Restate the selected task, outcome, readiness, dependencies, and acceptance criteria.
 3. Inspect the repository enough to identify the affected module boundaries, existing patterns, and validation commands.
-4. Choose the first observable behaviour or release-readiness outcome from the acceptance criteria.
-5. Add or update a failing test before implementation when the behaviour can be tested locally and deterministically.
-6. Implement the smallest coherent change that makes the test pass.
-7. Repeat the behaviour-by-behaviour loop until the task's acceptance criteria are covered.
-8. Refactor only while tests are green, and only to reduce real complexity, clarify boundaries, or align with established local patterns.
-9. Run the task's validation commands, any focused tests needed for the touched area, and the full repository validation suite again, including functional tests when the repository defines them.
-10. If implementation requires a new durable architecture decision, stop and challenge the task unless the decision is already captured in an ADR or the user explicitly asks to make and capture it. Use `$capture-architecture-decisions` for the ADR before or alongside the implementation work.
-11. Report changed files, validation results, acceptance criteria covered by tests, manual checks performed or still required, and unresolved follow-up work.
+4. If implementation requires a new durable architecture decision, stop and challenge the task unless the decision is already captured in an ADR or the user explicitly asks to make and capture it. Use `$capture-architecture-decisions` for the ADR before or alongside the implementation work.
+5. Choose the first observable behaviour or release-readiness outcome from the acceptance criteria.
+6. Add or update a failing test before implementation when the behaviour can be tested locally and deterministically.
+7. Implement the smallest coherent change that makes the test pass.
+8. Repeat the behaviour-by-behaviour loop until the task's acceptance criteria are covered.
+9. Refactor only while tests are green, and only to reduce real complexity, clarify boundaries, or align with established local patterns.
+10. Run the task's validation commands, any focused tests needed for the touched area, and the full repository validation suite again, including functional tests when the repository defines them.
+11. If all acceptance criteria are satisfied and validation passes, mark the selected task `status` as `done` and keep `docs/tasks/README.md` and capability indexes current. If completing this task clearly unblocks dependent generated tasks, update those tasks' readiness from `blocked-by-task` to `ready-for-agent` only when all their generated task dependencies are complete and no human, manual, product, security, data, or release decision still blocks them.
+12. Report changed files, validation results, acceptance criteria covered by tests, manual checks performed or still required, task status/index updates, and unresolved follow-up work.
 
 When a test-first loop is not useful, explain why in the final summary. Examples include documentation-only work, manual operations, wiring that cannot run locally, or changes where the repository has no practical deterministic test surface.
 
