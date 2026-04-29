@@ -15,7 +15,7 @@ A: Use these capability areas where they fit:
 Prefer product/domain capability areas over technical areas. Use `application-platform`, `verification`, and `local-operations` only for work that is shared across product capabilities or comes directly from the path-to-production plan.
 
 Q: Should release-readiness work become implementation tasks?
-A: Yes. Include local release-readiness tasks required for the first release, especially Java 25 and Spring Boot project setup, Thymeleaf templates, Spring Data JPA repositories, H2 in-memory configuration through `application.yml`, Spring Boot Actuator health, Maven wrapper and `./mvnw verify`, Maven Surefire and Failsafe separation, Playwright for Java tests tagged `e2e`, local run instructions, local health/startup checks, error logging, and documentation that data is lost when the application stops.
+A: Yes. Include local release-readiness tasks required for the first release, especially Java 25 and Spring Boot project setup, Thymeleaf templates, Spring Data JPA repositories, H2 in-memory configuration through `application.yml`, semantic Spring MVC route mappings with hidden method filtering for server-rendered form updates/deletes, Spring Boot Actuator health, Maven wrapper and `./mvnw verify`, Maven Surefire and Failsafe separation, Playwright for Java tests tagged `e2e`, local run instructions, local health/startup checks, error logging, and documentation that data is lost when the application stops.
 
 Do not include container build, image publishing, CI/CD, cloud infrastructure, deployment, external database provisioning, backup/restore, or production rollout tasks.
 

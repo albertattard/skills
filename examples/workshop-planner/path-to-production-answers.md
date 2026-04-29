@@ -21,6 +21,7 @@ The build and run path should stay simple:
 - Use Maven to build, test, package, and run the project.
 - Use Spring Data JPA with H2 in-memory database mode for local session data.
 - Use `application.yml` for Spring Boot application configuration.
+- Use semantic Spring MVC route mappings where practical. Enable Spring MVC hidden method filtering so server-rendered forms can submit `DELETE`, `PUT`, or `PATCH` style operations without introducing client-side JavaScript.
 - Use Playwright for Java for functional browser tests.
 - Use Maven Failsafe for browser-level integration tests.
 - Use Spring Boot Actuator for a simple local health endpoint.
