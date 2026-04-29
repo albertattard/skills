@@ -111,6 +111,7 @@ Prefer changes that reduce cognitive load for the next maintainer.
 - Avoid shallow abstractions that mostly rename one operation, pass data through, or split code without creating a clearer boundary.
 - Do not split code just to make files or functions smaller. Split when it creates a stable concept, clearer responsibility, or useful isolation.
 - Keep task-specific decisions close to the task, but move stable domain rules into shared code when reuse is real.
+- Avoid long parameter lists when the parameters form an existing domain concept. If a method's parameters mirror a record, value object, command, or request type in the same layer or an inward layer, prefer passing that object instead of unpacking and repacking fields. Do not pass web/form or transport types into domain entities; map them to domain commands or values first.
 - Prefer clear names that carry domain meaning over vague names such as `data`, `handler`, `manager`, `processor`, or `utils`.
 - Make invalid states hard to represent when the language and local style support it.
 - Mark methods `static` when they do not read or mutate instance state and the language or local style supports it. This is especially useful for pure formatting, parsing, comparison, mapping, and small calculations that only use their parameters. Do not make methods static when they are part of an object's polymorphic contract, need instance collaborators, or would make the API harder to test or evolve.
