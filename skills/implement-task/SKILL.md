@@ -113,6 +113,7 @@ Prefer changes that reduce cognitive load for the next maintainer.
 - Keep task-specific decisions close to the task, but move stable domain rules into shared code when reuse is real.
 - Prefer clear names that carry domain meaning over vague names such as `data`, `handler`, `manager`, `processor`, or `utils`.
 - Make invalid states hard to represent when the language and local style support it.
+- Mark methods `static` when they do not read or mutate instance state and the language or local style supports it. This is especially useful for pure formatting, parsing, comparison, mapping, and small calculations that only use their parameters. Do not make methods static when they are part of an object's polymorphic contract, need instance collaborators, or would make the API harder to test or evolve.
 - Preserve the repository's existing patterns unless they conflict with the selected task or create avoidable complexity.
 - When creating new framework configuration and no repository convention exists, prefer structured configuration formats that preserve hierarchy clearly, such as YAML instead of properties. For Spring Boot applications, prefer `application.yml` over `application.properties` unless the repository already uses properties files.
 - Use comments to explain intent, invariants, constraints, and non-obvious trade-offs. Do not narrate obvious code.
