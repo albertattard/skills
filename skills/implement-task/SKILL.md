@@ -68,10 +68,11 @@ Do not implement adjacent work merely because it is nearby. If the selected task
 6. Add or update a failing test before implementation when the behaviour can be tested locally and deterministically.
 7. Implement the smallest coherent change that makes the test pass.
 8. Repeat the behaviour-by-behaviour loop until the task's acceptance criteria are covered.
-9. Refactor only while tests are green, and only to reduce real complexity, clarify boundaries, or align with established local patterns.
-10. Run the task's validation commands, any focused tests needed for the touched area, and the full repository validation suite again, including functional tests when the repository defines them.
-11. If all acceptance criteria are satisfied and validation passes, mark the selected task `status` as `done` and keep `docs/tasks/README.md` and capability indexes current. If completing this task clearly unblocks dependent generated tasks, update those tasks' readiness from `blocked-by-task` to `ready-for-agent` only when all their generated task dependencies are complete and no human, manual, product, security, data, or release decision still blocks them.
-12. Report changed files, validation results, acceptance criteria covered by tests, manual checks performed or still required, task status/index updates, and unresolved follow-up work.
+9. While tests are green, review the changed files and closest related code for local refactoring opportunities revealed by the implementation.
+10. Apply small refactorings that reduce real complexity, clarify boundaries, remove duplication, align with established local patterns, or make the code easier to change. Do not broaden into unrelated refactoring.
+11. Run the task's validation commands, any focused tests needed for the touched area, and the full repository validation suite again, including functional tests when the repository defines them.
+12. If all acceptance criteria are satisfied and validation passes, mark the selected task `status` as `done` and keep `docs/tasks/README.md` and capability indexes current. If completing this task clearly unblocks dependent generated tasks, update those tasks' readiness from `blocked-by-task` to `ready-for-agent` only when all their generated task dependencies are complete and no human, manual, product, security, data, or release decision still blocks them.
+13. Report changed files, validation results, acceptance criteria covered by tests, manual checks performed or still required, task status/index updates, and unresolved follow-up work.
 
 When a test-first loop is not useful, explain why in the final summary. Examples include documentation-only work, manual operations, wiring that cannot run locally, or changes where the repository has no practical deterministic test surface.
 
