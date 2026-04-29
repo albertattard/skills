@@ -17,7 +17,7 @@ This skill executes generated tasks. It does not derive, split, reorder, or publ
 
 Start from a specific task file, usually one of:
 
-- `docs/tasks/0001-task-title.md`
+- `docs/tasks/TASK-0001-task-title.md`
 - a task linked from `docs/tasks/README.md`
 - a user-provided task document that follows the implementation task structure
 

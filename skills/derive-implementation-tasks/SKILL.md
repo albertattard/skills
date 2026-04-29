@@ -58,18 +58,22 @@ If source assumptions, contradictions, or missing decisions affect task readines
 15. Use `decision` tasks for unresolved choices that block implementation. When the choice is architecture-significant, make the task outcome an ADR created with `$capture-architecture-decisions`, not just a prose answer in the task file.
 16. Ask the user before writing files when task granularity, release boundaries, missing decisions, tracker format, capability grouping, or remote issue publication materially changes the plan and the user has not asked to proceed with assumptions.
 17. When running non-interactively or when the user asks to avoid follow-up questions, choose the smallest conservative task breakdown that fits the source artefacts and repository context, then record assumptions and unresolved decisions in the affected tasks.
-18. Write or update task files under `docs/tasks/`, and keep the directory `README.md` current when files are added, moved, or deleted.
+18. Use `TASK-NNNN` as the task number, where `NNNN` is a zero-padded sequence number.
+19. Use the full `TASK-NNNN` identifier everywhere the task is referenced: filename, title, task index, dependency links, capability indexes, and final summaries.
+20. Write or update task files under `docs/tasks/`, and keep the directory `README.md` current when files are added, moved, or deleted.
 
 Do not create remote GitHub, Jira, Linear, or other tracker issues unless the user explicitly asks for remote issue creation.
 
 ## File Naming
 
-Use zero-padded numeric prefixes and kebab-case titles:
+Use the next available sequence number:
 
 ```text
-docs/tasks/0001-submit-first-request.md
-docs/tasks/0002-add-request-status-review.md
+docs/tasks/TASK-0001-submit-first-request.md
+docs/tasks/TASK-0002-add-request-status-review.md
 ```
+
+Do not renumber existing tasks. When updating existing bare-numeric task files, preserve their numeric sequence and rename only to add the `TASK-` prefix when references can be updated. Do not use bare numeric identifiers such as `0001` for tasks; use the full `TASK-0001` form everywhere.
 
 Keep each file focused on one implementation task.
 
@@ -94,25 +98,25 @@ Derived from:
 
 | Task | Type | Readiness | Depends On |
 | --- | --- | --- | --- |
-| [Task title](0001-task-title.md) | product | ready-for-agent | None |
+| [TASK-0001. Task title](TASK-0001-task-title.md) | product | ready-for-agent | None |
 
 ## By Capability Area
 
 ### Capability Name
 
-- [Task title](0001-task-title.md)
+- [TASK-0001. Task title](TASK-0001-task-title.md)
 
 ## By Source
 
 ### Slice or Production Workstream
 
-- [Task title](0001-task-title.md)
+- [TASK-0001. Task title](TASK-0001-task-title.md)
 
 ## By Type
 
 ### Product
 
-- [Task title](0001-task-title.md)
+- [TASK-0001. Task title](TASK-0001-task-title.md)
 
 ### Production Readiness
 
@@ -126,7 +130,7 @@ Derived from:
 
 ### Ready for Agent
 
-- [Task title](0001-task-title.md)
+- [TASK-0001. Task title](TASK-0001-task-title.md)
 
 ### Needs Human Decision
 
@@ -158,7 +162,7 @@ Describe the product, domain, or shared technical capability this group covers.
 
 | Task | Type | Readiness | Depends On |
 | --- | --- | --- | --- |
-| [Task title](../0001-task-title.md) | product | ready-for-agent | None |
+| [TASK-0001. Task title](../TASK-0001-task-title.md) | product | ready-for-agent | None |
 
 ## Exit Criteria
 
@@ -176,7 +180,7 @@ Capability files are navigation aids, not task containers. Do not move task file
 Use this structure for each task file:
 
 ```markdown
-# Task Title
+# TASK-NNNN. Task Title
 
 ## Source
 
@@ -250,7 +254,7 @@ A good task index:
 
 - preserves the full release sequence
 - lets a reader find work by capability area, source slice, type, and readiness
-- keeps task files in stable numeric order
+- keeps task files in stable `TASK-NNNN` order
 - uses capability sub-indexes when the task set is too large for one readable page
 
 A poor implementation task:
