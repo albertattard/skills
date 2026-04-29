@@ -88,7 +88,19 @@ Prefer fewer larger-scope tests over many narrow tests.
 
 Use a red-green-refactor loop as a discipline, not as ceremony. One meaningful failing test per observable behaviour is usually better than many small tests that make the implementation harder to change.
 
-For browser-level tests that cover multi-step user flows, prefer a small domain-specific fluent driver or page object by default. The test should read like a scenario script, while the driver owns Playwright selectors, waits, repeated interactions, and product-state assertions. Name driver methods after user actions and observable product states, not DOM operations. Keep the driver small at first, and split it by screen or workflow only when one class starts mixing unrelated responsibilities.
+### Independent Confidence
+
+Design tests so each test has a distinct reason to fail.
+
+- Use overlap between test levels only when it buys different confidence. For example, one browser smoke test may cover the main user journey while focused controller, service, or domain tests cover edge cases and rules.
+- Avoid repeating the same broad rendered-page assertions across many tests. If a copy, layout, or label change would break several tests without changing product behaviour, the tests are too coupled to presentation.
+- Put business rules in the lowest useful test level that still proves the behaviour clearly. Use domain or service tests for calculations, state transitions, ordering, normalization, and validation rules when those rules can be exercised without a browser or full rendered page.
+- Use browser tests for integration risks: real navigation, form wiring, client-visible state, accessibility roles, critical happy paths, and cross-screen flows.
+- Use controller or MVC tests for request handling, validation feedback, route guards, rendered empty states, and security or read-only constraints.
+- In browser and MVC tests, assert stable user-observable outcomes rather than every repeated text string on the page.
+- Prefer one expressive scenario assertion over many incidental assertions. A test should fail because the behaviour it names is broken, not because nearby page content changed.
+
+For browser-level tests that cover multi-step user flows, prefer a small domain-specific fluent driver or page object by default. The test should read like a scenario script, while the driver owns Playwright selectors, waits, repeated interactions, and product-state assertions. Name driver methods after user actions and observable product states, not DOM operations. Keep fluent driver assertions focused on named product states; avoid `assertPageIsCorrect`-style helpers that assert incidental page content. Keep the driver small at first, and split it by screen or workflow only when one class starts mixing unrelated responsibilities.
 
 ## Design Bias
 
