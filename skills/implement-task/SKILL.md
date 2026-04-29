@@ -114,6 +114,7 @@ Prefer changes that reduce cognitive load for the next maintainer.
 - Prefer clear names that carry domain meaning over vague names such as `data`, `handler`, `manager`, `processor`, or `utils`.
 - Make invalid states hard to represent when the language and local style support it.
 - Preserve the repository's existing patterns unless they conflict with the selected task or create avoidable complexity.
+- When creating new framework configuration and no repository convention exists, prefer structured configuration formats that preserve hierarchy clearly, such as YAML instead of properties. For Spring Boot applications, prefer `application.yml` over `application.properties` unless the repository already uses properties files.
 - Use comments to explain intent, invariants, constraints, and non-obvious trade-offs. Do not narrate obvious code.
 
 Before finishing, look for accidental complexity introduced by the change and simplify it while tests are green.

@@ -20,6 +20,7 @@ The build and run path should stay simple:
 - Use Spring Boot and Thymeleaf for the web application.
 - Use Maven to build, test, package, and run the project.
 - Use Spring Data JPA with H2 in-memory database mode for local session data.
+- Use `application.yml` for Spring Boot application configuration.
 - Use Playwright for Java for functional browser tests.
 - Use Maven Failsafe for browser-level integration tests.
 - Use Spring Boot Actuator for a simple local health endpoint.
