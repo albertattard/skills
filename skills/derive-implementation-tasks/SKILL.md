@@ -180,31 +180,23 @@ Capability files are navigation aids, not task containers. Do not move task file
 Use this structure for each task file:
 
 ```markdown
-# TASK-NNNN. Task Title
+---
+id: TASK-NNNN
+title: Task Title
+type: product | production-readiness | validation | decision | manual-operation
+capability_area: user-management
+readiness: ready-for-agent | needs-human-decision | blocked-by-task | manual-only
+depends_on: []
+related_sources:
+  - SLICE-0001
+  - docs/production/path-to-production.md
+related_adrs:
+  - ADR-0001
+---
 
-## Source
+## Summary
 
-Derived from:
-
-- [SLICE-0001. Slice title](../slices/SLICE-0001-slice-title.md)
-- [path to production](../production/path-to-production.md)
-- [ADR title](../adrs/ADR-0001-adr-title.md)
-
-## Type
-
-product | production-readiness | validation | decision | manual-operation
-
-## Capability Area
-
-Use kebab-case, for example `user-management`, `request-review`, `infrastructure`, or `observability`.
-
-## Readiness
-
-ready-for-agent | needs-human-decision | blocked-by-task | manual-only
-
-## Outcome
-
-Describe the observable product behaviour or release-readiness result in one or two sentences.
+Describe the observable product behaviour or release-readiness result in one or two sentences. Mention the source slice, production workstream, or ADR when that context is needed to understand the task.
 
 ## Scope
 
@@ -231,11 +223,13 @@ Describe the observable product behaviour or release-readiness result in one or 
 - Capture assumptions, contradictions, sequencing notes, or implementation constraints that do not fit the sections above.
 ```
 
+Use `depends_on: []` when the task can start immediately. Use empty arrays (`[]`) for `related_sources` or `related_adrs` when there are no relevant links.
+
 Omit `Notes` only when there is nothing useful to say.
 
-Include ADR source links only for tasks that are materially constrained by those ADRs.
+Include ADRs only for tasks that are materially constrained by those ADRs.
 
-Use `None` for dependencies when the task can start immediately.
+Do not duplicate front matter fields as separate body sections. In particular, do not add separate `Type`, `Capability Area`, or `Readiness` sections unless the user explicitly asks for a non-front-matter format.
 
 ## Quality Bar
 

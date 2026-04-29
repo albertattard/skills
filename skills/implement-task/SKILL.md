@@ -21,6 +21,8 @@ Start from a specific task file, usually one of:
 - a task linked from `docs/tasks/README.md`
 - a user-provided task document that follows the implementation task structure
 
+Task files may store task metadata such as `id`, `title`, `type`, `capability_area`, `readiness`, `depends_on`, and related source references in YAML front matter instead of separate body sections.
+
 Read nearby context only when it affects the selected task:
 
 - `docs/tasks/README.md`
@@ -44,14 +46,14 @@ If the repository does not define a compile, test, or functional-test command, r
 
 ## Readiness Gate
 
-Before editing code, inspect the selected task's `Readiness`, `Dependencies`, `Acceptance Criteria`, and `Validation` sections.
+Before editing code, inspect the selected task's readiness, dependencies, acceptance criteria, and validation guidance. Prefer YAML front matter fields such as `readiness` and `depends_on` when present; otherwise use body sections such as `Readiness` and `Dependencies`.
 
 - `ready-for-agent`: proceed when dependencies are satisfied.
 - `blocked-by-task`: stop unless the blocking task is already complete in the repository.
 - `needs-human-decision`: stop and ask for the missing decision unless the user explicitly provided it.
 - `manual-only`: do not implement as code; report the required manual action or evidence.
 
-If the task file is missing readiness, dependencies, acceptance criteria, or validation guidance, infer the smallest useful interpretation from repository context. Record the assumption in the final summary instead of silently broadening the task.
+If the task file is missing readiness, dependencies, acceptance criteria, or validation guidance in both front matter and body sections, infer the smallest useful interpretation from repository context. Record the assumption in the final summary instead of silently broadening the task.
 
 Do not implement adjacent work merely because it is nearby. If the selected task is too broad, contradictory, or depends on unresolved product, data, security, or release decisions, challenge the task before editing.
 
