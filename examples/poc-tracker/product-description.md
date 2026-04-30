@@ -2,7 +2,7 @@
 
 Managing Proof of Concepts (PoCs) across an organisation is often fragmented and opaque. Information is scattered across emails, chat threads, and informal updates, making it difficult for managers to understand the current status, ownership, and progress of each initiative. This lack of visibility leads to missed risks, delayed interventions, and lost learning opportunities.
 
-The PoC Tracker is a web-based application designed to provide a centralised, structured view of all ongoing and completed PoCs within an organisation. Its primary goal is to give managers clear, real-time insight into what is being worked on, who is responsible, and how each PoC is progressing.
+The PoC Tracker is a web-based application designed to provide a centralised, structured view of all ongoing and completed PoCs within an organisation. Its primary goal is to give managers a clear, current view of the records maintained in the application: what is being worked on, who is responsible, and how each PoC is progressing. The UI does not automatically poll for updates; users refresh the page to see changes made elsewhere.
 
 At its core, the system organises PoCs into a defined lifecycle with clearly distinguishable states:
 
@@ -20,7 +20,7 @@ This structured lifecycle enables consistent tracking and makes it easy to ident
 
 Each PoC record captures essential ownership and context, including the responsible internal owner, the customer involved, and key metadata needed for accountability and reporting.
 
-A central feature of the application is the **journal system**, which provides a chronological narrative of each PoC. Every update—whether it’s a progress note, a decision, or a state transition—is recorded as a journal entry. This creates a complete, transparent history that can be read end-to-end, allowing stakeholders to quickly understand what happened, why decisions were made, and how outcomes were reached.
+A central feature of the application is the **journal system**, which provides a chronological narrative of each PoC. Every update-whether it is a progress note, a decision, or a state transition-is recorded as a journal entry. This is a simple append-only log for auditability and context, not an event-sourcing system that needs to replay changes. The journal creates a complete, transparent history that can be read end-to-end, allowing stakeholders to quickly understand what happened, why decisions were made, and how outcomes were reached.
 
 By combining structured state tracking with rich, time-ordered activity logs, the PoC Tracker transforms scattered updates into a coherent, auditable story. Managers can quickly assess risk (e.g., blocked PoCs), monitor progress across teams, and ensure that both successes and failures contribute to organisational learning.
 
