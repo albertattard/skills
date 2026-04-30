@@ -62,9 +62,8 @@ entries:
       # Ignore the OS related files
       **/.DS_Store
 
-      # Ignore the sw-runbook.yaml and README.md files as these are not part of this demo
+      # Ignore the sw-runbook.yaml file and fixtures as these are not part of this demo
       /sw-runbook.yaml
-      /README.md
       /.fixtures
       EOF
 
@@ -105,6 +104,18 @@ entries:
       When introducing, changing, or discovering ambiguity in a domain-significant term, update `docs/domain/ubiquitous-language.md` or record the ambiguity as an open question in the relevant product artefact.
 
       Do not turn the ubiquitous language into a dump of every noun in the project. Capture terms that affect product behaviour, user experience, domain rules, data meaning, acceptance criteria, or implementation naming.
+
+      ## Project README
+
+      The repository root must contain a developer-facing `README.md`.
+
+      Keep the top-level `README.md` short and practical. It should:
+
+      - Describe what the project is and what problem it solves.
+      - Explain prerequisites and the commands to build, test, and run the application locally.
+      - If build, test, or run commands are not known yet, say what is missing instead of inventing commands, then replace that note once tooling exists.
+      - Link to the relevant `docs/README.md` and other important project documentation instead of duplicating it.
+      - Stay current when project structure, build tooling, runtime commands, or documentation locations change.
 
       ## Documentation Indexes
 
@@ -151,12 +162,12 @@ entries:
 
   - type: Markdown
     contents: |
-      2. Ask the model to apply the documentation index rules from `AGENTS.md`.
+      2. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
-      Create any missing `README.md` files required by the documentation.
+      Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     output:
       caption: |
@@ -285,12 +296,12 @@ entries:
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the documentation index rules from `AGENTS.md`.
+      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
-      Create any missing `README.md` files required by the documentation.
+      Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     output:
       caption: |
@@ -407,12 +418,12 @@ entries:
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the documentation index rules from `AGENTS.md`.
+      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
-      Create any missing `README.md` files required by the documentation.
+      Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     output:
       caption: |
@@ -532,12 +543,12 @@ entries:
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the documentation index rules from `AGENTS.md`.
+      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
-      Create any missing `README.md` files required by the documentation.
+      Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     output:
       caption: |
@@ -669,12 +680,12 @@ entries:
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the documentation index rules from `AGENTS.md`.
+      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
-      Create any missing `README.md` files required by the documentation.
+      Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     output:
       caption: |
@@ -806,12 +817,12 @@ entries:
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the documentation index rules from `AGENTS.md`.
+      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
-      Create any missing `README.md` files required by the documentation.
+      Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     output:
       caption: |
@@ -944,12 +955,12 @@ entries:
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the documentation index rules from `AGENTS.md`.
+      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
-      Create any missing `README.md` files required by the documentation.
+      Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     output:
       caption: |
@@ -1158,4 +1169,3 @@ entries:
          Each implemented task is committed separately with the task identifier
          in the commit subject. Tasks that still need a human decision, manual
          action, or another generated task remain in `docs/tasks/`.
-    indent: 3
