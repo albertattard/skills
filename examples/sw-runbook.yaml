@@ -7,6 +7,12 @@ entries:
     level: H2
     title: Prerequisites
 
+  - type: Markdown
+    contents: |
+      Some examples may need Docker later in the run. Checking it up front avoids
+      discovering that Docker is not running after the workflow has already been
+      executing for a long time.
+
   - type: Prerequisite
     checks:
       - kind: command
@@ -27,6 +33,13 @@ entries:
           - [Tree](https://oldmanprogrammer.net/source.php?dir=projects/tree)
         commands: tree --version
         help: Install Tree and make sure `tree` is available on your PATH.
+      - kind: command
+        name: Docker
+        contents: |
+          - [Docker](https://docs.docker.com/get-docker/)
+        commands: |
+          docker info >/dev/null
+        help: Install Docker and start the Docker daemon before running this example.
 
   - type: Heading
     level: H2
