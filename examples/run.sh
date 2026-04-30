@@ -40,6 +40,7 @@ IMPLEMENTATION_TASKS_ANSWERS="${SOURCE_DIR}/implementation-tasks-answers.md"
 TARGET_DIR="/tmp/${EXAMPLE}"
 DIST_ROOT="${EXAMPLES_DIR}/dist"
 DIST_DIR="${DIST_ROOT}/${EXAMPLE}"
+DEMO_FILE="${DIST_DIR}/DEMO.md"
 DIST_ARCHIVE="${DIST_ROOT}/${EXAMPLE}.zip"
 
 if [[ ! -d "${SOURCE_DIR}" ]]; then
@@ -79,7 +80,7 @@ if grep -q '@\.fixtures/prompts/implementation-tasks-answers\.md' "${RUNBOOK}" &
   exit 2
 fi
 
-# Ignore all the things within the dist directory
+# Ignore all the things within the dist directory.
 mkdir -p "${DIST_ROOT}"
 cat <<'EOF' > "${DIST_ROOT}/.gitignore"
 *
@@ -123,19 +124,20 @@ EOF
 
 (cd "${TARGET_DIR}"
 
- # Run the runbook.
- sw --verbose
-
- # Create the distribution directory.
+ # Create the distribution directory before running the runbook so sw can write
+ # the rendered demo output there directly.
  rm -rf "${DIST_DIR}"
  mkdir -p "${DIST_DIR}/.fixtures" "${DIST_DIR}/docs/product"
+
+ # Run the runbook.
+ sw --verbose --output-file "${DEMO_FILE}"
+
  cp "${TARGET_DIR}/.fixtures/AGENTS.md" "${DIST_DIR}/.fixtures/AGENTS.md"
  if [[ -d "${TARGET_DIR}/.fixtures/prompts" ]]; then
   cp -R "${TARGET_DIR}/.fixtures/prompts" "${DIST_DIR}/.fixtures/prompts"
  fi
  cp -R "${REPO_ROOT}/skills" "${DIST_DIR}/.fixtures/skills"
  cp "${PRODUCT_DESCRIPTION}" "${DIST_DIR}/docs/product/description.md"
- cp "${TARGET_DIR}/README.md" "${DIST_DIR}/README.md"
  rm -f "${DIST_ARCHIVE}"
  (cd "${DIST_ROOT}" && zip -qr "${DIST_ARCHIVE}" "${EXAMPLE}")
 
