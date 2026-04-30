@@ -28,11 +28,30 @@ Read nearby context only when it affects the selected task:
 - `docs/tasks/README.md`
 - source slice, production, requirement, or scope documents linked by the task
 - repository instructions such as `AGENTS.md`
+- selected default profile guidance from `../shared/defaults/README.md`, only when a profile is explicitly selected or clearly matched
 - build, test, lint, package, migration, fixture, and deployment conventions
 - existing tests that cover the affected behaviour
 - relevant source files and module boundaries
 
 Treat task, slice, production, requirement, and scope documents as source artefacts. Do not change them unless the selected task explicitly requires documentation updates, the selected task's completion status must be updated, or the task index must stay current after task-related file changes.
+
+## Default Profiles
+
+The base implementation workflow is stack-neutral.
+
+When stack-specific implementation guidance is needed, consult `../shared/defaults/README.md` and load at most one matching profile.
+
+Apply a profile only when one of these is true:
+
+- the user explicitly names the profile
+- `AGENTS.md` names the profile
+- an accepted ADR selects the stack covered by the profile
+- the selected task front matter names the profile with `default_profile`
+- existing repository files clearly match the profile
+
+Do not load all profiles. Do not apply a profile just because it exists.
+
+If no profile is selected and the repository is empty or ambiguous, stay stack-neutral and ask the user or stop with the smallest `needs-human-decision` blocker. If a profile conflicts with existing repository conventions, follow the repository conventions and report the conflict.
 
 ## Preflight Gate
 
@@ -111,15 +130,15 @@ Prefer changes that reduce cognitive load for the next maintainer.
 - Prefer deep modules: hide meaningful complexity behind simple APIs.
 - Avoid shallow abstractions that mostly rename one operation, pass data through, or split code without creating a clearer boundary.
 - Do not split code just to make files or functions smaller. Split when it creates a stable concept, clearer responsibility, or useful isolation.
-- Prefer a modular modulith package structure by default. Group code by product capability or business module instead of technical layer. For small Spring Boot features, keep controllers, form or request objects, application services, repositories, entities, and domain command or value objects in the same capability package unless the repository already uses a different convention or the module has grown enough to justify subpackages. Use visibility, naming, and dependency direction to preserve boundaries before introducing technical package splits.
+- Prefer grouping code by product capability or business module when the repository does not already have a stronger convention.
 - Keep task-specific decisions close to the task, but move stable domain rules into shared code when reuse is real.
-- Avoid long parameter lists when the parameters form an existing domain concept. If a method's parameters mirror a record, value object, command, or request type in the same layer or an inward layer, prefer passing that object instead of unpacking and repacking fields. Do not pass web/form or transport types into domain entities; map them to domain commands or values first.
+- Avoid long parameter lists when the parameters form an existing domain concept. If a method's parameters mirror a record, value object, command, or request type in the same layer or an inward layer, prefer passing that object instead of unpacking and repacking fields. Do not pass transport or UI-specific types into domain entities; map them to domain commands or values first.
 - Prefer clear names that carry domain meaning over vague names such as `data`, `handler`, `manager`, `processor`, or `utils`.
 - Make invalid states hard to represent when the language and local style support it.
 - Mark methods `static` when they do not read or mutate instance state and the language or local style supports it. This is especially useful for pure formatting, parsing, comparison, mapping, and small calculations that only use their parameters. Do not make methods static when they are part of an object's polymorphic contract, need instance collaborators, or would make the API harder to test or evolve.
 - Preserve the repository's existing patterns unless they conflict with the selected task or create avoidable complexity.
-- For server-rendered web applications, prefer semantic HTTP method mappings for resource operations: `GET` for reads, `POST` for creation or commands, `PUT` or `PATCH` for updates when appropriate, and `DELETE` for deletes. When plain HTML forms cannot submit those verbs directly, prefer the framework's standard method override support over action-suffixed POST routes such as `/delete`, unless the repository already uses command-style POST endpoints.
-- When creating new framework configuration and no repository convention exists, prefer structured configuration formats that preserve hierarchy clearly, such as YAML instead of properties. For Spring Boot applications, prefer `application.yml` over `application.properties` unless the repository already uses properties files.
+- For web applications, prefer semantic HTTP method mappings for resource operations where the framework, client, and repository conventions support them.
+- When creating new framework configuration and no repository convention exists, prefer structured configuration formats that preserve hierarchy clearly.
 - Use comments to explain intent, invariants, constraints, and non-obvious trade-offs. Do not narrate obvious code.
 
 Before finishing, look for accidental complexity introduced by the change and simplify it while tests are green.

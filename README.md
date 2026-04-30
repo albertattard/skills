@@ -55,6 +55,8 @@ architecture decision candidates
 |   |-- workshop-planner/
 |   `-- wort-werk/
 `-- skills/
+    |-- shared/
+    |   `-- defaults/
     |-- capture-architecture-decisions/
     |-- create-scope/
     |-- derive-implementation-tasks/
@@ -66,6 +68,9 @@ architecture decision candidates
 
 - `skills/` contains the reusable Codex skill definitions and their agent
   metadata.
+- `skills/shared/defaults/` contains optional stack-specific default profiles
+  that skills may load only when a profile is explicitly selected or clearly
+  matched by repository context.
 - `examples/` contains product-description fixtures and a shared `sw` runbook
   used to exercise the skills.
 - `AGENTS.md` captures repository-specific development, validation, and

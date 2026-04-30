@@ -47,22 +47,23 @@ If source assumptions, contradictions, or missing decisions affect task readines
 8. Avoid horizontal task breakdowns such as "build UI", "add data model", "wire API", or "write tests" unless the task is clearly tied to a slice outcome or release-readiness gate.
 9. For any user-facing UI, ensure the result is not just functional but visually intentional. Do not rely on default or bare styling. Apply basic layout, spacing, typography, readable colours, and responsive behaviour so the interface is coherent and usable. Simplicity is fine, but unstyled or visually incoherent output is not acceptable unless styling is explicitly out of scope.
 10. For browser-level validation tasks that cover multi-step user flows, include acceptance criteria or notes requiring a small domain-specific fluent driver or page object unless the flow is trivial or the repository already has a different browser-test convention.
-11. Record dependencies explicitly. If a task cannot start until another task lands, mark it as blocked instead of hiding the ordering in prose.
-12. Mark each task with a clear readiness value:
+11. Add a `default_profile` front matter field only when repository instructions, accepted ADRs, user instructions, or existing repository conventions explicitly select a default profile. Do not invent a stack profile from product requirements alone.
+12. Record dependencies explicitly. If a task cannot start until another task lands, mark it as blocked instead of hiding the ordering in prose.
+13. Mark each task with a clear readiness value:
    - `ready-for-agent`: enough context exists for a developer or coding agent to implement it.
    - `needs-human-decision`: blocked by product, release, security, data, ownership, or operational ambiguity.
    - `blocked-by-task`: cannot start until another generated task is complete.
    - `manual-only`: requires credentials, access, deployment approval, production operation, or external-system action.
-13. Assign each task to a capability area. Prefer product or domain capabilities such as `user-management`, `request-review`, `reporting`, or `notifications`. Use technical capability areas such as `infrastructure`, `deployment`, or `observability` only when the work does not naturally belong to one product capability or is shared across multiple capabilities.
-14. Keep task files in one ordered sequence by default. Use the task index to provide grouped views by capability area, source slice or production workstream, type, and readiness.
-15. Choose the task index structure based on expected growth, not only the current task count. If the source artefacts imply the task set may grow large, start with capability, source, type, and readiness groupings even when the initial task set is small.
-16. Add capability sub-index files under `docs/tasks/capabilities/` when the main index becomes hard to scan or when the project already has clear capability areas. Capability sub-indexes are additive navigation aids; do not move or renumber existing task files to introduce them.
-17. Use `decision` tasks for unresolved choices that block implementation. When the choice is architecture-significant, make the task outcome an ADR created with `$capture-architecture-decisions`, not just a prose answer in the task file.
-18. Ask the user before writing files when task granularity, release boundaries, missing decisions, tracker format, capability grouping, or remote issue publication materially changes the plan and the user has not asked to proceed with assumptions.
-19. When running non-interactively or when the user asks to avoid follow-up questions, choose the smallest conservative task breakdown that fits the source artefacts and repository context, then record assumptions and unresolved decisions in the affected tasks.
-20. Use `TASK-NNNN` as the task number, where `NNNN` is a zero-padded sequence number.
-21. Use the full `TASK-NNNN` identifier everywhere the task is referenced: filename, title, task index, dependency links, capability indexes, and final summaries.
-22. Write or update task files under `docs/tasks/`, and keep the directory `README.md` current when files are added, moved, or deleted.
+14. Assign each task to a capability area. Prefer product or domain capabilities such as `user-management`, `request-review`, `reporting`, or `notifications`. Use technical capability areas such as `infrastructure`, `deployment`, or `observability` only when the work does not naturally belong to one product capability or is shared across multiple capabilities.
+15. Keep task files in one ordered sequence by default. Use the task index to provide grouped views by capability area, source slice or production workstream, type, and readiness.
+16. Choose the task index structure based on expected growth, not only the current task count. If the source artefacts imply the task set may grow large, start with capability, source, type, and readiness groupings even when the initial task set is small.
+17. Add capability sub-index files under `docs/tasks/capabilities/` when the main index becomes hard to scan or when the project already has clear capability areas. Capability sub-indexes are additive navigation aids; do not move or renumber existing task files to introduce them.
+18. Use `decision` tasks for unresolved choices that block implementation. When the choice is architecture-significant, make the task outcome an ADR created with `$capture-architecture-decisions`, not just a prose answer in the task file.
+19. Ask the user before writing files when task granularity, release boundaries, missing decisions, tracker format, capability grouping, or remote issue publication materially changes the plan and the user has not asked to proceed with assumptions.
+20. When running non-interactively or when the user asks to avoid follow-up questions, choose the smallest conservative task breakdown that fits the source artefacts and repository context, then record assumptions and unresolved decisions in the affected tasks.
+21. Use `TASK-NNNN` as the task number, where `NNNN` is a zero-padded sequence number.
+22. Use the full `TASK-NNNN` identifier everywhere the task is referenced: filename, title, task index, dependency links, capability indexes, and final summaries.
+23. Write or update task files under `docs/tasks/`, and keep the directory `README.md` current when files are added, moved, or deleted.
 
 Do not create remote GitHub, Jira, Linear, or other tracker issues unless the user explicitly asks for remote issue creation.
 
@@ -189,6 +190,7 @@ status: todo
 type: product | production-readiness | validation | decision | manual-operation
 capability_area: user-management
 readiness: ready-for-agent | needs-human-decision | blocked-by-task | manual-only
+default_profile: null
 depends_on: []
 related_sources:
   - SLICE-0001
@@ -230,6 +232,8 @@ Describe the observable product behaviour or release-readiness result in one or 
 ```
 
 Use `depends_on: []` when the task can start immediately. Use empty arrays (`[]`) for `related_sources` or `related_adrs` when there are no relevant links.
+
+Use `default_profile: null` when no profile is selected. Use a profile id such as `java-spring-server-rendered` only when the profile is explicitly selected by repository instructions, accepted ADRs, user instructions, or existing repository conventions.
 
 Use `status: todo` for newly generated tasks. Implementation agents may change it to `done` after the task's acceptance criteria and validation pass.
 
