@@ -7,6 +7,7 @@ Usage: examples/run.sh <example-name>
 
 Runs examples/sw-runbook.yaml with inputs from examples/<example-name> in a clean temporary directory.
 Writes a shareable copy of the completed example to examples/dist/<example-name>.
+Writes the completed solution directory to examples/dist/<example-name>/solution.zip.
 EOF
 }
 
@@ -41,6 +42,7 @@ TARGET_DIR="/tmp/${EXAMPLE}"
 DIST_ROOT="${EXAMPLES_DIR}/dist"
 DIST_DIR="${DIST_ROOT}/${EXAMPLE}"
 DEMO_FILE="${DIST_DIR}/DEMO.md"
+SOLUTION_ARCHIVE="${DIST_DIR}/solution.zip"
 DIST_ARCHIVE="${DIST_ROOT}/${EXAMPLE}.zip"
 
 if [[ ! -d "${SOURCE_DIR}" ]]; then
@@ -138,6 +140,7 @@ EOF
  fi
  cp -R "${REPO_ROOT}/skills" "${DIST_DIR}/.fixtures/skills"
  cp "${PRODUCT_DESCRIPTION}" "${DIST_DIR}/docs/product/description.md"
+ (cd "$(dirname "${TARGET_DIR}")" && zip -qr "${SOLUTION_ARCHIVE}" "${EXAMPLE}" -x '*/target/' '*/target/*')
  rm -f "${DIST_ARCHIVE}"
  (cd "${DIST_ROOT}" && zip -qr "${DIST_ARCHIVE}" "${EXAMPLE}")
 
