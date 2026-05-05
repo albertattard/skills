@@ -62,7 +62,8 @@ entries:
       # Ignore the OS related files
       **/.DS_Store
 
-      # Ignore the sw-runbook.yaml file and fixtures as these are not part of this demo
+      # Ignore the bootstrap files as these are not part of this demo's output
+      /runbook.md
       /sw-runbook.yaml
       /.fixtures
       EOF
