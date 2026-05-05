@@ -105,12 +105,31 @@ entries:
 
   - type: Markdown
     contents: |
+      Follow this guide from a fresh, disposable project directory.
+
+      Do not follow it from inside the workshop repository or from inside an
+      existing application repository. The steps below create a new Git repository
+      with `git init`, write project files, install local skills, generate
+      planning documents, and commit each phase.
+
+      At the start, the directory should contain only the bootstrap files provided
+      by the workshop: `runbook.md`, `.fixtures/`, and
+      `docs/product/description.md`. The guide turns that bootstrap directory into
+      a new project.
+
       Some examples may need Docker later in the run. Checking it up front avoids
       discovering that Docker is not running after the workflow has already been
       executing for a long time.
 
   - type: Prerequisite
     checks:
+      - kind: command
+        name: Fresh project directory
+        contents: |
+          - A fresh project directory that is not inside an existing Git repository.
+        commands: |
+          ! git rev-parse --is-inside-work-tree >/dev/null 2>&1
+        help: Follow this guide from a fresh disposable project directory, not from the workshop repository, an existing Git repository, or a subdirectory of one.
       - kind: command
         name: Git
         contents: |
