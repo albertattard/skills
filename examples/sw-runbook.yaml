@@ -3,6 +3,102 @@ entries:
     level: H1
     title: Applying Skills in Software Development
 
+  - type: Markdown
+    contents: |
+      This walkthrough shows how to start from an early product idea and turn it
+      into a project that can use agentic coding in a controlled, reviewable way.
+      The goal is not to hand the whole project to an agent in one prompt. The goal
+      is to create enough product, architecture, production, and task context that
+      each agent run has a clear purpose, a bounded scope, and concrete validation
+      expectations.
+
+      Software engineers should read the runbook as both executable documentation
+      and a development workflow. Each phase produces an artefact that a human can
+      inspect before the next phase starts. That gives the team places to challenge
+      assumptions, tighten ambiguous requirements, reject weak plans, and keep the
+      implementation grounded in product intent.
+
+  - type: Heading
+    level: H2
+    title: Workflow
+
+  - type: Markdown
+    contents: |
+      The runbook follows this path:
+
+      ```text
+      product description
+        -> MVP scope
+        -> product requirements document (PRD)
+        -> vertical slices
+        -> path to production
+        -> architecture decision records (ADRs)
+        -> implementation task documents
+        -> completed implementation tasks
+      ```
+
+      The early steps reduce ambiguity before code is generated. The middle steps
+      split the product into small, user-visible increments and identify production
+      constraints. The later steps turn those decisions into concrete task documents
+      that an agent can complete one at a time with tests and validation.
+
+  - type: Heading
+    level: H2
+    title: Skills
+
+  - type: Markdown
+    contents: |
+      A **skill** in agentic coding is a reusable, task-specific capability package: a
+      compact bundle of instructions, conventions, examples, and sometimes scripts
+      that teaches an agent how to do one class of work reliably. Think of it as a
+      focused operating manual for a narrow domain, like
+      "implement backend CRUD endpoints," "review a Java diff for security issues," or
+      "generate release notes from commit history." The point is not to make the model
+      smarter in general; it is to make it more consistent, more accurate, and less
+      dependent on ad hoc prompting each time.
+
+      For a software engineer, the useful mental model is: **prompting tells the agent
+      what to do right now; a skill tells it how to do that kind of work every time**.
+      Good skills reduce ambiguity, define the expected output shape, encode edge cases,
+      and constrain the agent away from bad habits. In practice, they sit somewhere
+      between documentation and automation: lighter than a full app, but more durable
+      than a one-off prompt. In agentic systems, that matters because the agent is not
+      just answering questions; it is executing workflows, and the skill becomes the
+      guardrail that keeps execution repeatable.
+
+      In this runbook, each skill owns one repeatable phase of the workflow:
+      clarifying scope, deriving requirements, slicing work, planning production,
+      capturing architecture decisions, deriving implementation tasks, and
+      implementing one ready task. Installing a skill before using it makes the
+      agent's behaviour explicit and reviewable instead of hidden in a one-off
+      prompt.
+
+  - type: Heading
+    level: H2
+    title: Skills and Repository Instructions
+
+  - type: Markdown
+    contents: |
+      This walkthrough uses both skills and an `AGENTS.md` file. They are both
+      agent instructions, but they serve different purposes.
+
+      `AGENTS.md` captures repository-level policy and context: how agents should
+      work in this project, how commits should be shaped, how documentation should
+      stay organised, and which conventions should remain consistent across tasks.
+
+      A skill captures a task-specific workflow: how an agent should perform one
+      kind of work, such as clarifying scope, deriving vertical slices, capturing
+      architecture decisions, or implementing a ready task.
+
+      A useful rule of thumb is:
+
+      - `AGENTS.md` answers: "How should agents work in this repository?"
+      - A skill answers: "How should agents perform this kind of task?"
+
+      The runbook creates `AGENTS.md` once because it applies to the whole project.
+      It installs several skills because each later phase needs a different,
+      repeatable workflow.
+
   - type: Heading
     level: H2
     title: Prerequisites
@@ -165,10 +261,14 @@ entries:
     contents: |
       2. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
 
+         ```text
+         Create or update the top-level `README.md` and any documentation `README.md` files required by @AGENTS.md.
+         ```
+
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
-      Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
+      Create or update the top-level `README.md` and any documentation `README.md` files required by @AGENTS.md.
       EOF
     output:
       caption: |
