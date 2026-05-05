@@ -79,7 +79,7 @@ entries:
 
   - type: Markdown
     contents: |
-      This walkthrough uses both skills and an `AGENTS.md` file. They are both
+      This runbook uses both skills and an `AGENTS.md` file. They are both
       agent instructions, but they serve different purposes.
 
       `AGENTS.md` captures repository-level policy and context: how agents should
@@ -158,7 +158,7 @@ entries:
       # Ignore the OS related files
       **/.DS_Store
 
-      # Ignore the bootstrap files as these are not part of this demo's output
+      # Ignore the bootstrap files as these are not part of the runbook output
       /runbook.md
       /sw-runbook.yaml
       /.fixtures

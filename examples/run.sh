@@ -41,7 +41,7 @@ IMPLEMENTATION_TASKS_ANSWERS="${SOURCE_DIR}/implementation-tasks-answers.md"
 TARGET_DIR="/tmp/${EXAMPLE}"
 DIST_ROOT="${EXAMPLES_DIR}/dist"
 DIST_DIR="${DIST_ROOT}/${EXAMPLE}"
-DEMO_FILE="${DIST_DIR}/runbook.md"
+RUNBOOK_FILE="${DIST_DIR}/runbook.md"
 SOLUTION_ARCHIVE="${DIST_DIR}/solution.zip"
 DIST_ARCHIVE="${DIST_ROOT}/${EXAMPLE}.zip"
 
@@ -127,12 +127,12 @@ EOF
 (cd "${TARGET_DIR}"
 
  # Create the distribution directory before running the runbook so sw can write
- # the rendered demo output there directly.
+ # the rendered runbook output there directly.
  rm -rf "${DIST_DIR}"
  mkdir -p "${DIST_DIR}/.fixtures" "${DIST_DIR}/docs/product"
 
  # Run the runbook.
- sw --verbose --output-file "${DEMO_FILE}"
+ sw --verbose --output-file "${RUNBOOK_FILE}"
 
  cp "${TARGET_DIR}/.fixtures/AGENTS.md" "${DIST_DIR}/.fixtures/AGENTS.md"
  if [[ -d "${TARGET_DIR}/.fixtures/prompts" ]]; then
