@@ -158,11 +158,19 @@ entries:
 
   - type: Heading
     level: H2
-    title: Create Project
+    title: Initialise Project Repository
 
   - type: Markdown
     contents: |
-      1. Create project and initialise Git.
+      1. Initialise the project repository.
+
+         When working with a coding agent, you need a reliable way to distinguish
+         changes made by the agent from the state that already existed before the
+         task started. Version control gives you that boundary.
+
+         The pattern is: start from a clean worktree, let the agent perform a
+         bounded task, then use Git to inspect exactly what changed before deciding
+         whether to keep, revise, or discard the result.
 
   - type: Command
     commands: |
