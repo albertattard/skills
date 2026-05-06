@@ -454,63 +454,93 @@ entries:
 
   - type: Markdown
     contents: |
+      A product or feature usually starts as an idea, often captured in an email,
+      message, ticket, or short note. In this guide, we call that starting point the
+      product description, even though it is usually rough and incomplete.
+
+      A product description does not need to be complete or implementation-ready. Its
+      job is to give us, as software engineers, enough context to identify the problem,
+      intended users, useful outcomes, domain language, assumptions, and open questions.
+
+      To simulate a real-world scenario, we will start from that initial stage.
+
+  - type: Markdown
+    contents: |
       1. Review the product description (`docs/product/description.md`).
 
   - type: Markdown
     contents: |
-      2. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
+      2. Ask the model to apply the documentation rules from `AGENTS.md`.
 
-         ```text
-         Create or update the top-level `README.md` and any documentation `README.md` files required by @AGENTS.md.
-         ```
+         Now that the repository has durable instructions, we can ask the agent to
+         use them. The first task is deliberately small: create or update the
+         top-level `README.md` and documentation indexes so the project has a
+         clear place for generated product, scope, requirements, and implementation
+         documents.
+
+         There is no need to resume a previous session for this step. From this point on,
+         the guide favours durable repository context over chat history. That makes the
+         workflow more consistent across sessions and team members.
+
+         Codex can discover `AGENTS.md` automatically when it runs in the repository.
+         The prompt mentions `@AGENTS.md` anyway to make the dependency explicit for the
+         reader and for tools or sessions where automatic discovery may differ.
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
+      codex exec - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by @AGENTS.md.
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
     timeout: 1 minute
     indent: 3
 
   - type: Markdown
     contents: |
-      (*Optional*) List the files under the `docs` directory
+      (*Optional*) Inspect the README files created or updated by the agent. These
+      files show how the repository instructions shaped the project and
+      documentation indexes.
     indent: 3
 
   - type: Command
     commands: |
-      tree --dirsfirst --sort=name 'docs'
+      tree --dirsfirst --sort=name --prune -P 'README.md'
     output:
       caption: |
-        The documentation files
+        The `README.md` files
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      Documentation is a good place to start with agentic coding. The work is useful,
+      bounded, and easy to review. An agent can help keep README files linked and
+      current, spot broken links, find inconsistencies or contradictions, and identify
+      terminology that is used inconsistently.
+
+      If you are new to agentic coding, use documentation tasks to practise the basic
+      workflow: give the agent clear repository instructions, let it make a focused
+      change, then review the diff before committing.
     indent: 3
 
   - type: Markdown
     contents: |
       3. Commit changes
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This guide also shows the manual Git commands so you can see exactly what is
+         committed at this checkpoint.
 
   - type: Command
     commands: |
-      git add 'docs/'
+      git add 'README.md' 'docs/'
       git commit \
-        --message 'Add product description' \
-        --message 'Capture the initial product direction before narrowing it into a first minimum viable product (MVP) scope document.'
+        --message 'Add project documentation indexes' \
+        --message 'Create the initial README files so the project has a clear documentation structure before deriving scope, requirements, and implementation plans.'
     indent: 3
 
   - type: Heading
