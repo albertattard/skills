@@ -52,8 +52,8 @@ entries:
       compact bundle of instructions, conventions, examples, and sometimes scripts
       that teaches an agent how to do one class of work reliably. Think of it as a
       focused operating manual for a narrow domain, like
-      "implement backend CRUD endpoints," "review a Java diff for security issues," or
-      "generate release notes from commit history." The point is not to make the model
+      “implement backend CRUD endpoints,” “review a Java diff for security issues,” or
+      “generate release notes from commit history.” The point is not to make the model
       smarter in general; it is to make it more consistent, more accurate, and less
       dependent on ad hoc prompting each time.
 
@@ -92,8 +92,8 @@ entries:
 
       A useful rule of thumb is:
 
-      - `AGENTS.md` answers: "How should agents work in this repository?"
-      - A skill answers: "How should agents perform this kind of task?"
+      - `AGENTS.md` answers: “How should agents work in this repository?”
+      - A skill answers: “How should agents perform this kind of task?”
 
       The runbook creates `AGENTS.md` once because it applies to the whole project.
       It installs several skills because each later phase needs a different,
