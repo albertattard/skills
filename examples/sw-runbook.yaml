@@ -189,7 +189,6 @@ entries:
 
       # Ignore the bootstrap files as these are not part of the runbook output
       /runbook.md
-      /sw-runbook.yaml
       /.fixtures
       EOF
 
@@ -625,8 +624,13 @@ entries:
     contents: |
       2. Create a repository-scoped `create-scope` skill.
 
-         This skill helps the model turn the product description into a clear MVP
-         scope before requirements or implementation work starts.
+         A skill can be written manually, generated with help from the model, or
+         copied from an existing definition. For this runbook, we use a prepared
+         `create-scope` skill from the example fixtures so the rest of the workflow
+         can focus on how the skill is used.
+
+         The fixture is based on the repository skill at
+         [skills/create-scope/SKILL.md](https://github.com/albertattard/skills/blob/main/skills/create-scope/SKILL.md).
 
   - type: Command
     commands: |
@@ -636,7 +640,10 @@ entries:
 
   - type: Markdown
     contents: |
-      (*Optional*) Show the generated skill metadata.
+      Codex looks for project-specific skills under the `.codex` directory. Other
+      agentic tools may use different conventions.
+
+      (*Optional*) View the new skill directory structure.
     indent: 3
 
   - type: Command
@@ -644,22 +651,29 @@ entries:
       tree --dirsfirst --sort=name '.codex/skills/create-scope'
     output:
       caption: |
-        The generated skill
+        The new skill directory structure
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      The skill definition is in `.codex/skills/create-scope/SKILL.md`. The
+      `.codex/skills/create-scope/agents/openai.yaml` file is specific to the Codex
+      application and is used by the UI.
     indent: 3
 
   - type: Markdown
     contents: |
       3. Commit the skill.
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This guide also shows the manual Git commands so you can see exactly what is
+         committed at this checkpoint.
 
   - type: Command
     commands: |
