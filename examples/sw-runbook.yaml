@@ -210,9 +210,9 @@ entries:
     contents: |
       A coding agent can only follow the context it has available. If you explain
       project conventions in one chat session, a later session may not have that
-      conversation. Even when the files are the same, the agent may not know how
-      you want commits shaped, documentation organised, domain language handled,
-      or generated changes reviewed.
+      conversation. Even when the files are the same, the agent may not know how you
+      want commits shaped, documentation organised, domain language handled, or
+      generated changes reviewed.
 
       Consider a simple example. In one session, tell the model how you want commit
       messages to be written.
@@ -234,7 +234,7 @@ entries:
         The model’s output
       rewrite:
         - type: keep_between
-          start_pattern: '^session id: [0-9a-fA-F-]+$'
+          start_pattern: "^session id: [0-9a-fA-F-]+$"
           end: tokens used
           start_offset: 0
           end_offset: -1
@@ -243,7 +243,7 @@ entries:
       - name: session_id
         source: stderr
         stage: raw
-        pattern: 'session id: ([0-9a-fA-F-]+)'
+        pattern: "session id: ([0-9a-fA-F-]+)"
     timeout: 1 minute
 
   - type: Markdown
@@ -251,9 +251,9 @@ entries:
       In the Codex app, ask the following follow-up question in the same chat.
 
       If you are running the terminal commands instead, use the session id from
-      the previous command, `@{session_id}`, to continue working in the same
-      session. The command below resumes that exact session. Your session id may
-      be different.
+      the previous command, `@{session_id}`, to continue
+      working in the same session. The command below resumes that exact session. Your
+      session id may be different.
 
   - type: Command
     commands: |
@@ -265,7 +265,7 @@ entries:
         The model’s output
       rewrite:
         - type: keep_between
-          start_pattern: '^session id: [0-9a-fA-F-]+$'
+          start_pattern: "^session id: [0-9a-fA-F-]+$"
           end: tokens used
           start_offset: 0
           end_offset: -1
@@ -274,9 +274,9 @@ entries:
 
   - type: Markdown
     contents: |
-      The resumed command shows the same session id, `@{session_id}`. That confirms
-      Codex is continuing the existing session and can use the messages already in
-      that conversation.
+      The resumed command shows the same session id,
+      `@{session_id}`. That confirms Codex is continuing the existing
+      session and can use the messages already in that conversation.
 
       The model can use the previous prompt to answer the question in the second
       prompt because both prompts belong to the same session.
@@ -295,7 +295,7 @@ entries:
         The model’s output
       rewrite:
         - type: keep_between
-          start_pattern: '^session id: [0-9a-fA-F-]+$'
+          start_pattern: "^session id: [0-9a-fA-F-]+$"
           end: tokens used
           start_offset: 0
           end_offset: -1
@@ -304,19 +304,19 @@ entries:
       - name: new_session_id
         source: stderr
         stage: raw
-        pattern: 'session id: ([0-9a-fA-F-]+)'
+        pattern: "session id: ([0-9a-fA-F-]+)"
     timeout: 1 minute
-    indent: 3
 
   - type: Markdown
     contents: |
-      The new command starts a different session: `@{new_session_id}`. That is not
-      the session where we set the commit-message rules, which was `@{session_id}`.
-      Because this prompt is in a new session, Codex does not have the earlier chat
-      context from `@{session_id}`.
+      The new command starts a different session:
+      `@{new_session_id}`. That is not the session where we set the
+      commit-message rules, which was `@{session_id}`. Because
+      this prompt is in a new session, Codex does not have the earlier chat context
+      from `@{session_id}`.
 
-      The model may still give a plausible answer, but that answer is not grounded
-      in a durable project instruction. It is only guessing from the current prompt,
+      The model may still give a plausible answer, but that answer is not grounded in
+      a durable project instruction. It is only guessing from the current prompt,
       local files, or general commit-message conventions. That can lead to
       inconsistent behaviour across sessions, which is what `AGENTS.md` helps
       mitigate.
@@ -353,12 +353,12 @@ entries:
       ]
       ```
 
-      The system message is controlled by the agent tool, so project-specific
-      guidance belongs in repository files such as `AGENTS.md`.
+      You usually do not control the system message. It is provided by the agent tool.
+      For project-specific guidance, use repository files such as `AGENTS.md` instead.
 
-      `AGENTS.md` makes those expectations part of the repository. Future agent
-      runs can read the file and recover the working rules without relying on
-      memory from a previous chat.
+      `AGENTS.md` makes those expectations part of the repository. Future agent runs
+      can read the file and recover the working rules without relying on memory from a
+      previous chat.
 
   - type: Markdown
     contents: |
