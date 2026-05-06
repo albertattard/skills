@@ -91,7 +91,6 @@ EOF
 # Recreate the target directory to simulate running the runbook in a clean environment.
 rm -rf "${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}"
-cp "${RUNBOOK}" "${TARGET_DIR}/sw-runbook.yaml"
 mkdir -p "${TARGET_DIR}/docs/product"
 cp "${PRODUCT_DESCRIPTION}" "${TARGET_DIR}/docs/product/description.md"
 if [[ -f "${CREATE_SCOPE_ANSWERS}" ]]; then
@@ -132,7 +131,7 @@ EOF
  mkdir -p "${DIST_DIR}/.fixtures" "${DIST_DIR}/docs/product"
 
  # Run the runbook.
- sw --verbose --output-file "${RUNBOOK_FILE}"
+ sw run --input-file "${RUNBOOK}" --verbose --working-directory "${TARGET_DIR}" --output-file "${RUNBOOK_FILE}"
 
  cp "${TARGET_DIR}/.fixtures/AGENTS.md" "${DIST_DIR}/.fixtures/AGENTS.md"
  if [[ -d "${TARGET_DIR}/.fixtures/prompts" ]]; then
