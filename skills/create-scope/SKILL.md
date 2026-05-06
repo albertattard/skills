@@ -1,35 +1,61 @@
 ---
 name: create-scope
-description: Use when a user proposes a product idea, project, feature, architecture change, implementation plan, or other ambiguous change and needs help clarifying scope before acting. Clarify the goal, first user, first useful flow, constraints, trade-offs, risks, decisions, and open questions; inspect available local context first; ask one decision at a time; write or update scope documents under docs/scopes/ when enough clarity exists.
+description: Use when a user proposes a product idea, project, feature, architecture change, implementation plan, or other ambiguous change and needs help clarifying scope before acting. Clarify the goal, first user, first useful flow, constraints, trade-offs, risks, decisions, and open questions; inspect available local context first; run the clarification loop before writing scope; ask one decision at a time; write or update scope documents under docs/scopes/ only when enough clarity exists.
 ---
 
 # Create Scope
 
-## Overview
+## Mission
 
-Create enough shared understanding to define a scope and act deliberately. Prefer discovering answers from the repository or provided materials before asking the user. Challenge ambiguity directly, but do not ask unnecessary questions when the answer can be inferred safely.
+Clarify scope before implementation. A short user prompt should be enough: the skill owns the clarification process, asks the necessary questions, and only writes the scope document when the work is ready to scope.
 
-## Workflow
+Prefer discovering answers from the repository or provided materials before asking the user. Challenge ambiguity directly, but do not ask unnecessary questions when the answer can be inferred safely.
+
+## Hard Rules
+
+- Do not create or update a scope document until the clarification loop reaches `Ready to write scope`.
+- Do not treat the first answer as sufficient unless the readiness check has no remaining material open questions.
+- Ask exactly one question at a time when the answer cannot be determined safely.
+- Include recommended options for each question so the user can answer quickly or provide a different answer.
+- Only defer an open question when the user explicitly chooses to defer it.
+
+## Clarification Loop
 
 1. Restate the requested work in concrete terms.
-2. Run the readiness check before writing scope:
+2. Inspect local context when it can answer a question: files, docs, existing code, git state, configs, scripts, and tests.
+3. Run the readiness check:
    - goal or product intent
    - problem being solved
    - first user or beneficiary
    - desired outcome
    - first useful flow
    - major assumptions or unresolved decisions
-3. Inspect local context when it can answer a question: files, docs, existing code, git state, configs, scripts, and tests.
-4. Maintain an open-question list for any ambiguity that changes scope, trade-offs, risks, domain language, or implementation direction.
-5. Capture trade-offs as ranked priorities that can guide later decisions, for example: user clarity > small scope > polish > extensibility.
-6. Capture risks that could break the user experience, invalidate the scope, or cause scope expansion.
-7. Record durable architecture choices as decisions or ADR candidates instead of burying them in prose. Use `$capture-architecture-decisions` when the user explicitly asks to capture ADRs or when the task is explicitly architecture decision capture.
-8. Ask exactly one question at a time when the answer cannot be determined safely. Include recommended options for the user to choose from.
-9. After each answer, update the open-question list and decide whether the scope is ready, another clarification is required, or a decision should be deferred.
-10. If the answer is unclear, contradictory, too broad, or conflicts with repository conventions, warn the user, propose a clear interpretation, and ask for confirmation before using it.
-11. Record material confirmed answers in the scope document's `Clarification Log`.
-12. Push back when a request is too broad, contradictory, premature, not ready for scoping, or not yet tied to a user outcome.
-13. Continue until no material open questions remain, the user explicitly defers the remaining questions, or the user explicitly stops.
+4. Build a material open-question list from the source artefact and local context.
+5. If material open questions exist, ask the highest-impact question first using the question style below.
+6. After the user answers, validate the answer, update the open-question list, and either ask the next highest-impact question or state `Ready to write scope`.
+7. If no material open questions remain, state `Ready to write scope` and create or update the scope document.
+
+Material open questions are questions that would change scope, trade-offs, risks, domain language, exclusions, constraints, architecture direction, or the first useful flow.
+
+If the answer is unclear, contradictory, too broad, or conflicts with repository conventions, warn the user, propose a clear interpretation, and ask for confirmation before using it.
+
+Push back when a request is too broad, contradictory, premature, not ready for scoping, or not yet tied to a user outcome.
+
+## Scope Content
+
+When the clarification loop reaches `Ready to write scope`, capture:
+
+- goal or product intent
+- first user or beneficiary
+- first useful flow
+- in scope, out of scope, and Not List
+- ranked trade-offs, for example: user clarity > small scope > polish > extensibility
+- risks that could break the user experience, invalidate the scope, or cause scope expansion
+- material confirmed answers in `Clarification Log`
+- deferred questions in `Open Questions` with the reason they were deferred
+- durable architecture choices as decisions or ADR candidates
+
+Use `$capture-architecture-decisions` when the user explicitly asks to capture ADRs or when the task is explicitly architecture decision capture.
 
 ## Domain Language
 
@@ -82,6 +108,20 @@ When the user gives a free-form answer, validate it before applying it:
 
 If the user asks whether open questions remain, answer with the current open-question list and continue with the next highest-impact question. Do not merely say that open questions exist.
 
+Good questions:
+
+- "Who is the first real user of this workflow?"
+- "What is the first useful flow that would prove this feature is useful?"
+- "Should this be optimised for local experimentation, production deployment, or both?"
+- "What failure case must the first version handle?"
+- "Which priority wins when user clarity, delivery speed, polish, and extensibility conflict?"
+
+Poor questions:
+
+- "What should I do next?"
+- "Do you want this to be good?"
+- "Which stack should I use?" when the repository already constrains the answer.
+
 ## Clarification Log
 
 Capture material questions asked during scoping and the confirmed answers that shaped the scope. The log explains how ambiguity was resolved; it is not a raw transcript.
@@ -105,20 +145,6 @@ Use this format:
 ```
 
 If the user confirms an answer after being warned that it conflicts with conventions, constraints, or earlier decisions, record that confirmation in the impact.
-
-Good questions:
-
-- "Who is the first real user of this workflow?"
-- "What is the first useful flow that would prove this feature is useful?"
-- "Should this be optimised for local experimentation, production deployment, or both?"
-- "What failure case must the first version handle?"
-- "Which priority wins when user clarity, delivery speed, polish, and extensibility conflict?"
-
-Poor questions:
-
-- "What should I do next?"
-- "Do you want this to be good?"
-- "Which stack should I use?" when the repository already constrains the answer.
 
 ## Output
 
