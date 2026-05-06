@@ -218,6 +218,7 @@ entries:
       messages to be written.
 
   - type: Command
+    debug: true
     commands: |
       codex exec - <<'EOF'
       Keep commits coherent. Each commit should contain one logical change, and unrelated repository workflow changes should be committed separately.
@@ -233,39 +234,57 @@ entries:
       caption: |
         The model’s output
       rewrite:
-        - type: limit_lines
-          last: 20
+        - type: keep_between
+          start_pattern: '^session id: [0-9a-fA-F-]+$'
+          end: tokens used
+          start_offset: 0
+          end_offset: -1
+          show_trim_markers: false
+    capture:
+      - name: session_id
+        source: stderr
+        stage: raw
+        pattern: 'session id: ([0-9a-fA-F-]+)'
     timeout: 1 minute
 
   - type: Markdown
     contents: |
       In the Codex app, ask the following follow-up question in the same chat.
 
-      If you are running the terminal commands instead, the command below uses
-      `resume --last` as a shortcut for the previous Codex session. This assumes
-      you are following the guide step by step and have not started another Codex
-      session between the two commands.
+      If you are running the terminal commands instead, use the session id from
+      the previous command, `@{session_id}`, to continue working in the same
+      session. The command below resumes that exact session. Your session id may
+      be different.
 
   - type: Command
     commands: |
-      codex exec resume --last - <<'EOF'
+      codex exec resume '@{session_id}' - <<'EOF'
       List my commit message preference, please.
       EOF
     output:
       caption: |
         The model’s output
       rewrite:
-        - type: limit_lines
-          last: 20
+        - type: keep_between
+          start_pattern: '^session id: [0-9a-fA-F-]+$'
+          end: tokens used
+          start_offset: 0
+          end_offset: -1
+          show_trim_markers: false
     timeout: 1 minute
 
   - type: Markdown
     contents: |
+      The resumed command shows the same session id, `@{session_id}`. That confirms
+      Codex is continuing the existing session and can use the messages already in
+      that conversation.
+
       The model can use the previous prompt to answer the question in the second
       prompt because both prompts belong to the same session.
 
-      Now ask the same question in a new session, without `resume --last`. A new
-      session should not depend on context from the previous conversation.
+      Now ask the same question in a new session, without resuming the captured
+      session. A new session should not depend on context from the previous
+      conversation.
 
   - type: Command
     commands: |
@@ -275,14 +294,28 @@ entries:
     output:
       caption: |
         The model’s output
+      capture:
+        - name: new_session_id
+          source: stderr
+          stage: raw
+          pattern: 'session id: ([0-9a-fA-F-]+)'
       rewrite:
-        - type: limit_lines
-          last: 20
+        - type: keep_between
+          start_pattern: '^session id: [0-9a-fA-F-]+$'
+          end: tokens used
+          start_offset: 0
+          end_offset: -1
+          show_trim_markers: false
     timeout: 1 minute
     indent: 3
 
   - type: Markdown
     contents: |
+      The new command starts a different session: `@{new_session_id}`. That is not
+      the session where we set the commit-message rules, which was `@{session_id}`.
+      Because this prompt is in a new session, Codex does not have the earlier chat
+      context from `@{session_id}`.
+
       The model may still give a plausible answer, but that answer is not grounded
       in a durable project instruction. It is only guessing from the current prompt,
       local files, or general commit-message conventions. That can lead to
