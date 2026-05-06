@@ -1,38 +1,35 @@
 ---
 name: create-scope
-description: Use when a user proposes a product idea, project, feature, architecture, implementation plan, or ambiguous change and Codex should clarify the idea and create a clear scope before acting. The skill challenges vague assumptions, inspects available local context, asks option-based focussed questions when answers cannot be discovered, validates unclear answers, captures material clarifications, and continues until the problem, first user, first useful flow, trade-offs, risks, constraints, decisions, and next actions are clear enough to proceed.
+description: Use when a user proposes a product idea, project, feature, architecture change, implementation plan, or other ambiguous change and needs help clarifying scope before acting. Clarify the goal, first user, first useful flow, constraints, trade-offs, risks, decisions, and open questions; inspect available local context first; ask one decision at a time; write or update scope documents under docs/scopes/ when enough clarity exists.
 ---
 
 # Create Scope
 
 ## Overview
 
-Create enough shared understanding to define a scope and act deliberately. Prefer discovering answers from the repository or provided materials before asking the user, then challenge ambiguity with direct, focussed questions. Do not stop after the first clarification if material ambiguity remains.
+Create enough shared understanding to define a scope and act deliberately. Prefer discovering answers from the repository or provided materials before asking the user. Challenge ambiguity directly, but do not ask unnecessary questions when the answer can be inferred safely.
 
 ## Workflow
 
-1. Restate the proposed work in concrete terms.
-2. Run the idea-readiness gate before writing scope:
-   - product intent, stated as one concise paragraph
+1. Restate the requested work in concrete terms.
+2. Run the readiness check before writing scope:
+   - goal or product intent
    - problem being solved
    - first user or beneficiary
    - desired outcome
-   - the first useful flow that would prove value
+   - first useful flow
    - major assumptions or unresolved decisions
-3. Define the product intent as one concise paragraph in the scope output.
-4. Identify assumptions, missing decisions, and terms that could mean more than one thing. Maintain these as an open-question list while scoping.
-5. Define Out of Scope as relevant work that may belong to the product later but is deferred from the current scope.
-6. Create a Not List for adjacent ideas that may appear to fit the product but are explicitly not part of what this product or solution is.
-7. Capture trade-offs as ranked decision priorities that can guide later choices, for example user clarity > small scope > polish > extensibility.
-8. Capture risks that could break the user experience, invalidate the scope, or cause scope expansion.
-9. Inspect local context when it can answer a question: files, docs, existing code, git state, configs, scripts, and tests.
-10. When scoping settles or exposes a durable architecture choice, record it as an ADR candidate in `Decisions` or `Open Questions` instead of burying it in prose. Use `$capture-architecture-decisions` when the user asks to capture ADRs or when the current task is explicitly architecture decision capture.
-11. Ask exactly one question at a time when the answer cannot be determined safely. Include recommended options for the user to choose from.
-12. After each answer, update the open-question list and decide whether the scope is ready, another clarification is required, or a decision should be explicitly deferred.
-13. If the answer is unclear, contradictory, too broad, or does not follow the repository's conventions, warn the user, explain the risk, propose a clear interpretation, and ask for confirmation before using it.
-14. Record material confirmed answers in the scope document's `Clarification Log`.
-15. Push back when a request is too broad, contradictory, premature, not ready for scoping, or not yet tied to a user outcome.
-16. Continue until no material open questions remain, the user explicitly defers the remaining questions, or the user explicitly stops.
+3. Inspect local context when it can answer a question: files, docs, existing code, git state, configs, scripts, and tests.
+4. Maintain an open-question list for any ambiguity that changes scope, trade-offs, risks, domain language, or implementation direction.
+5. Capture trade-offs as ranked priorities that can guide later decisions, for example: user clarity > small scope > polish > extensibility.
+6. Capture risks that could break the user experience, invalidate the scope, or cause scope expansion.
+7. Record durable architecture choices as decisions or ADR candidates instead of burying them in prose. Use `$capture-architecture-decisions` when the user explicitly asks to capture ADRs or when the task is explicitly architecture decision capture.
+8. Ask exactly one question at a time when the answer cannot be determined safely. Include recommended options for the user to choose from.
+9. After each answer, update the open-question list and decide whether the scope is ready, another clarification is required, or a decision should be deferred.
+10. If the answer is unclear, contradictory, too broad, or conflicts with repository conventions, warn the user, propose a clear interpretation, and ask for confirmation before using it.
+11. Record material confirmed answers in the scope document's `Clarification Log`.
+12. Push back when a request is too broad, contradictory, premature, not ready for scoping, or not yet tied to a user outcome.
+13. Continue until no material open questions remain, the user explicitly defers the remaining questions, or the user explicitly stops.
 
 ## Domain Language
 
@@ -143,7 +140,7 @@ Do not create or finalise the scope document while material open questions remai
 
 Explicitly capture relevant product work that is deliberately deferred from the current scope.
 
-Use Out of Scope for features, workflows, user groups, platforms, integrations, operational responsibilities, quality levels, or technical capabilities that may be useful for this product later but should not be built now.
+Use Out of Scope for features, workflows, user groups, platforms, integrations, operational responsibilities, quality levels, or technical capabilities that may be useful later but should not be built now.
 
 ## Not List
 
