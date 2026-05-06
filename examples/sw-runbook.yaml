@@ -105,7 +105,7 @@ entries:
 
   - type: Markdown
     contents: |
-      Follow this guide from a fresh, disposable project directory.
+      Follow this runbook from a fresh, disposable project directory.
 
       Do not follow it from inside the workshop repository or from inside an
       existing application repository. The steps below create a new Git repository
@@ -113,7 +113,7 @@ entries:
       planning documents, and commit each phase.
 
       At the start, the repository directory should contain only the bootstrap
-      product description at `docs/product/description.md`. The guide turns that
+      product description at `docs/product/description.md`. The runbook turns that
       bootstrap directory into a new project.
 
       Some examples may need Docker later in the run. Checking it up front avoids
@@ -134,7 +134,7 @@ entries:
           - A fresh project directory that is not inside an existing Git repository.
         commands: |
           ! git rev-parse --is-inside-work-tree >/dev/null 2>&1
-        help: Follow this guide from a fresh disposable project directory, not from the
+        help: Follow this runbook from a fresh disposable project directory, not from the
           workshop repository, an existing Git repository, or a subdirectory of
           one.
       - kind: command
@@ -412,7 +412,7 @@ entries:
 
   - type: Markdown
     contents: |
-      This guide creates the root `AGENTS.md` file because these instructions apply
+      This runbook creates the root `AGENTS.md` file because these instructions apply
       to the whole project.
 
       A repository can contain more than one `AGENTS.md` file. The root file
@@ -434,7 +434,7 @@ entries:
          commit changes
          ```
 
-         This guide also shows the manual Git commands so you can see exactly what
+         This runbook also shows the manual Git commands so you can see exactly what
          is committed at this checkpoint.
   - type: Command
     commands: |
@@ -452,7 +452,7 @@ entries:
   - type: Markdown
     contents: |
       A product or feature usually starts as an idea, often captured in an email,
-      message, ticket, or short note. In this guide, we call that starting point the
+      message, ticket, or short note. In this runbook, we call that starting point the
       product description, even though it is usually rough and incomplete.
 
       A product description does not need to be complete or implementation-ready. Its
@@ -476,7 +476,7 @@ entries:
          documents.
 
          There is no need to resume a previous session for this step. From this point on,
-         the guide favours durable repository context over chat history. That makes the
+         the runbook favours durable repository context over chat history. That makes the
          workflow more consistent across sessions and team members.
 
          Codex can discover `AGENTS.md` automatically when it runs in the repository.
@@ -529,7 +529,7 @@ entries:
          commit changes
          ```
 
-         This guide also shows the manual Git commands so you can see exactly what is
+         This runbook also shows the manual Git commands so you can see exactly what is
          committed at this checkpoint.
 
   - type: Command
@@ -580,16 +580,16 @@ entries:
 
       A better fit is a skill. A skill packages the task-specific instructions for
       creating scope and is invoked only when that workflow is needed. In this
-      guide, the `create-scope` skill tells the model to clarify ambiguity before
+      runbook, the `create-scope` skill tells the model to clarify ambiguity before
       producing the scope, reducing uncertainty without turning the process into a
       heavy waterfall phase.
 
       Skills can be installed globally or stored in a repository. For project-specific
-      skills, this guide keeps them in the repository so they can be reviewed,
+      skills, this runbook keeps them in the repository so they can be reviewed,
       version-controlled, and shared with the team. When someone clones the project,
       they get the same skill definitions as everyone else.
 
-      For that reason, this guide adds skills to the project instead of relying on
+      For that reason, this runbook adds skills to the project instead of relying on
       global user-level skills.
 
   - type: Markdown
@@ -670,7 +670,7 @@ entries:
          commit changes
          ```
 
-         This guide also shows the manual Git commands so you can see exactly what is
+         This runbook also shows the manual Git commands so you can see exactly what is
          committed at this checkpoint.
 
   - type: Command
@@ -750,7 +750,7 @@ entries:
          commit changes
          ```
 
-         This guide also shows the manual Git commands so you can see exactly what is
+         This runbook also shows the manual Git commands so you can see exactly what is
          committed at this checkpoint.
 
   - type: Command
