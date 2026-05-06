@@ -1,6 +1,6 @@
 ---
 name: create-scope
-description: Use when a user proposes a product idea, project, feature, architecture, implementation plan, or ambiguous change and Codex should clarify the idea and create a clear scope before acting. The skill challenges vague assumptions, inspects available local context, asks option-based focussed questions when answers cannot be discovered, validates unclear answers, and continues until the problem, first user, first useful flow, trade-offs, risks, constraints, decisions, and next actions are clear enough to proceed.
+description: Use when a user proposes a product idea, project, feature, architecture, implementation plan, or ambiguous change and Codex should clarify the idea and create a clear scope before acting. The skill challenges vague assumptions, inspects available local context, asks option-based focussed questions when answers cannot be discovered, validates unclear answers, captures material clarifications, and continues until the problem, first user, first useful flow, trade-offs, risks, constraints, decisions, and next actions are clear enough to proceed.
 ---
 
 # Create Scope
@@ -30,8 +30,9 @@ Create enough shared understanding to define a scope and act deliberately. Prefe
 11. Ask exactly one question at a time when the answer cannot be determined safely. Include recommended options for the user to choose from.
 12. After each answer, update the open-question list and decide whether the scope is ready, another clarification is required, or a decision should be explicitly deferred.
 13. If the answer is unclear, contradictory, too broad, or does not follow the repository's conventions, warn the user, explain the risk, propose a clear interpretation, and ask for confirmation before using it.
-14. Push back when a request is too broad, contradictory, premature, not ready for scoping, or not yet tied to a user outcome.
-15. Continue until no material open questions remain, the user explicitly defers the remaining questions, or the user explicitly stops.
+14. Record material confirmed answers in the scope document's `Clarification Log`.
+15. Push back when a request is too broad, contradictory, premature, not ready for scoping, or not yet tied to a user outcome.
+16. Continue until no material open questions remain, the user explicitly defers the remaining questions, or the user explicitly stops.
 
 ## Domain Language
 
@@ -84,6 +85,30 @@ When the user gives a free-form answer, validate it before applying it:
 
 If the user asks whether open questions remain, answer with the current open-question list and continue with the next highest-impact question. Do not merely say that open questions exist.
 
+## Clarification Log
+
+Capture material questions asked during scoping and the confirmed answers that shaped the scope. The log explains how ambiguity was resolved; it is not a raw transcript.
+
+By default, keep the clarification log in the scope document after `Source Clarifications` and before `Intent`. Move it to a separate linked file, such as `docs/scopes/mvp-scope-clarifications.md`, only when the log is long, sensitive, audit-heavy, or would make the main scope hard to review.
+
+Include only clarifications that affect scope, trade-offs, risks, domain language, exclusions, assumptions, constraints, or implementation direction. Omit trivial questions and intermediate answers that were replaced before confirmation.
+
+Each entry should capture:
+
+- the material question
+- the confirmed answer
+- the impact on scope, risk, trade-offs, domain language, or implementation direction
+
+Use this format:
+
+```markdown
+- Question: Which user should the first version optimise for?
+  Answer: Internal support staff.
+  Impact: Limits the MVP to internal workflows and defers customer-facing polish.
+```
+
+If the user confirms an answer after being warned that it conflicts with conventions, constraints, or earlier decisions, record that confirmation in the impact.
+
 Good questions:
 
 - "Who is the first real user of this workflow?"
@@ -108,6 +133,7 @@ When enough clarity exists, summarise:
 - the first useful flow
 - the trade-offs and risks captured
 - the decisions made
+- the material clarifications captured
 - any domain language updates or unresolved term ambiguities
 - the next concrete action
 
@@ -152,6 +178,10 @@ Derived from:
 - [product description](../product/description.md)
 
 ## Source Clarifications
+
+None.
+
+## Clarification Log
 
 None.
 
