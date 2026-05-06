@@ -275,11 +275,11 @@ entries:
   - type: Markdown
     contents: |
       The resumed command shows the same session id,
-      `@{session_id}`. That confirms Codex is continuing the existing
-      session and can use the messages already in that conversation.
+      `@{session_id}`. That confirms Codex is continuing the
+      existing session and can use the messages already in that conversation.
 
-      The model can use the previous prompt to answer the question in the second
-      prompt because both prompts belong to the same session.
+      The model can use the previous prompt to answer the question in the second prompt
+      because both prompts belong to the same session.
 
       Now ask the same question in a new session, without resuming the captured
       session. A new session should not depend on context from the previous
@@ -491,7 +491,7 @@ entries:
       codex exec - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by @AGENTS.md.
       EOF
-    timeout: 1 minute
+    timeout: 2 minutes
     indent: 3
 
   - type: Markdown
@@ -587,9 +587,43 @@ entries:
       producing the scope, reducing uncertainty without turning the process into a
       heavy waterfall phase.
 
+      Skills can be installed globally or stored in a repository. For project-specific
+      skills, this guide keeps them in the repository so they can be reviewed,
+      version-controlled, and shared with the team. When someone clones the project,
+      they get the same skill definitions as everyone else.
+
+      For that reason, this guide adds skills to the project instead of relying on
+      global user-level skills.
+
   - type: Markdown
     contents: |
-      1. Create a repository-scoped `create-scope` skill.
+      1. Review the `create-scope` skill fixture
+         (`.fixtures/skills/create-scope/SKILL.md`).
+
+         Before copying the skill into the project, inspect the skill definition.
+         Unlike `AGENTS.md`, which captures repository-wide instructions, a
+         `SKILL.md` file defines one task-specific workflow.
+
+  - type: DisplayFile
+    path: .fixtures/skills/create-scope/SKILL.md
+    start_line: 1
+    line_count: 10
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      The YAML front matter at the top of `SKILL.md` provides metadata such as the
+      skill name and description. The body contains the instructions the agent
+      should follow when the skill is invoked.
+
+      This keeps task-specific guidance separate from `AGENTS.md`. The repository
+      instructions still apply, but the skill adds extra context only when this
+      workflow is needed.
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      2. Create a repository-scoped `create-scope` skill.
 
          This skill helps the model turn the product description into a clear MVP
          scope before requirements or implementation work starts.
@@ -615,7 +649,7 @@ entries:
 
   - type: Markdown
     contents: |
-      2. Commit the skill.
+      3. Commit the skill.
 
           In an interactive run, you can ask the model to analyse the modified files,
           create a commit message, and commit them using the following prompt.
@@ -637,7 +671,7 @@ entries:
 
   - type: Markdown
     contents: |
-      3. Apply the `create-scope` skill to obtain the first scope document, usually
+      4. Apply the `create-scope` skill to obtain the first scope document, usually
          referred to as the MVP Scope.
 
          ```text
@@ -666,7 +700,7 @@ entries:
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
+      5. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
 
   - type: Command
     commands: |
@@ -697,7 +731,7 @@ entries:
 
   - type: Markdown
     contents: |
-      5. Commit changes
+      6. Commit changes
 
           In an interactive run, you can ask the model to analyse the modified files,
           create a commit message, and commit them using the following prompt.
