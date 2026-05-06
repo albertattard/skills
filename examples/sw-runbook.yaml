@@ -549,10 +549,50 @@ entries:
 
   - type: Markdown
     contents: |
+      A product description is usually too broad or ambiguous to implement
+      directly. Before we ask an agent to create requirements or code, we first
+      narrow the idea into an MVP scope.
+
+      The MVP scope defines the first useful version of the product: what problem
+      it will solve, who it is for, which outcomes matter, what is deliberately
+      out of scope, and which assumptions or open questions still need attention.
+
+      This gives us and the agent a smaller, clearer target. If we ask an agent to
+      create the solution too early, it has to fill missing details with
+      assumptions. For example, the product description may not say which
+      technical stack to use, where the application will run, who will use it, or
+      how users should authenticate.
+
+      The product description captures the idea of what we want to build. The MVP
+      scope turns that idea into a first buildable boundary and gives the human
+      reviewer a checkpoint before the project moves into detailed requirements
+      and implementation planning.
+
+      We do not have to create the MVP scope by hand. The agent can help turn the
+      product description into a scope document, especially when we give it a clear
+      prompt for how to handle ambiguity, assumptions, non-goals, and open questions.
+
+      After doing this a few times, the same prompt starts to become a reusable
+      workflow. Keeping that workflow only in chat history makes it hard to share,
+      review, version, and improve across a team.
+
+      One option is to put the instructions in `AGENTS.md`. That can work, but it
+      would make the repository instructions carry task-specific guidance that is
+      only needed when creating scope. Since `AGENTS.md` is included with many
+      agent requests, unnecessary detail can waste context and distract the model.
+
+      A better fit is a skill. A skill packages the task-specific instructions for
+      creating scope and is invoked only when that workflow is needed. In this
+      guide, the `create-scope` skill tells the model to clarify ambiguity before
+      producing the scope, reducing uncertainty without turning the process into a
+      heavy waterfall phase.
+
+  - type: Markdown
+    contents: |
       1. Create a repository-scoped `create-scope` skill.
 
-         The skill will help the model turn the product description into a clear
-         scope before implementation starts.
+         This skill helps the model turn the product description into a clear MVP
+         scope before requirements or implementation work starts.
 
   - type: Command
     commands: |
