@@ -218,7 +218,6 @@ entries:
       messages to be written.
 
   - type: Command
-    debug: true
     commands: |
       codex exec - <<'EOF'
       Keep commits coherent. Each commit should contain one logical change, and unrelated repository workflow changes should be committed separately.
@@ -294,11 +293,6 @@ entries:
     output:
       caption: |
         The model’s output
-      capture:
-        - name: new_session_id
-          source: stderr
-          stage: raw
-          pattern: 'session id: ([0-9a-fA-F-]+)'
       rewrite:
         - type: keep_between
           start_pattern: '^session id: [0-9a-fA-F-]+$'
@@ -306,6 +300,11 @@ entries:
           start_offset: 0
           end_offset: -1
           show_trim_markers: false
+    capture:
+      - name: new_session_id
+        source: stderr
+        stage: raw
+        pattern: 'session id: ([0-9a-fA-F-]+)'
     timeout: 1 minute
     indent: 3
 
