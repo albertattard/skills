@@ -13,12 +13,12 @@ Create enough shared understanding to define a scope and act deliberately. Prefe
 
 1. Restate the proposed work in concrete terms.
 2. Run the idea-readiness gate before writing scope:
-  - product intent, stated as one concise paragraph
-  - problem being solved
-  - first user or beneficiary
-  - desired outcome
-  - the first useful flow that would prove value
-  - major assumptions or unresolved decisions
+   - product intent, stated as one concise paragraph
+   - problem being solved
+   - first user or beneficiary
+   - desired outcome
+   - the first useful flow that would prove value
+   - major assumptions or unresolved decisions
 3. Define the product intent as one concise paragraph in the scope output.
 4. Identify assumptions, missing decisions, and terms that could mean more than one thing.
 5. Define Out of Scope as relevant work that may belong to the product later but is deferred from the current scope.
