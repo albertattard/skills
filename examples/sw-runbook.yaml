@@ -124,18 +124,20 @@ entries:
   - type: Prerequisite
     checks:
       - kind: command
-        name: Fresh project directory
-        contents: |
-          - A fresh project directory that is not inside an existing Git repository.
-        commands: |
-          ! git rev-parse --is-inside-work-tree >/dev/null 2>&1
-        help: Follow this guide from a fresh disposable project directory, not from the workshop repository, an existing Git repository, or a subdirectory of one.
-      - kind: command
         name: Git
         contents: |
           - [Git](https://git-scm.com/downloads)
         commands: git --version
         help: Install Git and make sure `git` is available on your PATH.
+      - kind: command
+        name: Fresh project directory
+        contents: |
+          - A fresh project directory that is not inside an existing Git repository.
+        commands: |
+          ! git rev-parse --is-inside-work-tree >/dev/null 2>&1
+        help: Follow this guide from a fresh disposable project directory, not from the
+          workshop repository, an existing Git repository, or a subdirectory of
+          one.
       - kind: command
         name: Codex CLI
         contents: |
@@ -200,9 +202,135 @@ entries:
       git commit --message 'Add repository baseline files'
     indent: 3
 
+  - type: Heading
+    level: H2
+    title: Establish Repository Instructions
+
   - type: Markdown
     contents: |
-      2. Create the `AGENTS.md` file and define how to commit changes and how the
+      A coding agent can only follow the context it has available. If you explain
+      project conventions in one chat session, a later session may not have that
+      conversation. Even when the files are the same, the agent may not know how
+      you want commits shaped, documentation organised, domain language handled,
+      or generated changes reviewed.
+
+      Consider a simple example. In one session, tell the model how you want commit
+      messages to be written.
+
+  - type: Command
+    commands: |
+      codex exec - <<'EOF'
+      Keep commits coherent. Each commit should contain one logical change, and unrelated repository workflow changes should be committed separately.
+
+      When proposing commit messages, use:
+
+      1. A short imperative subject line that starts with a verb.
+      2. A body paragraph that explains why the change exists.
+
+      Focus the body on motivation, context, or intent that cannot be determined from the diff. Avoid restating files changed or implementation details that are already visible in the commit.
+      EOF
+    output:
+      caption: |
+        The model’s output
+      rewrite:
+        - type: limit_lines
+          last: 20
+    timeout: 1 minute
+
+  - type: Markdown
+    contents: |
+      In the Codex app, ask the following follow-up question in the same chat.
+
+      If you are running the terminal commands instead, the command below uses
+      `resume --last` as a shortcut for the previous Codex session. This assumes
+      you are following the guide step by step and have not started another Codex
+      session between the two commands.
+
+  - type: Command
+    commands: |
+      codex exec resume --last - <<'EOF'
+      List my commit message preference, please.
+      EOF
+    output:
+      caption: |
+        The model’s output
+      rewrite:
+        - type: limit_lines
+          last: 20
+    timeout: 1 minute
+
+  - type: Markdown
+    contents: |
+      The model can use the previous prompt to answer the question in the second
+      prompt because both prompts belong to the same session.
+
+      Now ask the same question in a new session, without `resume --last`. A new
+      session should not depend on context from the previous conversation.
+
+  - type: Command
+    commands: |
+      codex exec - <<'EOF'
+      List my commit message preference, please.
+      EOF
+    output:
+      caption: |
+        The model’s output
+      rewrite:
+        - type: limit_lines
+          last: 20
+    timeout: 1 minute
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      The model may still give a plausible answer, but that answer is not grounded
+      in a durable project instruction. It is only guessing from the current prompt,
+      local files, or general commit-message conventions. That can lead to
+      inconsistent behaviour across sessions, which is what `AGENTS.md` helps
+      mitigate.
+
+      `AGENTS.md` is a Markdown file that stores repository-level instructions for
+      agent tools. There is nothing special about the Markdown syntax itself. What
+      matters is the file name. Tools such as Codex know to read `AGENTS.md` and
+      include its instructions when working in the repository.
+
+      A simplified prompt sent by an agent tool may look like this:
+
+      ```json
+      [
+        {
+          "role": "system",
+          "content": "..."
+        },
+        {
+          "role": "user",
+          "content": "[agents.md]\n..."
+        },
+        {
+          "role": "user",
+          "content": "Prompt 1 ..."
+        },
+        {
+          "role": "assistant",
+          "content": "Reply to prompt 1 ..."
+        },
+        {
+          "role": "user",
+          "content": "Prompt 2 ..."
+        }
+      ]
+      ```
+
+      The system message is controlled by the agent tool, so project-specific
+      guidance belongs in repository files such as `AGENTS.md`.
+
+      `AGENTS.md` makes those expectations part of the repository. Future agent
+      runs can read the file and recover the working rules without relying on
+      memory from a previous chat.
+
+  - type: Markdown
+    contents: |
+      1. Create the `AGENTS.md` file and define how to commit changes and how the
          directory will be initially organised.
 
   - type: Command
@@ -255,18 +383,30 @@ entries:
 
   - type: Markdown
     contents: |
-      3. Commit changes
+      This guide creates the root `AGENTS.md` file because these instructions apply
+      to the whole project.
 
-         In an interactive run, you can ask the model to analyse the modified
-         files, create a commit message, and commit them using the following
-         prompt.
+      A repository can contain more than one `AGENTS.md` file. The root file
+      usually captures rules that apply everywhere. More specific directories can
+      add their own instructions when part of the project needs different
+      conventions. For example, a root `AGENTS.md` might define commit and
+      documentation rules, while `backend/AGENTS.md` or `frontend/AGENTS.md` could
+      add stack-specific guidance for those directories.
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      2. Commit the repository instructions.
+
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
          ```text
          commit changes
          ```
 
-         The runbook uses manual Git commands so this step remains reproducible
-         in environments where Codex cannot write to Git metadata.
+         This guide also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
   - type: Command
     commands: |
       git add 'AGENTS.md'
