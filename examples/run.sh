@@ -7,7 +7,7 @@ Usage: examples/run.sh <example-name>
 
 Runs examples/sw-runbook.yaml with inputs from examples/<example-name> in a clean temporary directory.
 Writes a shareable copy of the completed example to examples/dist/<example-name>.
-Writes the completed solution directory to examples/dist/<example-name>/solution.zip.
+Writes the completed repository directory to examples/dist/<example-name>/solution.zip.
 EOF
 }
 
@@ -25,36 +25,26 @@ require_file() {
   fi
 }
 
-prepare_example_directory() {
+prepare_example_layout() {
   local destination="$1"
+  local repository="${destination}/repository"
+  local fixtures="${destination}/fixtures"
 
   rm -rf "${destination}"
 
-  # Add fixture instructions so copied support files stay out of normal project work.
-  mkdir -p "${destination}/.fixtures"
-  cat <<'EOF' > "${destination}/.fixtures/AGENTS.md"
-# AGENTS.md
-
-This directory is out of scope for normal repository work.
-
-Do not inspect, summarize, edit, or rely on files in this directory unless a runbook or user prompt explicitly references a file here.
-
-When a file in this directory is explicitly referenced, use only that referenced file and do not browse the surrounding fixture tree.
-EOF
-
   # Copy the product description into the path used by the runbook.
-  mkdir -p "${destination}/docs/product"
-  cp "${PRODUCT_DESCRIPTION}" "${destination}/docs/product/description.md"
+  mkdir -p "${repository}/docs/product"
+  cp "${PRODUCT_DESCRIPTION}" "${repository}/docs/product/description.md"
 
   # Copy prepared answers used when running the prompt-driven sections.
-  mkdir -p "${destination}/.fixtures/prompts"
-  cp "${CREATE_SCOPE_ANSWERS}"          "${destination}/.fixtures/prompts/create-scope-answers.md"
-  cp "${PATH_TO_PRODUCTION_ANSWERS}"    "${destination}/.fixtures/prompts/path-to-production-answers.md"
-  cp "${ARCHITECTURE_DECISION_ANSWERS}" "${destination}/.fixtures/prompts/architecture-decision-answers.md"
-  cp "${IMPLEMENTATION_TASKS_ANSWERS}"  "${destination}/.fixtures/prompts/implementation-tasks-answers.md"
+  mkdir -p "${fixtures}/prompts"
+  cp "${CREATE_SCOPE_ANSWERS}"          "${fixtures}/prompts/create-scope-answers.md"
+  cp "${PATH_TO_PRODUCTION_ANSWERS}"    "${fixtures}/prompts/path-to-production-answers.md"
+  cp "${ARCHITECTURE_DECISION_ANSWERS}" "${fixtures}/prompts/architecture-decision-answers.md"
+  cp "${IMPLEMENTATION_TASKS_ANSWERS}"  "${fixtures}/prompts/implementation-tasks-answers.md"
 
   # Copy the skills which are referred to from the runbook.
-  cp -R "${REPO_ROOT}/skills" "${destination}/.fixtures/"
+  cp -R "${REPO_ROOT}/skills" "${fixtures}/"
 }
 
 if [[ $# -ne 1 ]]; then
@@ -108,16 +98,16 @@ cat <<'EOF' > "${DIST_ROOT}/.gitignore"
 EOF
 
 # Recreate the directories used for the execution workspace and distributable copy.
-prepare_example_directory "${TARGET_DIR}"
-prepare_example_directory "${DIST_DIR}"
+prepare_example_layout "${TARGET_DIR}"
+prepare_example_layout "${DIST_DIR}"
+rm -f "${DIST_ARCHIVE}"
 
 # Run the runbook.
-sw run --verbose --input-file "${RUNBOOK}" --working-directory "${TARGET_DIR}" --output-file "${RUNBOOK_FILE}"
+sw run --verbose --input-file "${RUNBOOK}" --working-directory "${TARGET_DIR}/repository" --output-file "${RUNBOOK_FILE}"
 
 # Package the completed project and the shareable example directory.
-(cd "$(dirname "${TARGET_DIR}")" && zip -qr "${SOLUTION_ARCHIVE}" "${EXAMPLE}" -x '*/target/' '*/target/*' '*.DS_Store' '*/.DS_Store')
-rm -f "${DIST_ARCHIVE}"
+(cd "${TARGET_DIR}" && zip -qr "${SOLUTION_ARCHIVE}" repository -x '*/target/' '*/target/*' '*.DS_Store' '*/.DS_Store')
 (cd "${DIST_ROOT}" && zip -qr "${DIST_ARCHIVE}" "${EXAMPLE}" -x '*.DS_Store' '*/.DS_Store')
 
 # Open the editor.
-code "${TARGET_DIR}"
+code "${TARGET_DIR}/repository"

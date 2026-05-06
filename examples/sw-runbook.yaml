@@ -112,10 +112,9 @@ entries:
       with `git init`, write project files, install local skills, generate
       planning documents, and commit each phase.
 
-      At the start, the directory should contain only the bootstrap files provided
-      by the workshop: `runbook.md`, `.fixtures/`, and
-      `docs/product/description.md`. The guide turns that bootstrap directory into
-      a new project.
+      At the start, the repository directory should contain only the bootstrap
+      product description at `docs/product/description.md`. The guide turns that
+      bootstrap directory into a new project.
 
       Some examples may need Docker later in the run. Checking it up front avoids
       discovering that Docker is not running after the workflow has already been
@@ -187,9 +186,8 @@ entries:
       # Ignore the OS related files
       **/.DS_Store
 
-      # Ignore the bootstrap files as these are not part of the runbook output
+      # Ignore the bootstrap file as this is not part of the runbook output
       /runbook.md
-      /.fixtures
       EOF
 
       cat <<'EOF' > '.gitattributes'
@@ -597,14 +595,14 @@ entries:
   - type: Markdown
     contents: |
       1. Review the `create-scope` skill fixture
-         (`.fixtures/skills/create-scope/SKILL.md`).
+         (`../fixtures/skills/create-scope/SKILL.md`).
 
          Before copying the skill into the project, inspect the skill definition.
          Unlike `AGENTS.md`, which captures repository-wide instructions, a
          `SKILL.md` file defines one task-specific workflow.
 
   - type: DisplayFile
-    path: .fixtures/skills/create-scope/SKILL.md
+    path: ../fixtures/skills/create-scope/SKILL.md
     start_line: 1
     line_count: 10
     indent: 3
@@ -635,7 +633,7 @@ entries:
   - type: Command
     commands: |
       mkdir -p '.codex/skills'
-      cp -R '.fixtures/skills/create-scope' '.codex/skills/'
+      cp -R '../fixtures/skills/create-scope' '.codex/skills/'
     indent: 3
 
   - type: Markdown
@@ -685,30 +683,27 @@ entries:
 
   - type: Markdown
     contents: |
-      4. Apply the `create-scope` skill to obtain the first scope document, usually
-         referred to as the MVP Scope.
+      4. Apply the `create-scope` skill to clarify the product description and
+         create the MVP scope when the scope is ready.
 
          ```text
-         Use $create-scope to clarify @docs/product/description.md before we create requirements or scaffold the application and create the `docs/scopes/mvp-scope.md`.
+         Use $create-scope to clarify @docs/product/description.md and create `docs/scopes/mvp-scope.md` when the scope is ready.
          ```
 
-         The runbook provides answers up front because it needs to run unattended. In
-         an interactive session, you can use the prompt alone and answer the questions
-         one by one.
+         In an interactive session, use the prompt above and answer the model’s
+         questions one at a time. If you do not want to answer each question
+         manually, the command below supplies prepared answers from
+         `../fixtures/prompts/create-scope-answers.md`.
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
-      Use $create-scope to clarify @docs/product/description.md before we create requirements or scaffold the application and create the `docs/scopes/mvp-scope.md`.
+      codex exec --sandbox workspace-write - <<EOF
+      Use \$create-scope to clarify @docs/product/description.md and create \`docs/scopes/mvp-scope.md\` when the scope is ready.
 
-      Use the answers in @.fixtures/prompts/create-scope-answers.md without asking follow-up questions. If further clarification is still needed, use your best judgement and keep things simple.
+      Use the following answers without asking follow-up questions. If further clarification is still needed, use your best judgement and keep things simple.
+
+      $(cat '../fixtures/prompts/create-scope-answers.md')
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
     timeout: 3 minutes
     indent: 3
 
@@ -777,7 +772,7 @@ entries:
 
   - type: Command
     commands: |
-      cp -R '.fixtures/skills/derive-product-requirements-document' '.codex/skills/'
+      cp -R '../fixtures/skills/derive-product-requirements-document' '.codex/skills/'
     indent: 3
 
   - type: Markdown
@@ -902,7 +897,7 @@ entries:
 
   - type: Command
     commands: |
-      cp -R '.fixtures/skills/derive-vertical-slices' '.codex/skills/'
+      cp -R '../fixtures/skills/derive-vertical-slices' '.codex/skills/'
     indent: 3
 
   - type: Markdown
@@ -1029,7 +1024,7 @@ entries:
 
   - type: Command
     commands: |
-      cp -R '.fixtures/skills/derive-path-to-production' '.codex/skills/'
+      cp -R '../fixtures/skills/derive-path-to-production' '.codex/skills/'
     indent: 3
 
   - type: Markdown
@@ -1082,10 +1077,14 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
-      Use $derive-path-to-production to convert @docs/requirements/product-requirements-document.md and @docs/slices/ into a production readiness and release sequencing plan.
+      ANSWERS="$(cat '../fixtures/prompts/path-to-production-answers.md')"
 
-      Use the answers in @.fixtures/prompts/path-to-production-answers.md without asking follow-up questions. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the production plan.
+      codex exec -C "$PWD" --sandbox workspace-write - <<EOF
+      Use \$derive-path-to-production to convert @docs/requirements/product-requirements-document.md and @docs/slices/ into a production readiness and release sequencing plan.
+
+      Use the following answers without asking follow-up questions. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the production plan.
+
+      ${ANSWERS}
       EOF
     output:
       caption: |
@@ -1166,7 +1165,7 @@ entries:
 
   - type: Command
     commands: |
-      cp -R '.fixtures/skills/capture-architecture-decisions' '.codex/skills/'
+      cp -R '../fixtures/skills/capture-architecture-decisions' '.codex/skills/'
     indent: 3
 
   - type: Markdown
@@ -1219,10 +1218,14 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
-      Use $capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adrs/.
+      ANSWERS="$(cat '../fixtures/prompts/architecture-decision-answers.md')"
 
-      Use the answers in @.fixtures/prompts/architecture-decision-answers.md without asking follow-up questions. If a candidate is durable and the decision is clear from the source artefacts and repository context, create an accepted ADR. If a candidate is durable but the decision is unresolved, create a proposed ADR and record the uncertainty. If a candidate is not ADR-worthy, leave it in its source context and mention that in the final summary.
+      codex exec -C "$PWD" --sandbox workspace-write - <<EOF
+      Use \$capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adrs/.
+
+      Use the following answers without asking follow-up questions. If a candidate is durable and the decision is clear from the source artefacts and repository context, create an accepted ADR. If a candidate is durable but the decision is unresolved, create a proposed ADR and record the uncertainty. If a candidate is not ADR-worthy, leave it in its source context and mention that in the final summary.
+
+      ${ANSWERS}
       EOF
     output:
       caption: |
@@ -1303,7 +1306,7 @@ entries:
 
   - type: Command
     commands: |
-      cp -R '.fixtures/skills/derive-implementation-tasks' '.codex/skills/'
+      cp -R '../fixtures/skills/derive-implementation-tasks' '.codex/skills/'
     indent: 3
 
   - type: Markdown
@@ -1357,10 +1360,14 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
-      Use $derive-implementation-tasks to convert @docs/slices/, @docs/production/path-to-production.md, and @docs/adrs/ into ordered implementation task Markdown files.
+      ANSWERS="$(cat '../fixtures/prompts/implementation-tasks-answers.md')"
 
-      Use the answers in @.fixtures/prompts/implementation-tasks-answers.md without asking follow-up questions. Do not create remote tracker issues. Write local Markdown task files under @docs/tasks/. Treat relevant ADRs as implementation constraints and reference them only in tasks they materially affect. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the affected task files.
+      codex exec -C "$PWD" --sandbox workspace-write - <<EOF
+      Use \$derive-implementation-tasks to convert @docs/slices/, @docs/production/path-to-production.md, and @docs/adrs/ into ordered implementation task Markdown files.
+
+      Use the following answers without asking follow-up questions. Do not create remote tracker issues. Write local Markdown task files under @docs/tasks/. Treat relevant ADRs as implementation constraints and reference them only in tasks they materially affect. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the affected task files.
+
+      ${ANSWERS}
       EOF
     output:
       caption: |
@@ -1440,7 +1447,7 @@ entries:
 
   - type: Command
     commands: |
-      cp -R '.fixtures/skills/implement-task' '.codex/skills/'
+      cp -R '../fixtures/skills/implement-task' '.codex/skills/'
     indent: 3
 
   - type: Markdown
