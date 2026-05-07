@@ -38,12 +38,12 @@ prepare_example_layout() {
 
   # Copy prepared answers used when running the prompt-driven sections.
   mkdir -p "${fixtures}/prompts"
-  cp "${CREATE_SCOPE_ANSWERS}"              "${fixtures}/prompts/create-scope-answers.md"
-  cp "${DERIVE_PRD_ANSWERS}"                "${fixtures}/prompts/derive-product-requirements-document-answers.md"
-  cp "${DERIVE_VERTICAL_SLICES_ANSWERS}"    "${fixtures}/prompts/derive-vertical-slices-answers.md"
-  cp "${DERIVE_PATH_TO_PRODUCTION_ANSWERS}" "${fixtures}/prompts/derive-path-to-production-answers.md"
-  cp "${ARCHITECTURE_DECISION_ANSWERS}"     "${fixtures}/prompts/architecture-decision-answers.md"
-  cp "${IMPLEMENTATION_TASKS_ANSWERS}"      "${fixtures}/prompts/implementation-tasks-answers.md"
+  cp "${CREATE_SCOPE_ANSWERS}"                  "${fixtures}/prompts/create-scope-answers.md"
+  cp "${DERIVE_PRD_ANSWERS}"                    "${fixtures}/prompts/derive-product-requirements-document-answers.md"
+  cp "${DERIVE_VERTICAL_SLICES_ANSWERS}"        "${fixtures}/prompts/derive-vertical-slices-answers.md"
+  cp "${DERIVE_PATH_TO_PRODUCTION_ANSWERS}"     "${fixtures}/prompts/derive-path-to-production-answers.md"
+  cp "${CAPTURE_ARCHITECTURE_DECISION_ANSWERS}" "${fixtures}/prompts/capture-architecture-decision-answers.md"
+  cp "${IMPLEMENTATION_TASKS_ANSWERS}"          "${fixtures}/prompts/implementation-tasks-answers.md"
 
   # Copy the skills which are referred to from the runbook.
   cp -R "${REPO_ROOT}/skills" "${fixtures}/"
@@ -72,7 +72,7 @@ CREATE_SCOPE_ANSWERS="${SOURCE_DIR}/create-scope-answers.md"
 DERIVE_PRD_ANSWERS="${SOURCE_DIR}/derive-product-requirements-document-answers.md"
 DERIVE_VERTICAL_SLICES_ANSWERS="${SOURCE_DIR}/derive-vertical-slices-answers.md"
 DERIVE_PATH_TO_PRODUCTION_ANSWERS="${SOURCE_DIR}/derive-path-to-production-answers.md"
-ARCHITECTURE_DECISION_ANSWERS="${SOURCE_DIR}/architecture-decision-answers.md"
+CAPTURE_ARCHITECTURE_DECISION_ANSWERS="${SOURCE_DIR}/capture-architecture-decision-answers.md"
 IMPLEMENTATION_TASKS_ANSWERS="${SOURCE_DIR}/implementation-tasks-answers.md"
 TARGET_DIR="/tmp/${EXAMPLE}"
 DIST_ROOT="${EXAMPLES_DIR}/dist"
@@ -94,8 +94,8 @@ require_file "product description"                          "${PRODUCT_DESCRIPTI
 require_file "create scope answers"                         "${CREATE_SCOPE_ANSWERS}"
 require_file "derive product requirements document answers" "${DERIVE_PRD_ANSWERS}"
 require_file "derive vertical slices answers"               "${DERIVE_VERTICAL_SLICES_ANSWERS}"
-require_file "path-to-production answers"                   "${DERIVE_PATH_TO_PRODUCTION_ANSWERS}"
-require_file "architecture-decision answers"                "${ARCHITECTURE_DECISION_ANSWERS}"
+require_file "derive path-to-production answers"            "${DERIVE_PATH_TO_PRODUCTION_ANSWERS}"
+require_file "capture architecture-decision answers"        "${CAPTURE_ARCHITECTURE_DECISION_ANSWERS}"
 require_file "implementation-tasks answers"                 "${IMPLEMENTATION_TASKS_ANSWERS}"
 
 # Ignore all the things within the dist directory.

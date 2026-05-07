@@ -1251,14 +1251,36 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Create a repository-scoped `capture-architecture-decisions` skill.
+      Workflow position:
 
-         This skill helps the model scan the generated planning artefacts for ADR
-         candidates and turn durable architecture choices into Architecture
-         Decision Records (ADRs) under `docs/adrs/`. This checkpoint runs after
-         the path-to-production plan because production readiness exposes the
-         deployment, data, security, observability, integration, and operational
-         trade-offs that are most likely to need ADRs.
+      ```text
+      path to production
+        -> architecture decision records (ADRs)  [current]
+        -> implementation task documents
+      ```
+
+      The path-to-production plan exposes decisions that will constrain the system
+      beyond one implementation task: application stack, deployment shape,
+      persistence, security boundary, observability, rollback, integrations, and
+      operational ownership.
+
+      These decisions should not be left only as scattered notes in planning
+      documents. Architecture Decision Records (ADRs) capture durable choices, their
+      context, and their consequences so future implementation tasks can reference
+      the same constraints instead of rediscovering or silently changing them.
+
+      ADRs are not for every technical preference. They are for decisions that are
+      hard to reverse, affect multiple slices, shape production readiness, or create
+      constraints that future contributors need to understand.
+
+      As with the previous steps, this runbook uses a repository-scoped skill for
+      the repeatable work. The `capture-architecture-decisions` skill scans the
+      generated planning artefacts for ADR candidates and turns durable architecture
+      choices into records under `docs/adrs/`.
+
+  - type: Markdown
+    contents: |
+      1. Create a repository-scoped `capture-architecture-decisions` skill.
 
   - type: Command
     commands: |
@@ -1267,7 +1289,7 @@ entries:
 
   - type: Markdown
     contents: |
-      (*Optional*) Show the generated skill metadata.
+      (*Optional*) View the new skill directory structure.
     indent: 3
 
   - type: Command
@@ -1275,22 +1297,22 @@ entries:
       tree --dirsfirst --sort=name '.codex/skills/capture-architecture-decisions'
     output:
       caption: |
-        The generated skill
+        The new skill directory structure
     indent: 3
 
   - type: Markdown
     contents: |
       2. Commit the skill.
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
@@ -1309,74 +1331,68 @@ entries:
          Use $capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adrs/.
          ```
 
-         The runbook asks the model to avoid follow-up questions because it needs
-         to run unattended. In an interactive session, you can use the prompt alone
-         and answer questions about unsettled architecture decisions one by one.
+         In an interactive session, use the prompt above and answer the model’s
+         questions one at a time. If you do not want to answer each question
+         manually, the command below supplies prepared clarification notes from
+         `../fixtures/prompts/capture-architecture-decision-answers.md`.
 
   - type: Command
     commands: |
-      ANSWERS="$(cat '../fixtures/prompts/architecture-decision-answers.md')"
-
-      codex exec -C "$PWD" --sandbox workspace-write - <<EOF
+      codex exec --sandbox workspace-write - <<EOF
       Use \$capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adrs/.
 
       Use the following answers without asking follow-up questions. If a candidate is durable and the decision is clear from the source artefacts and repository context, create an accepted ADR. If a candidate is durable but the decision is unresolved, create a proposed ADR and record the uncertainty. If a candidate is not ADR-worthy, leave it in its source context and mention that in the final summary.
 
-      ${ANSWERS}
+      $(cat '../fixtures/prompts/capture-architecture-decision-answers.md')
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
     timeout: 3 minutes
     indent: 3
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
+      4. Ask the model to apply the project README and documentation index rules from
+         `AGENTS.md`.
+
+         This step may have created new documentation directories or files. Before
+         moving on, update the top-level `README.md` and any documentation index files
+         required by `AGENTS.md` so the new documents are discoverable.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
     timeout: 1 minute
     indent: 3
 
   - type: Markdown
     contents: |
-      (*Optional*) List the files under the `docs` directory
+      (*Optional*) Inspect the README files created or updated by the agent. These
+      files show how the repository instructions shaped the project and
+      documentation indexes.
     indent: 3
 
   - type: Command
     commands: |
-      tree --dirsfirst --sort=name 'docs'
+      tree --dirsfirst --sort=name --prune -P 'README.md'
     output:
       caption: |
-        The documentation files
+        The `README.md` files
     indent: 3
 
   - type: Markdown
     contents: |
       5. Commit changes
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
