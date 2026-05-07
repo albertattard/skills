@@ -134,9 +134,9 @@ entries:
           - A fresh project directory that is not inside an existing Git repository.
         commands: |
           ! git rev-parse --is-inside-work-tree >/dev/null 2>&1
-        help: Follow this runbook from a fresh disposable project directory, not from the
-          workshop repository, an existing Git repository, or a subdirectory of
-          one.
+        help: Follow this runbook from a fresh disposable project directory, not from
+          the workshop repository, an existing Git repository, or a subdirectory
+          of one.
       - kind: command
         name: Codex CLI
         contents: |
@@ -488,7 +488,7 @@ entries:
       codex exec - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by @AGENTS.md.
       EOF
-    timeout: 2 minutes
+    timeout: 3 minutes
     indent: 3
 
   - type: Markdown
@@ -529,8 +529,8 @@ entries:
          commit changes
          ```
 
-         This runbook also shows the manual Git commands so you can see exactly what is
-         committed at this checkpoint.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
@@ -670,8 +670,8 @@ entries:
          commit changes
          ```
 
-         This runbook also shows the manual Git commands so you can see exactly what is
-         committed at this checkpoint.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
@@ -750,8 +750,8 @@ entries:
          commit changes
          ```
 
-         This runbook also shows the manual Git commands so you can see exactly what is
-         committed at this checkpoint.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
@@ -763,13 +763,35 @@ entries:
 
   - type: Heading
     level: H2
-    title: Derive Product Requirements Document
+    title: Derive Product Requirements Document (PRD)
+
+  - type: Markdown
+    contents: |
+      Workflow position:
+
+      ```text
+      MVP scope
+        -> product requirements document (PRD)  [current]
+        -> vertical slices
+      ```
+
+      The MVP scope defines what should be built first and what should be left out.
+      Before implementation planning, that scope needs to become a Product
+      Requirements Document (PRD): a more explicit description of user behaviour,
+      functional requirements, constraints, and acceptance expectations.
+
+      The PRD is still product-focused. It should explain what the product must do
+      without jumping straight into implementation tasks. This gives the model a
+      stable bridge between the clarified scope and the vertical slices that follow.
+
+      As before, we will introduce a new skill that takes a scope and turns it into product requirements document (PRD).
 
   - type: Markdown
     contents: |
       1. Create a repository-scoped `derive-product-requirements-document` skill.
 
-         This skill turns an agreed scope into a Product Requirements Document that is detailed enough to derive vertical slices.
+         For convenience the skills are placed under the fixtures directory which can
+         be easily copied.
 
   - type: Command
     commands: |
@@ -778,7 +800,7 @@ entries:
 
   - type: Markdown
     contents: |
-      (*Optional*) Show the generated skill metadata.
+      (*Optional*) View the new skill directory structure.
     indent: 3
 
   - type: Command
@@ -786,22 +808,22 @@ entries:
       tree --dirsfirst --sort=name '.codex/skills/derive-product-requirements-document'
     output:
       caption: |
-        The generated skill
+        The new skill directory structure
     indent: 3
 
   - type: Markdown
     contents: |
       2. Commit the skill.
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
@@ -816,64 +838,72 @@ entries:
       3. Apply the `derive-product-requirements-document` skill to obtain the product
          requirements document.
 
+         ```text
+         Use $derive-product-requirements-document to convert @docs/scopes/mvp-scope.md into a Product Requirements Document.
+         ```
+
+         In an interactive session, use the prompt above and answer the model’s
+         questions one at a time. If you do not want to answer each question
+         manually, the command below supplies prepared answers from
+         `../fixtures/prompts/derive-product-requirements-document-answers.md`.
+
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
-      Use $derive-product-requirements-document to convert @docs/scopes/mvp-scope.md into a Product Requirements Document.
+      codex exec --sandbox workspace-write - <<EOF
+      Use \$derive-product-requirements-document to convert @docs/scopes/mvp-scope.md into a Product Requirements Document.
+
+      Use the following answers without asking follow-up questions. If further clarification is still needed, use your best judgement and keep things simple.
+
+      $(cat '../fixtures/prompts/derive-product-requirements-document-answers.md')
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
     timeout: 3 minutes
     indent: 3
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
+      4. Ask the model to apply the project README and documentation index rules from
+        `AGENTS.md`.
+
+         This step may have created new documentation directories or files. Before
+         moving on, update the top-level `README.md` and any documentation index files
+         required by `AGENTS.md` so the new documents are discoverable.
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
+      codex exec --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
     timeout: 1 minute
     indent: 3
 
   - type: Markdown
     contents: |
-      (*Optional*) List the files under the `docs` directory
+      (*Optional*) Inspect the README files created or updated by the agent. These
+      files show how the repository instructions shaped the project and
+      documentation indexes.
     indent: 3
 
   - type: Command
     commands: |
-      tree --dirsfirst --sort=name 'docs'
+      tree --dirsfirst --sort=name --prune -P 'README.md'
     output:
       caption: |
-        The documentation files
+        The `README.md` files
     indent: 3
 
   - type: Markdown
     contents: |
       5. Commit changes
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |

@@ -39,6 +39,7 @@ prepare_example_layout() {
   # Copy prepared answers used when running the prompt-driven sections.
   mkdir -p "${fixtures}/prompts"
   cp "${CREATE_SCOPE_ANSWERS}"          "${fixtures}/prompts/create-scope-answers.md"
+  cp "${DERIVE_PRD_ANSWERS}"            "${fixtures}/prompts/derive-product-requirements-document-answers.md"
   cp "${PATH_TO_PRODUCTION_ANSWERS}"    "${fixtures}/prompts/path-to-production-answers.md"
   cp "${ARCHITECTURE_DECISION_ANSWERS}" "${fixtures}/prompts/architecture-decision-answers.md"
   cp "${IMPLEMENTATION_TASKS_ANSWERS}"  "${fixtures}/prompts/implementation-tasks-answers.md"
@@ -67,6 +68,7 @@ SOURCE_DIR="${EXAMPLES_DIR}/${EXAMPLE}"
 RUNBOOK="${EXAMPLES_DIR}/sw-runbook.yaml"
 PRODUCT_DESCRIPTION="${SOURCE_DIR}/product-description.md"
 CREATE_SCOPE_ANSWERS="${SOURCE_DIR}/create-scope-answers.md"
+DERIVE_PRD_ANSWERS="${SOURCE_DIR}/derive-product-requirements-document-answers.md"
 PATH_TO_PRODUCTION_ANSWERS="${SOURCE_DIR}/path-to-production-answers.md"
 ARCHITECTURE_DECISION_ANSWERS="${SOURCE_DIR}/architecture-decision-answers.md"
 IMPLEMENTATION_TASKS_ANSWERS="${SOURCE_DIR}/implementation-tasks-answers.md"
@@ -84,12 +86,14 @@ if [[ ! -d "${SOURCE_DIR}" ]]; then
   exit 2
 fi
 
-require_file "shared runbook"                "${RUNBOOK}"
-require_file "product description"           "${PRODUCT_DESCRIPTION}"
-require_file "create-scope answers"          "${CREATE_SCOPE_ANSWERS}"
-require_file "path-to-production answers"    "${PATH_TO_PRODUCTION_ANSWERS}"
-require_file "architecture-decision answers" "${ARCHITECTURE_DECISION_ANSWERS}"
-require_file "implementation-tasks answers"  "${IMPLEMENTATION_TASKS_ANSWERS}"
+# Verify that the required fixtures files are available
+require_file "shared runbook"                               "${RUNBOOK}"
+require_file "product description"                          "${PRODUCT_DESCRIPTION}"
+require_file "create scope answers"                         "${CREATE_SCOPE_ANSWERS}"
+require_file "derive product requirements document answers" "${DERIVE_PRD_ANSWERS}"
+require_file "path-to-production answers"                   "${PATH_TO_PRODUCTION_ANSWERS}"
+require_file "architecture-decision answers"                "${ARCHITECTURE_DECISION_ANSWERS}"
+require_file "implementation-tasks answers"                 "${IMPLEMENTATION_TASKS_ANSWERS}"
 
 # Ignore all the things within the dist directory.
 mkdir -p "${DIST_ROOT}"
