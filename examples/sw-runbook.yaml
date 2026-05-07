@@ -915,7 +915,7 @@ entries:
 
   - type: Heading
     level: H2
-    title: Derive Vertical Slices
+    title: Derive Vertical Implementation Slices
 
   - type: Markdown
     contents: |
@@ -934,8 +934,8 @@ entries:
 
       It is possible to derive tasks directly from the PRD, but that often produces
       horizontal work such as database schema, backend endpoints, frontend screens,
-      and tests. Those tasks may be necessary, but they do not prove user value
-      until several layers are complete.
+      and tests. Those tasks may be necessary, but they do not prove user value until
+      several layers are complete.
 
       A useful vertical slice should prove a visible outcome, not just complete a
       technical layer. This keeps planning focused on user value while still giving
@@ -946,11 +946,10 @@ entries:
       supporting documents, such as the MVP scope, and creates one or more vertical
       slice documents.
 
-      Each vertical slice should produce something tangible enough for feedback.
-      For example, if a slice adds a table, that slice should also include the
-      smallest behaviour that reads from the table and shows something useful to
-      the user. Later slices can then add more capability in the same end-to-end
-      shape.
+      Each vertical slice should produce something tangible enough for feedback. For
+      example, if a slice adds a table, that slice should also include the smallest
+      behaviour that reads from the table and shows something useful to the user.
+      Later slices can then add more capability in the same end-to-end shape.
 
   - type: Markdown
     contents: |
