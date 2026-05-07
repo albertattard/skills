@@ -1090,18 +1090,40 @@ entries:
 
   - type: Heading
     level: H2
-    title: Derive Path to Production
+    title: Derive Path to Production Plan
+
+  - type: Markdown
+    contents: |
+      Workflow position:
+
+      ```text
+      vertical slices
+        -> path to production  [current]
+        -> architecture decision records (ADRs)
+      ```
+
+      Vertical slices describe the product increments we want to build. Before turning
+      those slices into implementation tasks, we also need to understand what it means
+      to make the first useful version releasable.
+
+      A path to production connects product planning with engineering reality. It
+      identifies the first releasable increment, validation gates, release sequence,
+      operational expectations, rollback approach, configuration, data, security,
+      ownership, risks, and open questions.
+
+      Without this step, the task plan can become too local to the codebase. The model
+      may create implementation tasks that work on a developer machine but miss the
+      work needed to build, validate, package, operate, or safely hand off the
+      application.
+
+      As with the previous steps, this runbook uses a repository-scoped skill for the
+      repeatable work. The `derive-path-to-production` skill takes the PRD, vertical
+      slices, and repository context, then creates a production readiness and release
+      sequencing plan under `docs/production/`.
 
   - type: Markdown
     contents: |
       1. Create a repository-scoped `derive-path-to-production` skill.
-
-         This skill helps the model turn the Product Requirements Document (PRD),
-         vertical slices, and repository context into a production readiness and
-         release sequencing plan under `docs/production/`. The plan should identify
-         the first releasable increment, release sequence, validation gates, rollback
-         expectations, observability, configuration, data, security, operational
-         ownership, risks, and open questions.
 
   - type: Command
     commands: |
@@ -1110,7 +1132,7 @@ entries:
 
   - type: Markdown
     contents: |
-      (*Optional*) Show the generated skill metadata.
+      (*Optional*) View the new skill directory structure.
     indent: 3
 
   - type: Command
@@ -1118,22 +1140,22 @@ entries:
       tree --dirsfirst --sort=name '.codex/skills/derive-path-to-production'
     output:
       caption: |
-        The generated skill
+        The new skill directory structure
     indent: 3
 
   - type: Markdown
     contents: |
       2. Commit the skill.
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
@@ -1152,74 +1174,68 @@ entries:
          Use $derive-path-to-production to convert @docs/requirements/product-requirements-document.md and @docs/slices/ into a production readiness and release sequencing plan.
          ```
 
-         The runbook provides production answers up front because it needs to run
-         unattended. In an interactive session, you can use the prompt alone and
-         answer the questions one by one.
+         In an interactive session, use the prompt above and answer the model’s
+         questions one at a time. If you do not want to answer each question
+         manually, the command below supplies prepared clarification notes from
+         `../fixtures/prompts/derive-path-to-production-answers.md`.
 
   - type: Command
     commands: |
-      ANSWERS="$(cat '../fixtures/prompts/path-to-production-answers.md')"
-
-      codex exec -C "$PWD" --sandbox workspace-write - <<EOF
+      codex exec --sandbox workspace-write - <<EOF
       Use \$derive-path-to-production to convert @docs/requirements/product-requirements-document.md and @docs/slices/ into a production readiness and release sequencing plan.
 
       Use the following answers without asking follow-up questions. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the production plan.
 
-      ${ANSWERS}
+      $(cat '../fixtures/prompts/derive-path-to-production-answers.md')
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
     timeout: 3 minutes
     indent: 3
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
+      4. Ask the model to apply the project README and documentation index rules from
+         `AGENTS.md`.
+
+         This step may have created new documentation directories or files. Before
+         moving on, update the top-level `README.md` and any documentation index files
+         required by `AGENTS.md` so the new documents are discoverable.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
-    timeout: 1 minute
+    timeout: 2 minutes
     indent: 3
 
   - type: Markdown
     contents: |
-      (*Optional*) List the files under the `docs` directory
+      (*Optional*) Inspect the README files created or updated by the agent. These
+      files show how the repository instructions shaped the project and
+      documentation indexes.
     indent: 3
 
   - type: Command
     commands: |
-      tree --dirsfirst --sort=name 'docs'
+      tree --dirsfirst --sort=name --prune -P 'README.md'
     output:
       caption: |
-        The documentation files
+        The `README.md` files
     indent: 3
 
   - type: Markdown
     contents: |
       5. Commit changes
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
