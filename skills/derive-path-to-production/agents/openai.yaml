@@ -1,4 +1,4 @@
 interface:
   display_name: "Derive Path to Production"
-  short_description: "Plan production readiness and release sequencing"
-  default_prompt: "Use $derive-path-to-production to convert the product requirements, vertical slices, and repository context into a production readiness and release sequencing plan."
+  short_description: "Check release readiness and sequence production work"
+  default_prompt: "Use $derive-path-to-production to check path readiness and convert the product requirements, vertical slices, and repository context into a production readiness and release sequencing plan."
