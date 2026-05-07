@@ -755,7 +755,7 @@ entries:
 
   - type: Command
     commands: |
-      git add 'docs/'
+      git add 'README.md' 'docs/'
       git commit \
         --message 'Add MVP scope' \
         --message 'Capture the first buildable unit so implementation can focus on proving the core implementation.'
@@ -907,7 +907,7 @@ entries:
 
   - type: Command
     commands: |
-      git add 'docs/'
+      git add 'README.md' 'docs/'
       git commit \
         --message 'Add product requirements' \
         --message 'Capture the MVP requirements derived from the agreed scope so the next workflow step can split the requirements into vertical slices.'
@@ -919,12 +919,42 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Create a repository-scoped `derive-vertical-slices` skill.
+      Workflow position:
 
-         This skill helps the model turn a Product Requirements Document (PRD) into
-         small, ordered vertical slice documents under `docs/slices/`. Each slice must
-         be independently understandable, linked back to the source PRD, focused on a
-         user-visible outcome, and avoid horizontal technical task breakdowns.
+      ```text
+      product requirements document (PRD)
+        -> vertical slices  [current]
+        -> path to production
+      ```
+
+      The PRD describes what the product must do. Before creating implementation
+      tasks, we split those requirements into vertical slices: small, ordered
+      increments that cut through the product from user behaviour to the supporting
+      implementation.
+
+      It is possible to derive tasks directly from the PRD, but that often produces
+      horizontal work such as database schema, backend endpoints, frontend screens,
+      and tests. Those tasks may be necessary, but they do not prove user value
+      until several layers are complete.
+
+      A useful vertical slice should prove a visible outcome, not just complete a
+      technical layer. This keeps planning focused on user value while still giving
+      the model enough structure to derive implementation work later.
+
+      As with the previous steps, this runbook uses a repository-scoped skill for
+      the repeatable work. The `derive-vertical-slices` skill takes the PRD and
+      supporting documents, such as the MVP scope, and creates one or more vertical
+      slice documents.
+
+      Each vertical slice should produce something tangible enough for feedback.
+      For example, if a slice adds a table, that slice should also include the
+      smallest behaviour that reads from the table and shows something useful to
+      the user. Later slices can then add more capability in the same end-to-end
+      shape.
+
+  - type: Markdown
+    contents: |
+      1. Create a repository-scoped `derive-vertical-slices` skill.
 
   - type: Command
     commands: |
@@ -933,7 +963,7 @@ entries:
 
   - type: Markdown
     contents: |
-      (*Optional*) Show the generated skill metadata.
+      (*Optional*) View the new skill directory structure.
     indent: 3
 
   - type: Command
@@ -941,22 +971,22 @@ entries:
       tree --dirsfirst --sort=name '.codex/skills/derive-vertical-slices'
     output:
       caption: |
-        The generated skill
+        The new skill directory structure
     indent: 3
 
   - type: Markdown
     contents: |
       2. Commit the skill.
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
@@ -971,68 +1001,89 @@ entries:
       3. Apply the `derive-vertical-slices` skill to obtain the first set of
          vertical slices.
 
+         ```text
+         Use $derive-vertical-slices to convert @docs/requirements/product-requirements-document.md into ordered vertical slice documents.
+         ```
+
+         In an interactive session, use the prompt above and answer the model’s
+         questions one at a time. If you do not want to answer each question
+         manually, the command below supplies prepared clarification notes from
+         `../fixtures/prompts/derive-vertical-slices-answers.md`.
+
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
-      Use $derive-vertical-slices to convert @docs/requirements/product-requirements-document.md into ordered vertical slice documents.
+      codex exec --sandbox workspace-write - <<EOF
+      Use \$derive-vertical-slices to convert @docs/requirements/product-requirements-document.md into ordered vertical slice documents.
+
+      Use the following prepared clarification notes. If they say no prepared answers are needed, derive the slices from the PRD and ask only when a material slicing decision is still unclear.
+
+      $(cat '../fixtures/prompts/derive-vertical-slices-answers.md')
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
     timeout: 3 minutes
     indent: 3
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
+      (*Optional*) View the derived slices.
+    indent: 3
+
+  - type: Command
+    commands: |
+      tree --dirsfirst --sort=name 'docs/slices'
+    output:
+      caption: |
+        The derived slices
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      4. Ask the model to apply the project README and documentation index rules from
+         `AGENTS.md`.
+
+         This step may have created new documentation directories or files. Before
+         moving on, update the top-level `README.md` and any documentation index files
+         required by `AGENTS.md` so the new documents are discoverable.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
-    timeout: 1 minute
+    timeout: 2 minutes
     indent: 3
 
   - type: Markdown
     contents: |
-      (*Optional*) List the files under the `docs` directory
+      (*Optional*) Inspect the README files created or updated by the agent. These
+      files show how the repository instructions shaped the project and
+      documentation indexes.
     indent: 3
 
   - type: Command
     commands: |
-      tree --dirsfirst --sort=name 'docs'
+      tree --dirsfirst --sort=name --prune -P 'README.md'
     output:
       caption: |
-        The documentation files
+        The `README.md` files
     indent: 3
 
   - type: Markdown
     contents: |
       5. Commit changes
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
-      git add 'docs/'
+      git add 'README.md' 'docs/'
       git commit \
         --message 'Add vertical slices' \
         --message 'Split the MVP requirements into ordered, user-visible implementation slices.'
@@ -1173,7 +1224,7 @@ entries:
 
   - type: Command
     commands: |
-      git add 'docs/'
+      git add 'README.md' 'docs/'
       git commit \
         --message 'Add path to production' \
         --message 'Capture the production readiness and release sequencing plan for the first releasable increment.'
@@ -1314,7 +1365,7 @@ entries:
 
   - type: Command
     commands: |
-      git add 'docs/'
+      git add 'README.md' 'docs/'
       git commit \
         --message 'Add architecture decision records' \
         --message 'Capture durable architecture decisions before deriving implementation tasks so downstream work can reference the technical constraints explicitly.'
@@ -1456,7 +1507,7 @@ entries:
 
   - type: Command
     commands: |
-      git add 'docs/'
+      git add 'README.md' 'docs/'
       git commit \
         --message 'Add implementation tasks' \
         --message 'Capture ordered, traceable implementation tasks derived from the vertical slices and production readiness plan.'
