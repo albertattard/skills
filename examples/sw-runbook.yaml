@@ -452,6 +452,13 @@ entries:
 
   - type: Markdown
     contents: |
+      Workflow position:
+
+      ```text
+      product description  [current]
+        -> MVP scope
+      ```
+
       A product or feature usually starts as an idea, often captured in an email,
       message, ticket, or short note. In this runbook, we call that starting point the
       product description, even though it is usually rough and incomplete.
@@ -548,6 +555,14 @@ entries:
 
   - type: Markdown
     contents: |
+      Workflow position:
+
+      ```text
+      product description
+        -> MVP scope  [current]
+        -> product requirements document (PRD)
+      ```
+
       A product description is usually too broad or ambiguous to implement directly.
       Before we ask an agent to create requirements or code, we first narrow the idea
       into an MVP scope.
