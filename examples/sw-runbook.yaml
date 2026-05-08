@@ -738,7 +738,7 @@ entries:
       codex exec --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-    timeout: 1 minute
+    timeout: 2 minutes
     indent: 3
 
   - type: Markdown
@@ -893,7 +893,7 @@ entries:
       codex exec --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-    timeout: 1 minute
+    timeout: 2 minutes
     indent: 3
 
   - type: Markdown
@@ -1382,7 +1382,7 @@ entries:
       codex exec --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-    timeout: 1 minute
+    timeout: 2 minutes
     indent: 3
 
   - type: Markdown
@@ -1547,7 +1547,7 @@ entries:
       codex exec --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-    timeout: 1 minute
+    timeout: 2 minutes
     indent: 3
 
   - type: Markdown
@@ -1720,7 +1720,7 @@ entries:
       codex exec --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-    timeout: 1 minute
+    timeout: 2 minutes
     indent: 3
 
   - type: Markdown
