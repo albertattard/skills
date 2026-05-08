@@ -801,15 +801,17 @@ entries:
       without jumping straight into implementation tasks. This gives the model a
       stable bridge between the clarified scope and the vertical slices that follow.
 
-      As before, we will introduce a new skill that takes a scope and turns it into
-      product requirements document (PRD).
+      This runbook uses a repository-scoped skill for the repeatable work. The
+      `derive-product-requirements-document` skill keeps the PRD step focused on
+      product behaviour and acceptance expectations, rather than relying on a one-off
+      prompt that may drift between sessions.
 
   - type: Markdown
     contents: |
       1. Create a repository-scoped `derive-product-requirements-document` skill.
 
-         For convenience the skills are placed under the fixtures directory which can
-         be easily copied.
+         For this runbook, we copy the prepared skill from the fixtures so the reader
+         can inspect the workflow before asking the model to derive the PRD.
 
   - type: Command
     commands: |
@@ -880,7 +882,7 @@ entries:
   - type: Markdown
     contents: |
       4. Ask the model to apply the project README and documentation index rules from
-        `AGENTS.md`.
+         `AGENTS.md`.
 
          This step may have created new documentation directories or files. Before
          moving on, update the top-level `README.md` and any documentation index files
@@ -1063,7 +1065,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
+      codex exec --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1220,7 +1222,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
+      codex exec --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1377,7 +1379,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
+      codex exec --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 1 minute
@@ -1699,9 +1701,19 @@ entries:
          understanding matters because you remain responsible for maintaining,
          extending, and correcting the software after the agent run finishes.
 
-         This step may have created new documentation directories or files. Before
-         moving on, update the top-level `README.md` and any documentation index files
-         required by `AGENTS.md` so the new documents are discoverable.
+         Check the diff before asking the model to continue. The goal is not only to
+         see whether the task passes, but also to understand the design choices,
+         naming, tests, and documentation changes introduced by the agent.
+
+  - type: Markdown
+    contents: |
+      5. Ask the model to apply the project README and documentation index rules from
+         `AGENTS.md`.
+
+         The implemented task may have changed source files, tests, task status, or
+         documentation. Before committing, update the top-level `README.md` and any
+         documentation index files required by `AGENTS.md` so the repository remains
+         navigable.
 
   - type: Command
     commands: |
@@ -1713,14 +1725,16 @@ entries:
 
   - type: Markdown
     contents: |
-      Once the changes are reviewed and well understood, commit the changes.
+      6. Commit changes
 
-      ```text
-      commit changes
-      ```
+         Once the changes are reviewed and well understood, commit the changes.
 
-      This runbook also shows the manual Git commands so you can see exactly what
-      is committed at this checkpoint.
+         ```text
+         commit changes
+         ```
+
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
     indent: 3
 
   - type: Command
