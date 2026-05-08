@@ -1,6 +1,6 @@
-# Default Profiles
+# Shared Profiles
 
-Default profiles provide stack-specific implementation guidance for skills that need concrete conventions after the project stack is known.
+Shared profiles provide stack-specific implementation guidance for skills that need concrete conventions after the project stack is known.
 
 Profiles are not global defaults. They must not override user instructions, repository conventions, accepted architecture decisions, or task-specific constraints.
 

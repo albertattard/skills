@@ -28,18 +28,18 @@ Read nearby context only when it affects the selected task:
 - `docs/tasks/README.md`
 - source slice, production, requirement, or scope documents linked by the task
 - repository instructions such as `AGENTS.md`
-- selected default profile guidance from `../shared/defaults/README.md`, only when a profile is explicitly selected or clearly matched
+- selected shared profile guidance from `../shared/profiles/README.md`, only when a profile is explicitly selected or clearly matched
 - build, test, lint, package, migration, fixture, and deployment conventions
 - existing tests that cover the affected behaviour
 - relevant source files and module boundaries
 
 Treat task, slice, production, requirement, and scope documents as source artefacts. Do not change them unless the selected task explicitly requires documentation updates, the selected task's completion status must be updated, or the task index must stay current after task-related file changes.
 
-## Default Profiles
+## Shared Profiles
 
 The base implementation workflow is stack-neutral.
 
-When stack-specific implementation guidance is needed, consult `../shared/defaults/README.md` and load at most one matching profile.
+When stack-specific implementation guidance is needed, consult `../shared/profiles/README.md` and load at most one matching profile.
 
 Apply a profile only when one of these is true:
 
