@@ -1527,7 +1527,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --full-auto <<'EOF'
+      codex exec --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 1 minute
@@ -1576,6 +1576,34 @@ entries:
 
   - type: Markdown
     contents: |
+      Workflow position:
+
+      ```text
+      implementation task documents
+        -> completed implementation tasks  [current]
+      ```
+
+      The previous section created implementation task documents. Those documents are
+      useful only if the agent treats them as bounded contracts rather than as a
+      suggestion to build nearby work.
+
+      This section switches from planning to implementation. The goal is to pick one
+      task that is ready for an agent, verify the repository baseline, implement only
+      that task, run the task’s validation, and update the task status when the work is
+      complete. That keeps each agent run small enough to review and makes failures
+      easier to diagnose.
+
+      The `implement-task` skill exists for this reason. It turns a generated task
+      file into an execution workflow with preflight checks, scoped implementation,
+      tests, final validation, and task-index updates.
+
+      The shared profiles were committed earlier with the implementation task
+      derivation skill. They are not skills on their own. They provide stack-specific
+      implementation guidance that `implement-task` can load when a generated task
+      explicitly selects a `default_profile`.
+
+  - type: Markdown
+    contents: |
       1. Create a repository-scoped `implement-task` skill.
 
          This skill helps the model implement one generated task from
@@ -1584,11 +1612,6 @@ entries:
          selected task, prefers acceptance-level tests, runs final validation,
          and reports any remaining manual checks or follow-up work.
 
-         The shared profiles were committed earlier with the implementation task
-         derivation skill. They provide stack-specific implementation guidance that
-         `implement-task` can load when a generated task explicitly selects a
-         `default_profile`.
-
   - type: Command
     commands: |
       cp -R '../fixtures/skills/implement-task' '.codex/skills/'
@@ -1596,7 +1619,7 @@ entries:
 
   - type: Markdown
     contents: |
-      (*Optional*) Show the generated skill metadata.
+      (*Optional*) View the new skill directory structure.
     indent: 3
 
   - type: Command
@@ -1604,16 +1627,22 @@ entries:
       tree --dirsfirst --sort=name '.codex/skills/implement-task' '.codex/skills/shared'
     output:
       caption: |
-        The generated skill
+        The new skill directory structure
     indent: 3
 
   - type: Markdown
     contents: |
       2. Commit the skill.
 
-          The implementation skill requires a clean worktree before it starts, so
-          the skill itself is committed before asking the model to implement a
-          task.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
+
+         ```text
+         commit changes
+         ```
+
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
@@ -1627,10 +1656,6 @@ entries:
     contents: |
       3. Apply the `implement-task` skill to the first ready implementation task.
 
-         ```text
-         Use $implement-task to implement the next incomplete ready task listed in @docs/tasks/README.md.
-         ```
-
          The skill is responsible for checking task readiness, dependencies, the
          clean worktree preflight, baseline validation, task-scoped tests, and
          final full validation. After the task passes validation, the skill marks
@@ -1638,103 +1663,59 @@ entries:
 
   - type: Command
     commands: |
-      set -e
-
-      TASK_ID="$(awk -F'|' '
-        /TASK-[0-9]+/ && /ready-for-agent/ && $0 !~ /\|[[:space:]]*done[[:space:]]*\|/ {
-          if (match($0, /TASK-[0-9]+/)) {
-            print substr($0, RSTART, RLENGTH)
-            exit
-          }
-        }
-      ' 'docs/tasks/README.md')"
-
-      if [ -z "$TASK_ID" ]; then
-        echo "No incomplete ready tasks remain."
-        exit 0
-      fi
-
-      TASK_FILE="$(find 'docs/tasks' -maxdepth 1 -type f -name "${TASK_ID}-*.md" -print -quit)"
-      test -n "$TASK_FILE"
-
-      codex exec --full-auto <<EOF
-      Use \$implement-task to implement @$TASK_FILE.
+      codex exec --sandbox workspace-write - <<'EOF'
+      Use $implement-task to implement the next incomplete ready task listed in @docs/tasks/README.md.
       EOF
-
-      git add .
-      if git diff --cached --quiet; then
-        echo "No changes were produced for ${TASK_ID}; stopping to avoid repeating the same task."
-        exit 1
-      fi
-
-      git commit --message "Implement ${TASK_ID}"
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 40
     timeout: 30 minutes
     indent: 3
 
   - type: Markdown
     contents: |
-      4. Apply the `implement-task` skill to the remaining ready implementation
-         tasks.
+      4. Review the implemented task.
 
-         The runbook repeats the implementation process until no
-         `ready-for-agent` task remains with a non-`done` status. Each completed
-         task is committed separately with the task identifier in the commit
-         subject.
+         Even when the model produces working code, it may make decisions that differ
+         from what you intended. Those decisions can be small, such as package names
+         or naming conventions, or more significant, such as validation boundaries,
+         module structure, or architectural style.
+
+         Resist the temptation to ask the model to implement every remaining task in
+         one long run. Reviewing one completed task at a time helps you understand
+         what changed, why it changed, and how the application is evolving. That
+         understanding matters because you remain responsible for maintaining,
+         extending, and correcting the software after the agent run finishes.
+
+         This step may have created new documentation directories or files. Before
+         moving on, update the top-level `README.md` and any documentation index files
+         required by `AGENTS.md` so the new documents are discoverable.
 
   - type: Command
     commands: |
-      set -e
-
-      while true; do
-        TASK_ID="$(awk -F'|' '
-          /TASK-[0-9]+/ && /ready-for-agent/ && $0 !~ /\|[[:space:]]*done[[:space:]]*\|/ {
-            if (match($0, /TASK-[0-9]+/)) {
-              print substr($0, RSTART, RLENGTH)
-              exit
-            }
-          }
-        ' 'docs/tasks/README.md')"
-
-        if [ -z "$TASK_ID" ]; then
-          echo "No incomplete ready tasks remain."
-          break
-        fi
-
-        TASK_FILE="$(find 'docs/tasks' -maxdepth 1 -type f -name "${TASK_ID}-*.md" -print -quit)"
-        test -n "$TASK_FILE"
-
-        codex exec --full-auto <<EOF
-      Use \$implement-task to implement @$TASK_FILE.
+      codex exec --sandbox workspace-write - <<'EOF'
+      Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-
-        git add .
-        if git diff --cached --quiet; then
-          echo "No changes were produced for ${TASK_ID}; stopping to avoid repeating the same task."
-          exit 1
-        fi
-
-        git commit \
-          --message "Implement ${TASK_ID}"
-      done
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 40
-    timeout: 120 minutes
+    timeout: 1 minute
     indent: 3
 
   - type: Markdown
     contents: |
-      5. Review the result.
+      Once the changes are reviewed and well understood, commit the changes.
 
-         Each implemented task is committed separately with the task identifier
-         in the commit subject. Tasks that still need a human decision, manual
-         action, or another generated task remain in `docs/tasks/`.
+      ```text
+      commit changes
+      ```
+
+      This runbook also shows the manual Git commands so you can see exactly what
+      is committed at this checkpoint.
+    indent: 3
+
+  - type: Command
+    commands: |
+      git add .
+      git commit --message 'Implement TASK-0001'
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      Continue this workflow one task at a time. After each task, review the diff,
+      ask questions when the model’s choices are unclear, challenge assumptions, and
+      commit only after you understand and accept the change.
