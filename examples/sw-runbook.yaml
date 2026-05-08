@@ -5,16 +5,16 @@ entries:
 
   - type: Markdown
     contents: |
-      This walkthrough shows how to start from an early product idea and turn it
-      into a project that can use agentic coding in a controlled, reviewable way.
-      The goal is not to hand the whole project to an agent in one prompt. The goal
-      is to create enough product, architecture, production, and task context that
-      each agent run has a clear purpose, a bounded scope, and concrete validation
+      This walkthrough shows how to start from an early product idea and turn it into
+      a project that can use agentic coding in a controlled, reviewable way. The goal
+      is not to hand the whole project to an agent in one prompt. The goal is to
+      create enough product, architecture, production, and task context that each
+      agent run has a clear purpose, a bounded scope, and concrete validation
       expectations.
 
-      Software engineers should read the runbook as both executable documentation
-      and a development workflow. Each phase produces an artefact that a human can
-      inspect before the next phase starts. That gives the team places to challenge
+      Software engineers should read the runbook as both executable documentation and
+      a development workflow. Each phase produces an artefact that a human can inspect
+      before the next phase starts. That gives the team places to challenge
       assumptions, tighten ambiguous requirements, reject weak plans, and keep the
       implementation grounded in product intent.
 
@@ -59,18 +59,18 @@ entries:
 
       For a software engineer, the useful mental model is: **prompting tells the agent
       what to do right now; a skill tells it how to do that kind of work every time**.
-      Good skills reduce ambiguity, define the expected output shape, encode edge cases,
-      and constrain the agent away from bad habits. In practice, they sit somewhere
-      between documentation and automation: lighter than a full app, but more durable
-      than a one-off prompt. In agentic systems, that matters because the agent is not
-      just answering questions; it is executing workflows, and the skill becomes the
-      guardrail that keeps execution repeatable.
+      Good skills reduce ambiguity, define the expected output shape, encode edge
+      cases, and constrain the agent away from bad habits. In practice, they sit
+      somewhere between documentation and automation: lighter than a full app, but
+      more durable than a one-off prompt. In agentic systems, that matters because the
+      agent is not just answering questions; it is executing workflows, and the skill
+      becomes the guardrail that keeps execution repeatable.
 
       In this runbook, each skill owns one repeatable phase of the workflow:
       clarifying scope, deriving requirements, slicing work, planning production,
       capturing architecture decisions, deriving implementation tasks, and
       implementing one ready task. Installing a skill before using it makes the
-      agent's behaviour explicit and reviewable instead of hidden in a one-off
+      agent’s behaviour explicit and reviewable instead of hidden in a one-off
       prompt.
 
   - type: Heading
@@ -79,15 +79,15 @@ entries:
 
   - type: Markdown
     contents: |
-      This runbook uses both skills and an `AGENTS.md` file. They are both
-      agent instructions, but they serve different purposes.
+      This runbook uses both skills and an `AGENTS.md` file. They are both agent
+      instructions, but they serve different purposes.
 
-      `AGENTS.md` captures repository-level policy and context: how agents should
-      work in this project, how commits should be shaped, how documentation should
-      stay organised, and which conventions should remain consistent across tasks.
+      `AGENTS.md` captures repository-level policy and context: how agents should work
+      in this project, how commits should be shaped, how documentation should stay
+      organised, and which conventions should remain consistent across tasks.
 
-      A skill captures a task-specific workflow: how an agent should perform one
-      kind of work, such as clarifying scope, deriving vertical slices, capturing
+      A skill captures a task-specific workflow: how an agent should perform one kind
+      of work, such as clarifying scope, deriving vertical slices, capturing
       architecture decisions, or implementing a ready task.
 
       A useful rule of thumb is:
@@ -95,9 +95,9 @@ entries:
       - `AGENTS.md` answers: “How should agents work in this repository?”
       - A skill answers: “How should agents perform this kind of task?”
 
-      The runbook creates `AGENTS.md` once because it applies to the whole project.
-      It installs several skills because each later phase needs a different,
-      repeatable workflow.
+      The runbook creates `AGENTS.md` once because it applies to the whole project. It
+      installs several skills because each later phase needs a different, repeatable
+      workflow.
 
   - type: Heading
     level: H2
@@ -107,14 +107,14 @@ entries:
     contents: |
       Follow this runbook from a fresh, disposable project directory.
 
-      Do not follow it from inside the workshop repository or from inside an
-      existing application repository. The steps below create a new Git repository
-      with `git init`, write project files, install local skills, generate
-      planning documents, and commit each phase.
+      Do not follow it from inside the workshop repository or from inside an existing
+      application repository. The steps below create a new Git repository with
+      `git init`, write project files, install local skills, generate planning
+      documents, and commit each phase.
 
-      At the start, the repository directory should contain only the bootstrap
-      product description at `docs/product/description.md`. The runbook turns that
-      bootstrap directory into a new project.
+      At the start, the repository directory should contain only the bootstrap product
+      description at `docs/product/description.md`. The runbook turns that bootstrap
+      directory into a new project.
 
       Some examples may need Docker later in the run. Checking it up front avoids
       discovering that Docker is not running after the workflow has already been
@@ -163,15 +163,17 @@ entries:
 
   - type: Markdown
     contents: |
+      When working with a coding agent, you need a reliable way to distinguish changes
+      made by the agent from the state that already existed before the task started.
+      Version control gives you that boundary.
+
+      The pattern is: start from a clean worktree, let the agent perform a bounded
+      task, then use Git to inspect exactly what changed before deciding whether to
+      keep, revise, or discard the result.
+
+  - type: Markdown
+    contents: |
       1. Initialise the project repository.
-
-         When working with a coding agent, you need a reliable way to distinguish
-         changes made by the agent from the state that already existed before the
-         task started. Version control gives you that boundary.
-
-         The pattern is: start from a clean worktree, let the agent perform a
-         bounded task, then use Git to inspect exactly what changed before deciding
-         whether to keep, revise, or discard the result.
 
   - type: Command
     commands: |
@@ -235,7 +237,6 @@ entries:
           end: tokens used
           start_offset: 0
           end_offset: -1
-          show_trim_markers: false
     capture:
       - name: session_id
         source: stderr
@@ -412,8 +413,8 @@ entries:
 
   - type: Markdown
     contents: |
-      This runbook creates the root `AGENTS.md` file because these instructions apply
-      to the whole project.
+      This runbook creates the root `AGENTS.md` file because these instructions
+      apply to the whole project.
 
       A repository can contain more than one `AGENTS.md` file. The root file
       usually captures rules that apply everywhere. More specific directories can
@@ -456,32 +457,33 @@ entries:
       product description, even though it is usually rough and incomplete.
 
       A product description does not need to be complete or implementation-ready. Its
-      job is to give us, as software engineers, enough context to identify the problem,
-      intended users, useful outcomes, domain language, assumptions, and open questions.
+      job is to give us, as software engineers, enough context to identify the
+      problem, intended users, useful outcomes, domain language, assumptions, and open
+      questions.
 
       To simulate a real-world scenario, we will start from that initial stage.
 
   - type: Markdown
     contents: |
-      1. Review the product description (`docs/product/description.md`).
+      1. Review the product description:
+         [`docs/product/description.md`](docs/product/description.md).
 
   - type: Markdown
     contents: |
       2. Ask the model to apply the documentation rules from `AGENTS.md`.
 
-         Now that the repository has durable instructions, we can ask the agent to
-         use them. The first task is deliberately small: create or update the
-         top-level `README.md` and documentation indexes so the project has a
-         clear place for generated product, scope, requirements, and implementation
-         documents.
+         Now that the repository has durable instructions, we can ask the agent to use
+         them. The first task is deliberately small: create or update the top-level
+         `README.md` and documentation indexes so the project has a clear place for
+         generated product, scope, requirements, and implementation documents.
 
-         There is no need to resume a previous session for this step. From this point on,
-         the runbook favours durable repository context over chat history. That makes the
-         workflow more consistent across sessions and team members.
+         There is no need to resume a previous session for this step. From this point
+         on, the runbook favours durable repository context over chat history. That
+         makes the workflow more consistent across sessions and team members.
 
          Codex can discover `AGENTS.md` automatically when it runs in the repository.
-         The prompt mentions `@AGENTS.md` anyway to make the dependency explicit for the
-         reader and for tools or sessions where automatic discovery may differ.
+         The prompt mentions `@AGENTS.md` anyway to make the dependency explicit for
+         the reader and for tools or sessions where automatic discovery may differ.
 
   - type: Command
     commands: |
@@ -508,14 +510,14 @@ entries:
 
   - type: Markdown
     contents: |
-      Documentation is a good place to start with agentic coding. The work is useful,
-      bounded, and easy to review. An agent can help keep README files linked and
-      current, spot broken links, find inconsistencies or contradictions, and identify
-      terminology that is used inconsistently.
+      Documentation is a good place to start with agentic coding. The work is
+      useful, bounded, and easy to review. An agent can help keep README files
+      linked and current, spot broken links, find inconsistencies or
+      contradictions, and identify terminology that is used inconsistently.
 
-      If you are new to agentic coding, use documentation tasks to practise the basic
-      workflow: give the agent clear repository instructions, let it make a focused
-      change, then review the diff before committing.
+      If you are new to agentic coding, use documentation tasks to practise the
+      basic workflow: give the agent clear repository instructions, let it make a
+      focused change, then review the diff before committing.
     indent: 3
 
   - type: Markdown
@@ -546,24 +548,24 @@ entries:
 
   - type: Markdown
     contents: |
-      A product description is usually too broad or ambiguous to implement
-      directly. Before we ask an agent to create requirements or code, we first
-      narrow the idea into an MVP scope.
+      A product description is usually too broad or ambiguous to implement directly.
+      Before we ask an agent to create requirements or code, we first narrow the idea
+      into an MVP scope.
 
-      The MVP scope defines the first useful version of the product: what problem
-      it will solve, who it is for, which outcomes matter, what is deliberately
-      out of scope, and which assumptions or open questions still need attention.
+      The MVP scope defines the first useful version of the product: what problem it
+      will solve, who it is for, which outcomes matter, what is deliberately out of
+      scope, and which assumptions or open questions still need attention.
 
       This gives us and the agent a smaller, clearer target. If we ask an agent to
-      create the solution too early, it has to fill missing details with
-      assumptions. For example, the product description may not say which
-      technical stack to use, where the application will run, who will use it, or
-      how users should authenticate.
+      create the solution too early, it has to fill missing details with assumptions.
+      For example, the product description may not say which technical stack to use,
+      where the application will run, who will use it, or how users should
+      authenticate.
 
       The product description captures the idea of what we want to build. The MVP
       scope turns that idea into a first buildable boundary and gives the human
-      reviewer a checkpoint before the project moves into detailed requirements
-      and implementation planning.
+      reviewer a checkpoint before the project moves into detailed requirements and
+      implementation planning.
 
       We do not have to create the MVP scope by hand. The agent can help turn the
       product description into a scope document, especially when we give it a clear
@@ -574,9 +576,9 @@ entries:
       review, version, and improve across a team.
 
       One option is to put the instructions in `AGENTS.md`. That can work, but it
-      would make the repository instructions carry task-specific guidance that is
-      only needed when creating scope. Since `AGENTS.md` is included with many
-      agent requests, unnecessary detail can waste context and distract the model.
+      would make the repository instructions carry task-specific guidance that is only
+      needed when creating scope. Since `AGENTS.md` is included with many agent
+      requests, unnecessary detail can waste context and distract the model.
 
       A better fit is a skill. A skill packages the task-specific instructions for
       creating scope and is invoked only when that workflow is needed. In this
@@ -594,12 +596,12 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Review the `create-scope` skill fixture
-         (`../fixtures/skills/create-scope/SKILL.md`).
+      1. Review the `create-scope` skill fixture:
+         [`../fixtures/skills/create-scope/SKILL.md`](../fixtures/skills/create-scope/SKILL.md).
 
          Before copying the skill into the project, inspect the skill definition.
-         Unlike `AGENTS.md`, which captures repository-wide instructions, a
-         `SKILL.md` file defines one task-specific workflow.
+         Unlike `AGENTS.md`, which captures repository-wide instructions, a `SKILL.md`
+         file defines one task-specific workflow.
 
   - type: DisplayFile
     path: ../fixtures/skills/create-scope/SKILL.md
@@ -683,16 +685,16 @@ entries:
 
   - type: Markdown
     contents: |
-      4. Apply the `create-scope` skill to clarify the product description and
-         create the MVP scope when the scope is ready.
+      4. Apply the `create-scope` skill to clarify the product description and create
+         the MVP scope when the scope is ready.
 
          ```text
          Use $create-scope to clarify @docs/product/description.md and create `docs/scopes/mvp-scope.md` when the scope is ready.
          ```
 
          In an interactive session, use the prompt above and answer the model’s
-         questions one at a time. If you do not want to answer each question
-         manually, the command below supplies prepared answers from
+         questions one at a time. If you do not want to answer each question manually,
+         the command below supplies prepared answers from
          `../fixtures/prompts/create-scope-answers.md`.
 
   - type: Command
@@ -704,7 +706,7 @@ entries:
 
       $(cat '../fixtures/prompts/create-scope-answers.md')
       EOF
-    timeout: 3 minutes
+    timeout: 5 minutes
     indent: 3
 
   - type: Markdown
@@ -712,9 +714,9 @@ entries:
       5. Ask the model to apply the project README and documentation index rules from
          `AGENTS.md`.
 
-         The scope step may have created new documentation directories or files. Before
-         moving on, update the top-level `README.md` and any documentation index files
-         required by `AGENTS.md` so the new documents are discoverable.
+         The scope step may have created new documentation directories or files.
+         Before moving on, update the top-level `README.md` and any documentation
+         index files required by `AGENTS.md` so the new documents are discoverable.
 
   - type: Command
     commands: |
@@ -784,7 +786,8 @@ entries:
       without jumping straight into implementation tasks. This gives the model a
       stable bridge between the clarified scope and the vertical slices that follow.
 
-      As before, we will introduce a new skill that takes a scope and turns it into product requirements document (PRD).
+      As before, we will introduce a new skill that takes a scope and turns it into
+      product requirements document (PRD).
 
   - type: Markdown
     contents: |
@@ -843,8 +846,8 @@ entries:
          ```
 
          In an interactive session, use the prompt above and answer the model’s
-         questions one at a time. If you do not want to answer each question
-         manually, the command below supplies prepared answers from
+         questions one at a time. If you do not want to answer each question manually,
+         the command below supplies prepared answers from
          `../fixtures/prompts/derive-product-requirements-document-answers.md`.
 
   - type: Command
@@ -856,7 +859,7 @@ entries:
 
       $(cat '../fixtures/prompts/derive-product-requirements-document-answers.md')
       EOF
-    timeout: 3 minutes
+    timeout: 5 minutes
     indent: 3
 
   - type: Markdown
@@ -1005,8 +1008,8 @@ entries:
          ```
 
          In an interactive session, use the prompt above and answer the model’s
-         questions one at a time. If you do not want to answer each question
-         manually, the command below supplies prepared clarification notes from
+         questions one at a time. If you do not want to answer each question manually,
+         the command below supplies prepared clarification notes from
          `../fixtures/prompts/derive-vertical-slices-answers.md`.
 
   - type: Command
@@ -1018,7 +1021,7 @@ entries:
 
       $(cat '../fixtures/prompts/derive-vertical-slices-answers.md')
       EOF
-    timeout: 3 minutes
+    timeout: 5 minutes
     indent: 3
 
   - type: Markdown
@@ -1175,8 +1178,8 @@ entries:
          ```
 
          In an interactive session, use the prompt above and answer the model’s
-         questions one at a time. If you do not want to answer each question
-         manually, the command below supplies prepared clarification notes from
+         questions one at a time. If you do not want to answer each question manually,
+         the command below supplies prepared clarification notes from
          `../fixtures/prompts/derive-path-to-production-answers.md`.
 
   - type: Command
@@ -1188,7 +1191,7 @@ entries:
 
       $(cat '../fixtures/prompts/derive-path-to-production-answers.md')
       EOF
-    timeout: 3 minutes
+    timeout: 5 minutes
     indent: 3
 
   - type: Markdown
@@ -1324,16 +1327,16 @@ entries:
 
   - type: Markdown
     contents: |
-      3. Apply the `capture-architecture-decisions` skill to turn ADR candidates
-         into architecture decision records.
+      3. Apply the `capture-architecture-decisions` skill to turn ADR candidates into
+         architecture decision records.
 
          ```text
          Use $capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adrs/.
          ```
 
          In an interactive session, use the prompt above and answer the model’s
-         questions one at a time. If you do not want to answer each question
-         manually, the command below supplies prepared clarification notes from
+         questions one at a time. If you do not want to answer each question manually,
+         the command below supplies prepared clarification notes from
          `../fixtures/prompts/capture-architecture-decision-answers.md`.
 
   - type: Command
@@ -1345,7 +1348,7 @@ entries:
 
       $(cat '../fixtures/prompts/capture-architecture-decision-answers.md')
       EOF
-    timeout: 3 minutes
+    timeout: 5 minutes
     indent: 3
 
   - type: Markdown
@@ -1408,53 +1411,83 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Create a repository-scoped `derive-implementation-tasks` skill.
+      Workflow position:
 
-         This skill helps the model turn vertical slices, the path-to-production
-         plan, architecture decision records, and repository context into ordered
-         implementation task documents under `docs/tasks/`. The tasks should
-         preserve traceability to slices, production-readiness work, and relevant
-         ADRs, identify dependencies and readiness, group work by capability area,
-         and avoid publishing remote tracker issues unless explicitly requested.
+      ```text
+      architecture decision records (ADRs)
+        -> implementation task documents  [current]
+        -> completed implementation tasks
+      ```
+
+      At this point the project has product intent, requirements, vertical slices,
+      production readiness, and architecture decisions. The next step is to turn that
+      planning context into implementation task documents that an agent or engineer
+      can pick up one at a time.
+
+      Implementation tasks are more concrete than vertical slices. A vertical slice
+      describes a user-visible increment; an implementation task describes a
+      buildable piece of work with source links, dependencies, readiness, acceptance
+      criteria, validation expectations, and any ADR constraints that matter.
+
+      This step also keeps the agentic workflow controlled. Instead of asking the
+      model to "build the app" from a broad PRD, we ask it to create a sequenced task
+      plan that preserves traceability to slices, production-readiness work, and
+      architecture decisions.
+
+      As with the previous steps, this runbook uses a repository-scoped skill for the
+      repeatable work. The `derive-implementation-tasks` skill creates ordered task
+      documents under `docs/tasks/`, grouped by capability area where useful, and
+      avoids publishing remote tracker issues unless explicitly requested.
+
+  - type: Markdown
+    contents: |
+      1. Create a repository-scoped `derive-implementation-tasks` skill and shared
+         profiles.
+
+         The shared profiles are not fallback stack choices. They let the task
+         derivation skill set `default_profile` only when repository instructions,
+         accepted ADRs, user instructions, or existing repository conventions already
+         select a matching implementation profile.
 
   - type: Command
     commands: |
       cp -R '../fixtures/skills/derive-implementation-tasks' '.codex/skills/'
+      cp -R '../fixtures/skills/shared' '.codex/skills/'
     indent: 3
 
   - type: Markdown
     contents: |
-      (*Optional*) Show the generated skill metadata.
+      (*Optional*) View the new skill directory structure.
     indent: 3
 
   - type: Command
     commands: |
-      tree --dirsfirst --sort=name '.codex/skills/derive-implementation-tasks'
+      tree --dirsfirst --sort=name '.codex/skills/derive-implementation-tasks' '.codex/skills/shared'
     output:
       caption: |
-        The generated skill
+        The new skill directory structure
     indent: 3
 
   - type: Markdown
     contents: |
-      2. Commit the skill.
+      2. Commit the skill and shared profiles.
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
-      git add '.codex/skills/derive-implementation-tasks'
+      git add '.codex/skills/derive-implementation-tasks' '.codex/skills/shared'
       git commit \
         --message 'Add implementation tasks skill' \
-        --message 'Extend the reusable product workflow with a step that turns vertical slices and production-readiness planning into ordered, traceable implementation tasks.'
+        --message 'Extend the reusable product workflow with a step that turns vertical slices and production-readiness planning into ordered, traceable implementation tasks with selected implementation profiles.'
     indent: 3
 
   - type: Markdown
@@ -1466,75 +1499,68 @@ entries:
          Use $derive-implementation-tasks to convert @docs/slices/, @docs/production/path-to-production.md, and @docs/adrs/ into ordered implementation task Markdown files.
          ```
 
-         The runbook asks the model to avoid follow-up questions because it needs
-         to run unattended. In an interactive session, you can use the prompt alone
-         and answer questions about task granularity, capability grouping, or
-         unresolved decisions one by one.
+         In an interactive session, use the prompt above and answer the model’s
+         questions one at a time. If you do not want to answer each question
+         manually, the command below supplies prepared clarification notes from
+         `../fixtures/prompts/derive-implementation-tasks-answers.md`.
 
   - type: Command
     commands: |
-      ANSWERS="$(cat '../fixtures/prompts/implementation-tasks-answers.md')"
-
-      codex exec -C "$PWD" --sandbox workspace-write - <<EOF
+      codex exec --sandbox workspace-write - <<EOF
       Use \$derive-implementation-tasks to convert @docs/slices/, @docs/production/path-to-production.md, and @docs/adrs/ into ordered implementation task Markdown files.
 
       Use the following answers without asking follow-up questions. Do not create remote tracker issues. Write local Markdown task files under @docs/tasks/. Treat relevant ADRs as implementation constraints and reference them only in tasks they materially affect. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the affected task files.
 
-      ${ANSWERS}
+      $(cat '../fixtures/prompts/derive-implementation-tasks-answers.md')
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
     timeout: 10 minutes
     indent: 3
 
   - type: Markdown
     contents: |
-      4. Ask the model to apply the project README and documentation index rules from `AGENTS.md`.
+      4. Ask the model to apply the project README and documentation index rules from
+         `AGENTS.md`.
+
+         This step may have created new documentation directories or files. Before
+         moving on, update the top-level `README.md` and any documentation index files
+         required by `AGENTS.md` so the new documents are discoverable.
 
   - type: Command
     commands: |
       codex exec --full-auto <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
-    output:
-      caption: |
-        The model’s output
-      rewrite:
-        - type: limit_lines
-          last: 20
     timeout: 1 minute
     indent: 3
 
   - type: Markdown
     contents: |
-      (*Optional*) List the files under the `docs` directory
+      (*Optional*) Inspect the README files created or updated by the agent. These
+      files show how the repository instructions shaped the project and
+      documentation indexes.
     indent: 3
 
   - type: Command
     commands: |
-      tree --dirsfirst --sort=name 'docs'
+      tree --dirsfirst --sort=name --prune -P 'README.md'
     output:
       caption: |
-        The documentation files
+        The `README.md` files
     indent: 3
 
   - type: Markdown
     contents: |
       5. Commit changes
 
-          In an interactive run, you can ask the model to analyse the modified files,
-          create a commit message, and commit them using the following prompt.
+         In an interactive workflow, you can ask the agent to review the changed
+         files, propose a commit message, and create the commit.
 
-          ```text
-          commit changes
-          ```
+         ```text
+         commit changes
+         ```
 
-          The runbook uses manual Git commands so this step remains reproducible in
-          environments where Codex cannot write to Git metadata.
+         This runbook also shows the manual Git commands so you can see exactly what
+         is committed at this checkpoint.
 
   - type: Command
     commands: |
@@ -1558,6 +1584,11 @@ entries:
          selected task, prefers acceptance-level tests, runs final validation,
          and reports any remaining manual checks or follow-up work.
 
+         The shared profiles were committed earlier with the implementation task
+         derivation skill. They provide stack-specific implementation guidance that
+         `implement-task` can load when a generated task explicitly selects a
+         `default_profile`.
+
   - type: Command
     commands: |
       cp -R '../fixtures/skills/implement-task' '.codex/skills/'
@@ -1570,7 +1601,7 @@ entries:
 
   - type: Command
     commands: |
-      tree --dirsfirst --sort=name '.codex/skills/implement-task'
+      tree --dirsfirst --sort=name '.codex/skills/implement-task' '.codex/skills/shared'
     output:
       caption: |
         The generated skill

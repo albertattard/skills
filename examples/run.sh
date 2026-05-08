@@ -43,7 +43,7 @@ prepare_example_layout() {
   cp "${DERIVE_VERTICAL_SLICES_ANSWERS}"        "${fixtures}/prompts/derive-vertical-slices-answers.md"
   cp "${DERIVE_PATH_TO_PRODUCTION_ANSWERS}"     "${fixtures}/prompts/derive-path-to-production-answers.md"
   cp "${CAPTURE_ARCHITECTURE_DECISION_ANSWERS}" "${fixtures}/prompts/capture-architecture-decision-answers.md"
-  cp "${IMPLEMENTATION_TASKS_ANSWERS}"          "${fixtures}/prompts/implementation-tasks-answers.md"
+  cp "${DERIVE_IMPLEMENTATION_TASKS_ANSWERS}"   "${fixtures}/prompts/derive-implementation-tasks-answers.md"
 
   # Copy the skills which are referred to from the runbook.
   cp -R "${REPO_ROOT}/skills" "${fixtures}/"
@@ -73,7 +73,7 @@ DERIVE_PRD_ANSWERS="${SOURCE_DIR}/derive-product-requirements-document-answers.m
 DERIVE_VERTICAL_SLICES_ANSWERS="${SOURCE_DIR}/derive-vertical-slices-answers.md"
 DERIVE_PATH_TO_PRODUCTION_ANSWERS="${SOURCE_DIR}/derive-path-to-production-answers.md"
 CAPTURE_ARCHITECTURE_DECISION_ANSWERS="${SOURCE_DIR}/capture-architecture-decision-answers.md"
-IMPLEMENTATION_TASKS_ANSWERS="${SOURCE_DIR}/implementation-tasks-answers.md"
+DERIVE_IMPLEMENTATION_TASKS_ANSWERS="${SOURCE_DIR}/derive-implementation-tasks-answers.md"
 TARGET_DIR="/tmp/${EXAMPLE}"
 DIST_ROOT="${EXAMPLES_DIR}/dist"
 DIST_DIR="${DIST_ROOT}/${EXAMPLE}"
@@ -96,7 +96,7 @@ require_file "derive product requirements document answers" "${DERIVE_PRD_ANSWER
 require_file "derive vertical slices answers"               "${DERIVE_VERTICAL_SLICES_ANSWERS}"
 require_file "derive path-to-production answers"            "${DERIVE_PATH_TO_PRODUCTION_ANSWERS}"
 require_file "capture architecture-decision answers"        "${CAPTURE_ARCHITECTURE_DECISION_ANSWERS}"
-require_file "implementation-tasks answers"                 "${IMPLEMENTATION_TASKS_ANSWERS}"
+require_file "derive implementation-tasks answers"          "${DERIVE_IMPLEMENTATION_TASKS_ANSWERS}"
 
 # Ignore all the things within the dist directory.
 mkdir -p "${DIST_ROOT}"
