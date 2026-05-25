@@ -77,7 +77,8 @@ entries:
           - A fresh project directory that is not inside an existing Git repository.
         commands: |
           ! git rev-parse --is-inside-work-tree >/dev/null 2>&1
-        help: Follow this runbook from a fresh disposable project directory, not from
+        help:
+          Follow this runbook from a fresh disposable project directory, not from
           the workshop repository, an existing Git repository, or a subdirectory
           of one.
       - kind: command
@@ -99,6 +100,32 @@ entries:
         commands: |
           docker info >/dev/null
         help: Install Docker and start the Docker daemon before running this example.
+
+  - type: Heading
+    level: H2
+    title: Example Directory Layout
+
+  - type: Markdown
+    contents: |
+      The example is made up of a `repository` directory, a `fixtures` directory, and
+      the generated `runbook.md` file.
+
+  - type: Command
+    commands: |
+      tree --dirsfirst --sort=name .
+    output:
+      caption: |
+        The example directory layout
+
+  - type: Markdown
+    contents: |
+      All subsequent commands shown in this runbook should be executed from within the
+      `repository` directory.
+
+      The generated `runbook.md` file and the `fixtures` directory stay outside
+      `repository`. This prevents the model from reading the runbook or fixture
+      answers as project context and short-circuiting the exercise instead of asking
+      clarification questions.
 
   - type: Heading
     level: H2
