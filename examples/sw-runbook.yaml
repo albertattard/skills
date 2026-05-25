@@ -575,14 +575,17 @@ entries:
       needed when creating scope. Since `AGENTS.md` is included with many agent
       requests, unnecessary detail can waste context and distract the model.
 
-      A better fit is a skill. A skill packages the task-specific instructions for
-      creating scope and is invoked only when that workflow is needed. In this
-      runbook, the `create-scope` skill tells the model to clarify ambiguity before
-      producing the scope, reducing uncertainty without turning the process into a
-      heavy waterfall phase.
+      A better fit is a skill. A skill is a reusable, task-specific instruction
+      package that tells the agent how to perform one kind of work consistently. It
+      keeps the workflow explicit and reviewable without adding that detail to every
+      agent request.
 
-      Skills can be installed globally or stored in a repository. For project-specific
-      skills, this runbook keeps them in the repository so they can be reviewed,
+      In this runbook, the first skill is `create-scope`. It tells the model how to
+      clarify ambiguity, identify assumptions, and produce an MVP scope from the
+      product description.
+
+      Skills can be installed globally or stored in a repository. This runbook stores
+      project-specific skills in the repository so they can be reviewed,
       version-controlled, and shared with the team. When someone clones the project,
       they get the same skill definitions as everyone else.
 
