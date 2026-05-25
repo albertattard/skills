@@ -1381,7 +1381,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<'EOF'
+      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1525,7 +1525,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<EOF
+      codex exec --ephemeral --sandbox workspace-write - <<EOF
       Use \$derive-implementation-tasks to convert @docs/slices/, @docs/production/path-to-production.md, and @docs/adrs/ into ordered implementation task Markdown files.
 
       Use the following answers without asking follow-up questions. Do not create remote tracker issues. Write local Markdown task files under @docs/tasks/. Treat relevant ADRs as implementation constraints and reference them only in tasks they materially affect. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the affected task files.
@@ -1546,7 +1546,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<'EOF'
+      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1682,7 +1682,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<'EOF'
+      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
       Use $implement-task to implement the next incomplete ready task listed in @docs/tasks/README.md.
       EOF
     timeout: 30 minutes
@@ -1719,7 +1719,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<'EOF'
+      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
