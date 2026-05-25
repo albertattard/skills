@@ -737,7 +737,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<'EOF'
+      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -871,7 +871,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<EOF
+      codex exec --ephemeral --sandbox workspace-write - <<EOF
       Use \$derive-product-requirements-document to convert @docs/scopes/mvp-scope.md into a Product Requirements Document.
 
       Use the following answers without asking follow-up questions. If further clarification is still needed, use your best judgement and keep things simple.
@@ -892,7 +892,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<'EOF'
+      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1033,7 +1033,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<EOF
+      codex exec --ephemeral --sandbox workspace-write - <<EOF
       Use \$derive-vertical-slices to convert @docs/requirements/product-requirements-document.md into ordered vertical slice documents.
 
       Use the following prepared clarification notes. If they say no prepared answers are needed, derive the slices from the PRD and ask only when a material slicing decision is still unclear.
@@ -1067,7 +1067,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<'EOF'
+      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1203,7 +1203,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<EOF
+      codex exec --ephemeral --sandbox workspace-write - <<EOF
       Use \$derive-path-to-production to convert @docs/requirements/product-requirements-document.md and @docs/slices/ into a production readiness and release sequencing plan.
 
       Use the following answers without asking follow-up questions. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the production plan.
@@ -1224,7 +1224,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<'EOF'
+      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1360,7 +1360,7 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --sandbox workspace-write - <<EOF
+      codex exec --ephemeral --sandbox workspace-write - <<EOF
       Use \$capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adrs/.
 
       Use the following answers without asking follow-up questions. If a candidate is durable and the decision is clear from the source artefacts and repository context, create an accepted ADR. If a candidate is durable but the decision is unresolved, create a proposed ADR and record the uncertainty. If a candidate is not ADR-worthy, leave it in its source context and mention that in the final summary.
