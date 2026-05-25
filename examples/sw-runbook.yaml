@@ -689,6 +689,17 @@ entries:
       4. Apply the `create-scope` skill to clarify the product description and create
          the MVP scope when the scope is ready.
 
+         The `$create-scope` token tells Codex to load the repository-scoped
+         `create-scope` skill before handling the request. The
+         `@docs/product/description.md` token points Codex at the product description
+         file as explicit context.
+
+         Using the skill name and file reference explicitly is recommended because it
+         makes the intended workflow and input file clear to both the model and the
+         human reviewer. It also avoids relying on the model to infer which skill or
+         document it should use from surrounding repository context, reducing
+         clarification loops before the real work can start.
+
          ```text
          Use $create-scope to clarify @docs/product/description.md and create `docs/scopes/mvp-scope.md` when the scope is ready.
          ```
