@@ -580,6 +580,9 @@ entries:
       keeps the workflow explicit and reviewable without adding that detail to every
       agent request.
 
+      A useful way to think about it is: a prompt tells the agent what to do now; a
+      skill tells it how to perform that kind of work consistently.
+
       In this runbook, the first skill is `create-scope`. It tells the model how to
       clarify ambiguity, identify assumptions, and produce an MVP scope from the
       product description.
