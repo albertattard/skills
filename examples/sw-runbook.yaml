@@ -1673,7 +1673,23 @@ entries:
 
   - type: Markdown
     contents: |
-      3. Apply the `implement-task` skill to the first ready implementation task.
+      3. Ask the model to identify the ready implementation tasks.
+
+         Before implementing code, check which generated task files are actually ready
+         to run. This gives you a final human checkpoint and avoids asking the agent
+         to start work from an ambiguous or blocked task.
+
+  - type: Command
+    commands: |
+      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
+      List the incomplete ready tasks in @docs/tasks/README.md without modifying files.
+      EOF
+    timeout: 5 minutes
+    indent: 3
+
+  - type: Markdown
+    contents: |
+      4. Apply the `implement-task` skill to the first ready implementation task.
 
          The skill is responsible for checking task readiness, dependencies, the
          clean worktree preflight, baseline validation, task-scoped tests, and
@@ -1690,7 +1706,7 @@ entries:
 
   - type: Markdown
     contents: |
-      4. Review the implemented task.
+      5. Review the implemented task.
 
          Even when the model produces working code, it may make decisions that differ
          from what you intended. Those decisions can be small, such as package names
@@ -1709,7 +1725,7 @@ entries:
 
   - type: Markdown
     contents: |
-      5. Ask the model to apply the project README and documentation index rules from
+      6. Ask the model to apply the project README and documentation index rules from
          `AGENTS.md`.
 
          The implemented task may have changed source files, tests, task status, or
@@ -1727,7 +1743,7 @@ entries:
 
   - type: Markdown
     contents: |
-      6. Commit changes
+      7. Commit changes
 
          Once the changes are reviewed and well understood, commit the changes.
 
