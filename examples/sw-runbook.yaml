@@ -266,11 +266,11 @@ entries:
       this prompt is in a new session, Codex does not have the earlier chat context
       from `@{session_id}`.
 
-      The model may still give a plausible answer, but that answer is not grounded in
-      a durable project instruction. It is only guessing from the current prompt,
-      local files, or general commit-message conventions. That can lead to
-      inconsistent behaviour across sessions, which is what `AGENTS.md` helps
-      mitigate.
+      The model may still give a plausible answer, but unless the preference is stored
+      in durable project context, the answer is not grounded in a rule the next
+      session can reliably recover. It may be inferred from the current prompt, nearby
+      files, or general commit-message conventions. That can lead to inconsistent
+      behaviour across sessions, which is what `AGENTS.md` helps mitigate.
 
       `AGENTS.md` is a Markdown file that stores repository-level instructions for
       agent tools. There is nothing special about the Markdown syntax itself. What
