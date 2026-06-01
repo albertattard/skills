@@ -67,7 +67,7 @@ class InstallSkillFromGithub {
         String repo = args.repo() == null ? DEFAULT_REPO : args.repo();
         if (repo.contains("://")) {
             return resolveSource(new Args(repo, null, args.paths(), args.ref(), args.dest(), args.name(),
-                    args.global(), args.method()));
+                    args.tool(), args.global(), args.method()));
         }
 
         String[] parts = Arrays.stream(repo.split("/"))
@@ -285,16 +285,20 @@ class InstallSkillFromGithub {
         }
     }
 
-    private static Path defaultDest(boolean global) {
+    private static Path defaultDest(Tool tool, boolean global) {
         if (!global) {
-            return Paths.get(".codex", "skills");
+            return Paths.get(tool.repositoryPath());
         }
 
-        String codexHome = System.getenv("CODEX_HOME");
-        if (codexHome == null || codexHome.isBlank()) {
-            codexHome = System.getProperty("user.home") + "/.codex";
+        if (tool.globalHomeEnv() != null) {
+            String globalHome = System.getenv(tool.globalHomeEnv());
+            if (globalHome != null && !globalHome.isBlank()) {
+                return Paths.get(globalHome, "skills");
+            }
         }
-        return Paths.get(codexHome, "skills");
+
+        String userHome = System.getProperty("user.home");
+        return Paths.get(tool.globalPath().replace("~", userHome));
     }
 
     private static Path tmpRoot() throws IOException {
@@ -333,6 +337,7 @@ class InstallSkillFromGithub {
             String ref,
             String dest,
             String name,
+            Tool tool,
             boolean global,
             String method
     ) {
@@ -348,6 +353,7 @@ class InstallSkillFromGithub {
             String ref = DEFAULT_REF;
             String dest = null;
             String name = null;
+            Tool tool = Tool.CODEX;
             boolean global = false;
             String method = "auto";
 
@@ -362,6 +368,7 @@ class InstallSkillFromGithub {
                     case "--repo" -> repo = cursor.requireValue();
                     case "--ref" -> ref = cursor.requireValue();
                     case "--dest" -> dest = cursor.requireValue();
+                    case "--tool" -> tool = Tool.parse(cursor.requireValue());
                     case "--global" -> global = true;
                     case "--name" -> name = cursor.requireValue();
                     case "--method" -> {
@@ -375,7 +382,7 @@ class InstallSkillFromGithub {
                 }
             }
 
-            return new ParseResult.Run(new Args(url, repo, paths, ref, dest, name, global, method));
+            return new ParseResult.Run(new Args(url, repo, paths, ref, dest, name, tool, global, method));
         }
     }
 
@@ -442,7 +449,7 @@ class InstallSkillFromGithub {
                     validateRelativePath(path);
                 }
 
-                Path destRoot = args.dest() == null ? defaultDest(args.global()) : Paths.get(args.dest());
+                Path destRoot = args.dest() == null ? defaultDest(args.tool(), args.global()) : Paths.get(args.dest());
                 Path tmpDir = Files.createTempDirectory(tmpRoot(), "skill-install-");
                 List<InstalledSkill> installed = new ArrayList<>();
                 try {
@@ -488,8 +495,12 @@ class InstallSkillFromGithub {
                           Install from a different GitHub repository instead of albertattard/skills.
                           Use this when installing skills maintained outside the shared skills repository.
 
+                      --tool <codex|claude|copilot|cursor|antigravity>
+                          Select the agentic tool's skill directory; default: codex.
+                          Use this when installing for a repository that is used with another tool.
+
                       --dest <path>
-                          Install into a different project skills directory instead of .codex/skills.
+                          Install into a custom skills directory instead of the selected tool's default.
                           Use this when preparing another repository or a temporary test install.
 
                       --global
@@ -515,6 +526,47 @@ class InstallSkillFromGithub {
     }
 
     private record ParsedGithubUrl(String owner, String repo, String ref, String path) {
+    }
+
+    private enum Tool {
+        CODEX("codex", ".codex/skills", "CODEX_HOME", "~/.codex/skills"),
+        CLAUDE("claude", ".claude/skills", null, "~/.claude/skills"),
+        COPILOT("copilot", ".github/skills", null, "~/.copilot/skills"),
+        CURSOR("cursor", ".cursor/skills", null, "~/.cursor/skills"),
+        ANTIGRAVITY("antigravity", ".agent/skills", null, "~/.gemini/antigravity/skills");
+
+        private final String id;
+        private final String repositoryPath;
+        private final String globalHomeEnv;
+        private final String globalPath;
+
+        Tool(String id, String repositoryPath, String globalHomeEnv, String globalPath) {
+            this.id = id;
+            this.repositoryPath = repositoryPath;
+            this.globalHomeEnv = globalHomeEnv;
+            this.globalPath = globalPath;
+        }
+
+        String repositoryPath() {
+            return repositoryPath;
+        }
+
+        String globalHomeEnv() {
+            return globalHomeEnv;
+        }
+
+        String globalPath() {
+            return globalPath;
+        }
+
+        static Tool parse(String value) {
+            for (Tool tool : values()) {
+                if (tool.id.equals(value.toLowerCase(Locale.ROOT))) {
+                    return tool;
+                }
+            }
+            throw new UsageError("--tool must be codex, claude, copilot, cursor, or antigravity.");
+        }
     }
 
     private record InstalledSkill(String name, Path path) {
