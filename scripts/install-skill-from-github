@@ -1,0 +1,531 @@
+#!/usr/bin/env -S java --source 25
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+class InstallSkillFromGithub {
+
+    private static final String DEFAULT_REF = "main";
+    private static final String USER_AGENT = "codex-skill-install-java";
+
+    public static void main(String[] argv) {
+        try {
+            ParseResult parseResult = Args.parse(argv);
+            parseResult.execute();
+        } catch (UsageError | OperationError error) {
+            System.err.println("Error: " + error.getMessage());
+            System.exit(1);
+        } catch (Exception error) {
+            System.err.println("Error: " + (error.getMessage() == null ? error : error.getMessage()));
+            System.exit(1);
+        }
+    }
+
+    private static Source resolveSource(Args args) {
+        if (args.url() != null) {
+            ParsedGithubUrl parsed = parseGithubUrl(args.url(), args.ref());
+            List<String> paths;
+            if (!args.paths().isEmpty()) {
+                paths = args.paths();
+            } else if (parsed.path() != null) {
+                paths = List.of(parsed.path());
+            } else {
+                paths = List.of();
+            }
+            if (paths.isEmpty()) {
+                throw new UsageError("Missing --path for GitHub URL.");
+            }
+            return new Source(parsed.owner(), parsed.repo(), parsed.ref(), paths, null);
+        }
+
+        if (args.repo() == null) {
+            throw new UsageError("Provide --repo or --url.");
+        }
+        if (args.repo().contains("://")) {
+            return resolveSource(new Args(args.repo(), null, args.paths(), args.ref(), args.dest(), args.name(),
+                    args.global(), args.method()));
+        }
+
+        String[] parts = Arrays.stream(args.repo().split("/"))
+                .filter(part -> !part.isBlank())
+                .toArray(String[]::new);
+        if (parts.length != 2) {
+            throw new UsageError("--repo must be in owner/repo format.");
+        }
+        if (args.paths().isEmpty()) {
+            throw new UsageError("Missing --path for --repo.");
+        }
+        return new Source(parts[0], parts[1], args.ref(), args.paths(), null);
+    }
+
+    private static ParsedGithubUrl parseGithubUrl(String rawUrl, String defaultRef) {
+        URI uri;
+        try {
+            uri = new URI(rawUrl);
+        } catch (URISyntaxException error) {
+            throw new UsageError("Invalid GitHub URL.");
+        }
+        if (!"github.com".equals(uri.getHost())) {
+            throw new UsageError("Only GitHub URLs are supported for download mode.");
+        }
+
+        String[] parts = Arrays.stream(uri.getPath().split("/"))
+                .filter(part -> !part.isBlank())
+                .toArray(String[]::new);
+        if (parts.length < 2) {
+            throw new UsageError("Invalid GitHub URL.");
+        }
+
+        String owner = parts[0];
+        String repo = parts[1];
+        String ref = defaultRef;
+        String path = null;
+        if (parts.length > 2) {
+            if ("tree".equals(parts[2]) || "blob".equals(parts[2])) {
+                if (parts.length < 4) {
+                    throw new UsageError("GitHub URL missing ref or path.");
+                }
+                ref = parts[3];
+                path = join(parts, 4);
+            } else {
+                path = join(parts, 2);
+            }
+        }
+        return new ParsedGithubUrl(owner, repo, ref, path == null || path.isBlank() ? null : path);
+    }
+
+    private static Path prepareRepo(Source source, String method, Path tmpDir) throws IOException, InterruptedException {
+        if ("download".equals(method) || "auto".equals(method)) {
+            try {
+                return downloadRepoZip(source.owner(), source.repo(), source.ref(), tmpDir);
+            } catch (OperationError error) {
+                if ("download".equals(method)) {
+                    throw error;
+                }
+                String message = error.getMessage();
+                if (!(message.contains("HTTP 401") || message.contains("HTTP 403") || message.contains("HTTP 404"))) {
+                    throw error;
+                }
+            }
+        }
+
+        if ("git".equals(method) || "auto".equals(method)) {
+            try {
+                return gitSparseCheckout("https://github.com/" + source.owner() + "/" + source.repo() + ".git",
+                        source.ref(), source.paths(), tmpDir);
+            } catch (OperationError error) {
+                return gitSparseCheckout("git@github.com:" + source.owner() + "/" + source.repo() + ".git",
+                        source.ref(), source.paths(), tmpDir);
+            }
+        }
+        throw new UsageError("Unsupported method.");
+    }
+
+    private static Path downloadRepoZip(String owner, String repo, String ref, Path destDir) throws IOException, InterruptedException {
+        String zipUrl = "https://codeload.github.com/" + owner + "/" + repo + "/zip/" + ref;
+        HttpRequest.Builder builder = HttpRequest.newBuilder(URI.create(zipUrl))
+                .timeout(Duration.ofSeconds(60))
+                .header("User-Agent", USER_AGENT)
+                .GET();
+        String token = firstNonBlank(System.getenv("GITHUB_TOKEN"), System.getenv("GH_TOKEN"));
+        if (token != null) {
+            builder.header("Authorization", "token " + token);
+        }
+
+        HttpResponse<byte[]> response = HttpClient.newHttpClient()
+                .send(builder.build(), HttpResponse.BodyHandlers.ofByteArray());
+        if (response.statusCode() < 200 || response.statusCode() >= 300) {
+            throw new OperationError("Download failed: HTTP " + response.statusCode());
+        }
+
+        Set<String> topLevels = safeExtractZip(response.body(), destDir);
+        if (topLevels.isEmpty()) {
+            throw new OperationError("Downloaded archive was empty.");
+        }
+        if (topLevels.size() != 1) {
+            throw new OperationError("Unexpected archive layout.");
+        }
+        return destDir.resolve(topLevels.iterator().next());
+    }
+
+    private static Set<String> safeExtractZip(byte[] payload, Path destDir) throws IOException {
+        Path destRoot = destDir.toAbsolutePath().normalize();
+        Set<String> topLevels = new HashSet<>();
+        try (InputStream input = new ByteArrayInputStream(payload);
+             ZipInputStream zip = new ZipInputStream(input)) {
+            ZipEntry entry;
+            while ((entry = zip.getNextEntry()) != null) {
+                String name = entry.getName();
+                if (name == null || name.isBlank()) {
+                    continue;
+                }
+                topLevels.add(name.split("/", 2)[0]);
+                Path target = destDir.resolve(name).toAbsolutePath().normalize();
+                if (!target.startsWith(destRoot)) {
+                    throw new OperationError("Archive contains files outside the destination.");
+                }
+                if (entry.isDirectory()) {
+                    Files.createDirectories(target);
+                } else {
+                    Files.createDirectories(target.getParent());
+                    Files.copy(zip, target, StandardCopyOption.REPLACE_EXISTING);
+                }
+            }
+        }
+        return topLevels;
+    }
+
+    private static Path gitSparseCheckout(String repoUrl, String ref, List<String> paths, Path destDir)
+            throws IOException, InterruptedException {
+        Path repoDir = destDir.resolve("repo");
+        try {
+            runGit(List.of("git", "clone", "--filter=blob:none", "--depth", "1", "--sparse",
+                    "--single-branch", "--branch", ref, repoUrl, repoDir.toString()));
+        } catch (OperationError error) {
+            runGit(List.of("git", "clone", "--filter=blob:none", "--depth", "1", "--sparse",
+                    "--single-branch", repoUrl, repoDir.toString()));
+        }
+
+        List<String> sparse = new ArrayList<>(List.of("git", "-C", repoDir.toString(), "sparse-checkout", "set"));
+        sparse.addAll(paths);
+        runGit(sparse);
+        runGit(List.of("git", "-C", repoDir.toString(), "checkout", ref));
+        return repoDir;
+    }
+
+    private static void runGit(List<String> command) throws IOException, InterruptedException {
+        Process process = new ProcessBuilder(command).redirectErrorStream(false).start();
+        byte[] stdout = process.getInputStream().readAllBytes();
+        byte[] stderr = process.getErrorStream().readAllBytes();
+        int exit = process.waitFor();
+        if (exit != 0) {
+            String message = new String(stderr).trim();
+            if (message.isBlank()) {
+                message = new String(stdout).trim();
+            }
+            throw new OperationError(message.isBlank() ? "Git command failed." : message);
+        }
+    }
+
+    private static void validateRelativePath(String path) {
+        Path normalized = Paths.get(path).normalize();
+        if (normalized.isAbsolute() || normalized.startsWith("..")) {
+            throw new UsageError("Skill path must be a relative path inside the repo.");
+        }
+    }
+
+    private static void validateSkillName(String name) {
+        if (name == null || name.isBlank() || ".".equals(name) || "..".equals(name)
+                || name.contains("/") || name.contains("\\")) {
+            throw new UsageError("Skill name must be a single path segment.");
+        }
+    }
+
+    private static void validateSkill(Path path) {
+        if (!Files.isDirectory(path)) {
+            throw new OperationError("Skill path not found: " + path);
+        }
+        if (!Files.isRegularFile(path.resolve("SKILL.md"))) {
+            throw new OperationError("SKILL.md not found in selected skill directory.");
+        }
+    }
+
+    private static void copyTree(Path source, Path dest) throws IOException {
+        Files.createDirectories(dest.getParent());
+        Files.walkFileTree(source, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                Path target = dest.resolve(source.relativize(dir));
+                Files.createDirectories(target);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Path target = dest.resolve(source.relativize(file));
+                Files.copy(file, target, StandardCopyOption.COPY_ATTRIBUTES);
+                return FileVisitResult.CONTINUE;
+            }
+        });
+    }
+
+    private static void deleteTreeIfExists(Path path) throws IOException {
+        if (!Files.exists(path)) {
+            return;
+        }
+        try (var stream = Files.walk(path)) {
+            List<Path> paths = stream.sorted(Comparator.reverseOrder()).toList();
+            for (Path item : paths) {
+                Files.deleteIfExists(item);
+            }
+        }
+    }
+
+    private static Path defaultDest(boolean global) {
+        if (!global) {
+            return Paths.get(".codex", "skills");
+        }
+
+        String codexHome = System.getenv("CODEX_HOME");
+        if (codexHome == null || codexHome.isBlank()) {
+            codexHome = System.getProperty("user.home") + "/.codex";
+        }
+        return Paths.get(codexHome, "skills");
+    }
+
+    private static Path tmpRoot() throws IOException {
+        Path root = Paths.get(System.getProperty("java.io.tmpdir"), "codex");
+        Files.createDirectories(root);
+        return root;
+    }
+
+    private static String basename(String path) {
+        String normalized = path;
+        while (normalized.endsWith("/")) {
+            normalized = normalized.substring(0, normalized.length() - 1);
+        }
+        int index = normalized.lastIndexOf('/');
+        return index >= 0 ? normalized.substring(index + 1) : normalized;
+    }
+
+    private static String join(String[] parts, int start) {
+        return String.join("/", Arrays.copyOfRange(parts, start, parts.length));
+    }
+
+    private static String firstNonBlank(String first, String second) {
+        if (first != null && !first.isBlank()) {
+            return first;
+        }
+        if (second != null && !second.isBlank()) {
+            return second;
+        }
+        return null;
+    }
+
+    private record Args(
+            String url,
+            String repo,
+            List<String> paths,
+            String ref,
+            String dest,
+            String name,
+            boolean global,
+            String method
+    ) {
+
+        private Args {
+            paths = List.copyOf(paths);
+        }
+
+        static ParseResult parse(String[] argv) {
+            String url = null;
+            String repo = null;
+            List<String> paths = new ArrayList<>();
+            String ref = DEFAULT_REF;
+            String dest = null;
+            String name = null;
+            boolean global = false;
+            String method = "auto";
+
+            ArgCursor cursor = new ArgCursor(argv);
+            while (cursor.hasNext()) {
+                String arg = cursor.next();
+                switch (arg) {
+                    case "--help", "-h" -> {
+                        return new ParseResult.Help();
+                    }
+                    case "--url" -> url = cursor.requireValue();
+                    case "--repo" -> repo = cursor.requireValue();
+                    case "--ref" -> ref = cursor.requireValue();
+                    case "--dest" -> dest = cursor.requireValue();
+                    case "--global" -> global = true;
+                    case "--name" -> name = cursor.requireValue();
+                    case "--method" -> {
+                        method = cursor.requireValue().toLowerCase(Locale.ROOT);
+                        if (!Set.of("auto", "download", "git").contains(method)) {
+                            throw new UsageError("--method must be auto, download, or git.");
+                        }
+                    }
+                    case "--path" -> paths.addAll(cursor.requireValues());
+                    default -> throw new UsageError("Unknown argument: " + arg);
+                }
+            }
+
+            return new ParseResult.Run(new Args(url, repo, paths, ref, dest, name, global, method));
+        }
+    }
+
+    private static class ArgCursor implements Iterator<String> {
+        private final String[] argv;
+        private int index;
+        private String currentOption;
+
+        ArgCursor(String[] argv) {
+            this.argv = argv;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index < argv.length;
+        }
+
+        @Override
+        public String next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            String value = argv[index++];
+            if (value.startsWith("--")) {
+                currentOption = value;
+            }
+            return value;
+        }
+
+        String requireValue() {
+            if (!hasNext() || peek().startsWith("--")) {
+                throw new UsageError(currentOption + " requires a value.");
+            }
+            return next();
+        }
+
+        List<String> requireValues() {
+            List<String> values = new ArrayList<>();
+            while (hasNext() && !peek().startsWith("--")) {
+                values.add(next());
+            }
+            if (values.isEmpty()) {
+                throw new UsageError(currentOption + " requires at least one value.");
+            }
+            return values;
+        }
+
+        private String peek() {
+            return argv[index];
+        }
+    }
+
+    private sealed interface ParseResult {
+        void execute() throws Exception;
+
+        record Run(Args args) implements ParseResult {
+            public void execute() throws Exception {
+                Source source = resolveSource(args);
+                if (source.paths().isEmpty()) {
+                    throw new UsageError("No skill paths provided.");
+                }
+
+                for (String path : source.paths()) {
+                    validateRelativePath(path);
+                }
+
+                Path destRoot = args.dest() == null ? defaultDest(args.global()) : Paths.get(args.dest());
+                Path tmpDir = Files.createTempDirectory(tmpRoot(), "skill-install-");
+                List<InstalledSkill> installed = new ArrayList<>();
+                try {
+                    Path repoRoot = prepareRepo(source, args.method(), tmpDir);
+                    for (String path : source.paths()) {
+                        String skillName = source.paths().size() == 1 && args.name() != null
+                                ? args.name()
+                                : basename(path);
+                        validateSkillName(skillName);
+
+                        Path sourceDir = repoRoot.resolve(path).normalize();
+                        Path destDir = destRoot.resolve(skillName).normalize();
+                        if (Files.exists(destDir)) {
+                            throw new OperationError("Destination already exists: " + destDir);
+                        }
+                        validateSkill(sourceDir);
+                        copyTree(sourceDir, destDir);
+                        installed.add(new InstalledSkill(skillName, destDir));
+                    }
+                } finally {
+                    deleteTreeIfExists(tmpDir);
+                }
+
+                for (InstalledSkill skill : installed) {
+                    System.out.println("Installed " + skill.name() + " to " + skill.path());
+                }
+            }
+        }
+
+        record Help() implements ParseResult {
+            public void execute() {
+                System.out.println("""
+                    Usage:
+                      scripts/install-skill-from-github --repo <owner/repo> --path <path/to/skill> [<path/to/skill> ...]
+                      scripts/install-skill-from-github --url https://github.com/<owner>/<repo>/tree/<ref>/<path>
+
+                    Options:
+                      --ref <ref>
+                          Install from a branch, tag, or commit instead of main.
+                          Use this to pin skills to a reviewed release.
+
+                      --dest <path>
+                          Install into a different project skills directory instead of .codex/skills.
+                          Use this when preparing another repository or a temporary test install.
+
+                      --global
+                          Install for the current user instead of the current repository.
+                          Use this for personal skills you want available outside one project.
+
+                      --name <name>
+                          Override the destination directory name for a single skill.
+                          Use this only when the source folder name is not the name you want installed.
+
+                      --method <auto|download|git>
+                          Choose how the repository is fetched; default: auto.
+                          Use this only to force download or git when auto cannot use your network or credentials.
+                    """);
+            }
+        }
+    }
+
+    private record Source(String owner, String repo, String ref, List<String> paths, String repoUrl) {
+        private Source {
+            paths = List.copyOf(paths);
+        }
+    }
+
+    private record ParsedGithubUrl(String owner, String repo, String ref, String path) {
+    }
+
+    private record InstalledSkill(String name, Path path) {
+    }
+
+    private static class UsageError extends RuntimeException {
+        UsageError(String message) {
+            super(message);
+        }
+    }
+
+    private static class OperationError extends RuntimeException {
+        OperationError(String message) {
+            super(message);
+        }
+    }
+}
