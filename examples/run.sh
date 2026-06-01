@@ -45,8 +45,6 @@ prepare_example_layout() {
   cp "${CAPTURE_ARCHITECTURE_DECISION_ANSWERS}" "${fixtures}/prompts/capture-architecture-decision-answers.md"
   cp "${DERIVE_IMPLEMENTATION_TASKS_ANSWERS}"   "${fixtures}/prompts/derive-implementation-tasks-answers.md"
 
-  # Copy the skills which are referred to from the runbook.
-  cp -R "${REPO_ROOT}/skills" "${fixtures}/"
 }
 
 if [[ $# -ne 1 ]]; then

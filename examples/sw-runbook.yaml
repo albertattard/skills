@@ -608,28 +608,20 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Review the `create-scope` skill fixture:
-         [`../fixtures/skills/create-scope/SKILL.md`](../fixtures/skills/create-scope/SKILL.md).
+      1. Review the `create-scope` skill source:
+         [skills/create-scope/SKILL.md](https://github.com/albertattard/skills/blob/main/skills/create-scope/SKILL.md).
 
-         Before copying the skill into the project, inspect the skill definition.
-         Unlike `AGENTS.md`, which captures repository-wide instructions, a `SKILL.md`
-         file defines one task-specific workflow.
+         The excerpt below shows the skill metadata and the start of its instructions.
+         Review skills before installing them: unlike `AGENTS.md`, which captures
+         repository-wide instructions, a `SKILL.md` file defines one task-specific
+         workflow.
 
-  - type: DisplayFile
-    path: ../fixtures/skills/create-scope/SKILL.md
+  - type: DisplayUrl
+    url: https://raw.githubusercontent.com/albertattard/skills/refs/heads/main/skills/create-scope/SKILL.md
+    content_type: markdown
+    timeout: 10 seconds
     start_line: 1
     line_count: 10
-    indent: 3
-
-  - type: Markdown
-    contents: |
-      The YAML front matter at the top of `SKILL.md` provides metadata such as the
-      skill name and description. The body contains the instructions the agent
-      should follow when the skill is invoked.
-
-      This keeps task-specific guidance separate from `AGENTS.md`. The repository
-      instructions still apply, but the skill adds extra context only when this
-      workflow is needed.
     indent: 3
 
   - type: Markdown
@@ -690,6 +682,16 @@ entries:
       The skill definition is in `.codex/skills/create-scope/SKILL.md`. The
       `.codex/skills/create-scope/agents/openai.yaml` file is specific to the Codex
       application and is used by the UI.
+
+      The YAML front matter at the top of `SKILL.md` provides metadata such as the
+      skill name and description. The body contains the instructions the agent
+      should follow when the skill is invoked.
+    indent: 3
+
+  - type: DisplayFile
+    path: .codex/skills/create-scope/SKILL.md
+    start_line: 1
+    line_count: 10
     indent: 3
 
   - type: Markdown
@@ -837,12 +839,14 @@ entries:
     contents: |
       1. Create a repository-scoped `derive-product-requirements-document` skill.
 
-         For this runbook, we copy the prepared skill from the fixtures so the reader
-         can inspect the workflow before asking the model to derive the PRD.
+         For this runbook, we install the prepared skill from the shared skills
+         repository so the reader can inspect the workflow before asking the model
+         to derive the PRD.
 
   - type: Command
     commands: |
-      cp -R '../fixtures/skills/derive-product-requirements-document' '.codex/skills/'
+      curl -fsSL 'https://raw.githubusercontent.com/albertattard/skills/main/scripts/install-skill-from-github' | java --source 25 /dev/stdin \
+        --skill derive-product-requirements-document
     indent: 3
 
   - type: Markdown
@@ -1004,7 +1008,8 @@ entries:
 
   - type: Command
     commands: |
-      cp -R '../fixtures/skills/derive-vertical-slices' '.codex/skills/'
+      curl -fsSL 'https://raw.githubusercontent.com/albertattard/skills/main/scripts/install-skill-from-github' | java --source 25 /dev/stdin \
+        --skill derive-vertical-slices
     indent: 3
 
   - type: Markdown
@@ -1174,7 +1179,8 @@ entries:
 
   - type: Command
     commands: |
-      cp -R '../fixtures/skills/derive-path-to-production' '.codex/skills/'
+      curl -fsSL 'https://raw.githubusercontent.com/albertattard/skills/main/scripts/install-skill-from-github' | java --source 25 /dev/stdin \
+        --skill derive-path-to-production
     indent: 3
 
   - type: Markdown
@@ -1331,7 +1337,8 @@ entries:
 
   - type: Command
     commands: |
-      cp -R '../fixtures/skills/capture-architecture-decisions' '.codex/skills/'
+      curl -fsSL 'https://raw.githubusercontent.com/albertattard/skills/main/scripts/install-skill-from-github' | java --source 25 /dev/stdin \
+        --skill capture-architecture-decisions
     indent: 3
 
   - type: Markdown
@@ -1493,10 +1500,19 @@ entries:
          accepted ADRs, user instructions, or existing repository conventions already
          select a matching implementation profile.
 
+         The installer handles the skill directory. The shared profiles are supporting
+         files rather than a skill, so this runbook fetches them separately from the
+         shared skills repository.
+
   - type: Command
     commands: |
-      cp -R '../fixtures/skills/derive-implementation-tasks' '.codex/skills/'
-      cp -R '../fixtures/skills/shared' '.codex/skills/'
+      curl -fsSL 'https://raw.githubusercontent.com/albertattard/skills/main/scripts/install-skill-from-github' | java --source 25 /dev/stdin \
+        --skill derive-implementation-tasks
+      tmp_dir="$(mktemp -d)"
+      git clone --quiet --filter=blob:none --depth 1 --sparse 'https://github.com/albertattard/skills.git' "${tmp_dir}/skills"
+      git -C "${tmp_dir}/skills" sparse-checkout set 'skills/shared'
+      cp -R "${tmp_dir}/skills/skills/shared" '.codex/skills/'
+      rm -rf "${tmp_dir}"
     indent: 3
 
   - type: Markdown
@@ -1658,7 +1674,8 @@ entries:
 
   - type: Command
     commands: |
-      cp -R '../fixtures/skills/implement-task' '.codex/skills/'
+      curl -fsSL 'https://raw.githubusercontent.com/albertattard/skills/main/scripts/install-skill-from-github' | java --source 25 /dev/stdin \
+        --skill implement-task
     indent: 3
 
   - type: Markdown
