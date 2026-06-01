@@ -93,6 +93,12 @@ entries:
           - [Tree](https://oldmanprogrammer.net/source.php?dir=projects/tree)
         commands: tree --version
         help: Install Tree and make sure `tree` is available on your PATH.
+      - kind: java
+        name: Java 25
+        version: "25"
+        contents: |
+          - [Java 25](https://www.oracle.com/java/technologies/downloads/)
+        help: Install Java 25 and make sure `java` is available on your PATH.
       - kind: command
         name: Docker
         contents: |
@@ -630,18 +636,30 @@ entries:
     contents: |
       2. Create a repository-scoped `create-scope` skill.
 
-         A skill can be written manually, generated with help from the model, or
-         copied from an existing definition. For this runbook, we use a prepared
-         `create-scope` skill from the example fixtures so the rest of the workflow
-         can focus on how the skill is used.
+         A skill can be written manually, generated with help from the model,
+         copied from an existing definition, or installed from a shared repository.
+         For this runbook, we install the prepared `create-scope` skill from the
+         shared [skills repository](https://github.com/albertattard/skills) so the
+         rest of the workflow can focus on how the skill is used.
 
-         The fixture is based on the repository skill at
-         [skills/create-scope/SKILL.md](https://github.com/albertattard/skills/blob/main/skills/create-scope/SKILL.md).
+         This runbook uses Codex and installs the skill under `.codex/skills/`.
+         If you are adapting the workflow to another agentic tool, its skill
+         directory may differ:
+
+         | Tool               | System-wide                     | Repository        |
+         | ------------------ | ------------------------------- | ----------------- |
+         | OpenAI Codex       | `~/.codex/skills/`              | `.codex/skills/`  |
+         | Claude Code        | `~/.claude/skills/`             | `.claude/skills/` |
+         | GitHub Copilot     | `~/.copilot/skills/`            | `.github/skills/` |
+         | Cursor             | `~/.cursor/skills/`             | `.cursor/skills/` |
+         | Google Antigravity | `~/.gemini/antigravity/skills/` | `.agent/skills/`  |
 
   - type: Command
     commands: |
-      mkdir -p '.codex/skills'
-      cp -R '../fixtures/skills/create-scope' '.codex/skills/'
+      curl -fsSL https://raw.githubusercontent.com/albertattard/skills/refs/heads/main/scripts/install-skill-from-github \
+        | java --source 25 /dev/stdin \
+            --repo albertattard/skills \
+            --path skills/create-scope
     indent: 3
 
   - type: Markdown
