@@ -163,9 +163,6 @@ entries:
 
       # Ignore the OS related files
       **/.DS_Store
-
-      # Ignore the bootstrap file as this is not part of the runbook output
-      /runbook.md
       EOF
 
       cat <<'EOF' > '.gitattributes'
