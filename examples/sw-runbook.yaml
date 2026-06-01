@@ -642,6 +642,10 @@ entries:
          shared [skills repository](https://github.com/albertattard/skills) so the
          rest of the workflow can focus on how the skill is used.
 
+         ```text
+         Install the skill `create-scope` from GitHub repo `albertattard/skills`. Use this repository’s local skill directory for the current agentic tool, not a global user-level install.
+         ```
+
          This runbook uses Codex and installs the skill under `.codex/skills/`.
          If you are adapting the workflow to another agentic tool, its skill
          directory may differ:
@@ -654,12 +658,15 @@ entries:
          | Cursor             | `~/.cursor/skills/`             | `.cursor/skills/` |
          | Google Antigravity | `~/.gemini/antigravity/skills/` | `.agent/skills/`  |
 
+         The command below uses the
+         [`install-skill-from-github` script](https://github.com/albertattard/skills/blob/main/scripts/install-skill-from-github).
+         Codex is the default target, and other tools can be selected with `--tool`.
+         Use `--help` to see all supported options.
+
   - type: Command
     commands: |
-      curl -fsSL https://raw.githubusercontent.com/albertattard/skills/refs/heads/main/scripts/install-skill-from-github \
-        | java --source 25 /dev/stdin \
-            --repo albertattard/skills \
-            --path skills/create-scope
+      curl -fsSL 'https://raw.githubusercontent.com/albertattard/skills/main/scripts/install-skill-from-github' | java --source 25 /dev/stdin \
+        --skill create-scope
     indent: 3
 
   - type: Markdown
