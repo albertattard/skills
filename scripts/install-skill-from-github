@@ -378,6 +378,7 @@ class InstallSkillFromGithub {
                         }
                     }
                     case "--path" -> paths.addAll(cursor.requireValues());
+                    case "--skill" -> paths.addAll(skillPaths(cursor.requireValues()));
                     default -> throw new UsageError("Unknown argument: " + arg);
                 }
             }
@@ -435,6 +436,15 @@ class InstallSkillFromGithub {
         }
     }
 
+    private static List<String> skillPaths(List<String> skillNames) {
+        List<String> paths = new ArrayList<>();
+        for (String skillName : skillNames) {
+            validateSkillName(skillName);
+            paths.add("skills/" + skillName);
+        }
+        return paths;
+    }
+
     private sealed interface ParseResult {
         void execute() throws Exception;
 
@@ -483,6 +493,7 @@ class InstallSkillFromGithub {
             public void execute() {
                 System.out.println("""
                     Usage:
+                      scripts/install-skill-from-github --skill <skill-name> [<skill-name> ...]
                       scripts/install-skill-from-github --path <path/to/skill> [<path/to/skill> ...]
                       scripts/install-skill-from-github --url https://github.com/<owner>/<repo>/tree/<ref>/<path>
 
@@ -494,6 +505,14 @@ class InstallSkillFromGithub {
                       --repo <owner/repo>
                           Install from a different GitHub repository instead of albertattard/skills.
                           Use this when installing skills maintained outside the shared skills repository.
+
+                      --skill <skill-name>
+                          Install from skills/<skill-name> in the selected repository.
+                          Use this for skills that follow the shared repository layout.
+
+                      --path <path/to/skill>
+                          Install from an explicit skill directory path in the selected repository.
+                          Use this when the skill is not stored under skills/<skill-name>.
 
                       --tool <codex|claude|copilot|cursor|antigravity>
                           Select the agentic tool's skill directory; default: codex.
