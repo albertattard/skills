@@ -626,7 +626,7 @@ entries:
 
   - type: Markdown
     contents: |
-      2. Create a repository-scoped `create-scope` skill.
+      2. Install the repository-scoped `create-scope` skill.
 
          A skill can be written manually, generated with help from the model,
          copied from an existing definition, or installed from a shared repository.
@@ -837,7 +837,7 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Create a repository-scoped `derive-product-requirements-document` skill.
+      1. Install the repository-scoped `derive-product-requirements-document` skill.
 
          For this runbook, we install the prepared skill from the shared skills
          repository so the reader can inspect the workflow before asking the model
@@ -1004,7 +1004,7 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Create a repository-scoped `derive-vertical-slices` skill.
+      1. Install the repository-scoped `derive-vertical-slices` skill.
 
   - type: Command
     commands: |
@@ -1175,7 +1175,7 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Create a repository-scoped `derive-path-to-production` skill.
+      1. Install the repository-scoped `derive-path-to-production` skill.
 
   - type: Command
     commands: |
@@ -1333,7 +1333,7 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Create a repository-scoped `capture-architecture-decisions` skill.
+      1. Install the repository-scoped `capture-architecture-decisions` skill.
 
   - type: Command
     commands: |
@@ -1492,7 +1492,7 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Create a repository-scoped `derive-implementation-tasks` skill and shared
+      1. Install the repository-scoped `derive-implementation-tasks` skill and shared
          profiles.
 
          The shared profiles are not fallback stack choices. They let the task
@@ -1664,7 +1664,7 @@ entries:
 
   - type: Markdown
     contents: |
-      1. Create a repository-scoped `implement-task` skill.
+      1. Install the repository-scoped `implement-task` skill.
 
          This skill helps the model implement one generated task from
          `docs/tasks/`. It checks that the worktree is clean, verifies the
