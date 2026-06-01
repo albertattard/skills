@@ -31,6 +31,7 @@ import java.util.zip.ZipInputStream;
 class InstallSkillFromGithub {
 
     private static final String DEFAULT_REF = "main";
+    private static final String DEFAULT_REPO = "albertattard/skills";
     private static final String USER_AGENT = "codex-skill-install-java";
 
     public static void main(String[] argv) {
@@ -63,15 +64,13 @@ class InstallSkillFromGithub {
             return new Source(parsed.owner(), parsed.repo(), parsed.ref(), paths, null);
         }
 
-        if (args.repo() == null) {
-            throw new UsageError("Provide --repo or --url.");
-        }
-        if (args.repo().contains("://")) {
-            return resolveSource(new Args(args.repo(), null, args.paths(), args.ref(), args.dest(), args.name(),
+        String repo = args.repo() == null ? DEFAULT_REPO : args.repo();
+        if (repo.contains("://")) {
+            return resolveSource(new Args(repo, null, args.paths(), args.ref(), args.dest(), args.name(),
                     args.global(), args.method()));
         }
 
-        String[] parts = Arrays.stream(args.repo().split("/"))
+        String[] parts = Arrays.stream(repo.split("/"))
                 .filter(part -> !part.isBlank())
                 .toArray(String[]::new);
         if (parts.length != 2) {
@@ -477,13 +476,17 @@ class InstallSkillFromGithub {
             public void execute() {
                 System.out.println("""
                     Usage:
-                      scripts/install-skill-from-github --repo <owner/repo> --path <path/to/skill> [<path/to/skill> ...]
+                      scripts/install-skill-from-github --path <path/to/skill> [<path/to/skill> ...]
                       scripts/install-skill-from-github --url https://github.com/<owner>/<repo>/tree/<ref>/<path>
 
                     Options:
                       --ref <ref>
                           Install from a branch, tag, or commit instead of main.
                           Use this to pin skills to a reviewed release.
+
+                      --repo <owner/repo>
+                          Install from a different GitHub repository instead of albertattard/skills.
+                          Use this when installing skills maintained outside the shared skills repository.
 
                       --dest <path>
                           Install into a different project skills directory instead of .codex/skills.
