@@ -10,10 +10,13 @@ the shared workflow rather than fit only one example.
 
 ## Skills
 
-The repository currently provides seven skills:
+The repository currently provides eight skills:
 
 - `capture-architecture-decisions`: identifies durable architecture choices and
   records Michael Nygard-style Architecture Decision Records (ADRs).
+- `create-oracle-java-dockerfile`: analyzes a Java project and creates an Oracle
+  Java Dockerfile with JLink support, container-aware JVM flags, and build
+  validation.
 - `create-scope`: clarifies a product idea, challenges ambiguity, captures the
   first useful flow, and writes a scoped Markdown artefact.
 - `derive-product-requirements-document`: turns an agreed scope into a practical
@@ -58,6 +61,7 @@ architecture decision candidates
     |-- shared/
     |   `-- profiles/
     |-- capture-architecture-decisions/
+    |-- create-oracle-java-dockerfile/
     |-- create-scope/
     |-- derive-implementation-tasks/
     |-- derive-path-to-production/

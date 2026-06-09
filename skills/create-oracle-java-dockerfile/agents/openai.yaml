@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Oracle Java Dockerfile"
+  short_description: "Generate Oracle Java Dockerfiles for Java apps"
+  default_prompt: "Use $create-oracle-java-dockerfile to analyze this Java project and create an Oracle Java Dockerfile with build validation."
