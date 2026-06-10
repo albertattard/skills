@@ -67,7 +67,7 @@ class InstallSkillFromGithub {
         String repo = args.repo() == null ? DEFAULT_REPO : args.repo();
         if (repo.contains("://")) {
             return resolveSource(new Args(repo, null, args.paths(), args.ref(), args.dest(), args.name(),
-                    args.tool(), args.global(), args.method()));
+                    args.tool(), args.global(), args.method(), args.force()));
         }
 
         String[] parts = Arrays.stream(repo.split("/"))
@@ -339,7 +339,8 @@ class InstallSkillFromGithub {
             String name,
             Tool tool,
             boolean global,
-            String method
+            String method,
+            boolean force
     ) {
 
         private Args {
@@ -356,6 +357,7 @@ class InstallSkillFromGithub {
             Tool tool = Tool.CODEX;
             boolean global = false;
             String method = "auto";
+            boolean force = false;
 
             ArgCursor cursor = new ArgCursor(argv);
             while (cursor.hasNext()) {
@@ -370,6 +372,7 @@ class InstallSkillFromGithub {
                     case "--dest" -> dest = cursor.requireValue();
                     case "--tool" -> tool = Tool.parse(cursor.requireValue());
                     case "--global" -> global = true;
+                    case "--force" -> force = true;
                     case "--name" -> name = cursor.requireValue();
                     case "--method" -> {
                         method = cursor.requireValue().toLowerCase(Locale.ROOT);
@@ -383,7 +386,7 @@ class InstallSkillFromGithub {
                 }
             }
 
-            return new ParseResult.Run(new Args(url, repo, paths, ref, dest, name, tool, global, method));
+            return new ParseResult.Run(new Args(url, repo, paths, ref, dest, name, tool, global, method, force));
         }
     }
 
@@ -473,9 +476,14 @@ class InstallSkillFromGithub {
                         Path sourceDir = repoRoot.resolve(path).normalize();
                         Path destDir = destRoot.resolve(skillName).normalize();
                         if (Files.exists(destDir)) {
-                            throw new OperationError("Destination already exists: " + destDir);
+                            if (!args.force()) {
+                                throw new OperationError("Destination already exists: " + destDir);
+                            }
                         }
                         validateSkill(sourceDir);
+                        if (args.force()) {
+                            deleteTreeIfExists(destDir);
+                        }
                         copyTree(sourceDir, destDir);
                         installed.add(new InstalledSkill(skillName, destDir));
                     }
@@ -525,6 +533,10 @@ class InstallSkillFromGithub {
                       --global
                           Install for the current user instead of the current repository.
                           Use this for personal skills you want available outside one project.
+
+                      --force
+                          Replace the destination skill when it already exists.
+                          Use this when intentionally refreshing an installed skill.
 
                       --name <name>
                           Override the destination directory name for a single skill.

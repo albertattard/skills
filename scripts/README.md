@@ -15,6 +15,7 @@ By default, the installer:
 - treats `--skill create-scope` as `--path skills/create-scope`
 - targets Codex
 - installs into the repository-local skill directory
+- fails when the destination skill already exists
 
 ### Codex
 
@@ -38,3 +39,5 @@ curl -fsSL 'https://raw.githubusercontent.com/albertattard/skills/main/scripts/i
 ```
 
 Run the installer with `--help` to see all supported options.
+Use `--force` to replace an existing destination skill during an intentional
+refresh.
