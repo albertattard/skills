@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Java Web Functional Test Harness"
+  short_description: "Create Java Playwright functional tests"
+  default_prompt: "Use $create-java-web-functional-test-harness to create a separate Maven functional-test project with Java 25, Playwright, JUnit 5, and a Docker-backed application harness."
