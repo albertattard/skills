@@ -1802,6 +1802,6 @@ entries:
 
   - type: Markdown
     contents: |
-      Continue this workflow one task at a time. After each task, review the diff,
-      ask questions when the model’s choices are unclear, challenge assumptions, and
+      Continue this workflow one task at a time. After each task, review the diff, ask
+      questions when the model’s choices are unclear, challenge assumptions, and
       commit only after you understand and accept the change.
