@@ -19,7 +19,7 @@ Hard rules:
 * For Java 9 and later, use a multi-stage `jlink` build by default.
 * Copy only the packaged runtime artifact and required runtime files.
 * Run the application as a non-root user unless the selected image makes that impossible.
-* Put JVM options in `JAVA_TOOL_OPTIONS`.
+* Put JVM options in `JDK_JAVA_OPTIONS`.
 * Do not create or update `.dockerignore`.
 * Build the image with `docker build` as the validation gate. Do not run the container unless the user explicitly asks.
 
@@ -90,7 +90,7 @@ USER appuser
 
 EXPOSE 8080
 
-ENV JAVA_TOOL_OPTIONS="-XX:MinRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
+ENV JDK_JAVA_OPTIONS="-XX:MinRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
@@ -118,7 +118,7 @@ RUN useradd --system --uid 10001 --create-home appuser
 
 ENV JAVA_HOME=/opt/java-runtime
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
-ENV JAVA_TOOL_OPTIONS="-XX:MinRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
+ENV JDK_JAVA_OPTIONS="-XX:MinRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
 
 WORKDIR /opt/app
 
@@ -179,10 +179,10 @@ jdk.unsupported
 
 ## JVM Options
 
-Use `JAVA_TOOL_OPTIONS` for JVM options in both Java 8 and JLink images:
+Use `JDK_JAVA_OPTIONS` for JVM options in both Java 8 and JLink images:
 
 ```dockerfile
-ENV JAVA_TOOL_OPTIONS="-XX:MinRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
+ENV JDK_JAVA_OPTIONS="-XX:MinRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
 ```
 
 When adding options with values, prefer single-token forms. For example, use:
@@ -191,7 +191,7 @@ When adding options with values, prefer single-token forms. For example, use:
 --add-opens=java.base/java.lang=ALL-UNNAMED
 ```
 
-inside `JAVA_TOOL_OPTIONS`, not the two-token command-line form:
+inside `JDK_JAVA_OPTIONS`, not the two-token command-line form:
 
 ```text
 --add-opens java.base/java.lang=ALL-UNNAMED
@@ -244,7 +244,7 @@ Static validation checks:
 * detected module list is recorded, or manual adjustments are explained
 * exposed port matches repository configuration
 * health-check decision matches repository evidence
-* JVM memory flags are present in `JAVA_TOOL_OPTIONS`
+* JVM memory flags are present in `JDK_JAVA_OPTIONS`
 * startup command matches the packaging model
 * non-root user is used, or the reason it could not be used is reported
 
