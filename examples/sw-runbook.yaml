@@ -480,9 +480,21 @@ entries:
          executing, but the next step should rely on files committed to the repository,
          not on resuming this chat.
 
+         This command also writes the full Codex output and final assistant message to
+         `../codex-logs`, outside the generated project repository. Keeping those run
+         artefacts beside the disposable repository makes them available for human
+         inspection without making previous run output part of the project context
+         that later Codex commands should use.
+
   - type: Command
     commands: |
-      codex exec --ephemeral - <<'EOF'
+      mkdir -p ../codex-logs
+
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-create-readme-files.md \
+        - <<'EOF' > ../codex-logs/codex-create-readme-files.log 2>&1
       Create or update the top-level `README.md` and any documentation `README.md` files required by @AGENTS.md.
       EOF
     timeout: 3 minutes
@@ -740,7 +752,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<EOF
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-create-mvp-scope.md \
+        - <<EOF > ../codex-logs/codex-create-mvp-scope.log 2>&1
       Use \$create-scope to clarify @docs/product/description.md and create \`docs/scopes/mvp-scope.md\` when the scope is ready.
 
       Use the following answers without asking follow-up questions. If further clarification is still needed, use your best judgement and keep things simple.
@@ -761,7 +777,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-update-readme-files-1.md \
+        - <<'EOF' > ../codex-logs/codex-update-readme-files-1.log 2>&1
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -897,7 +917,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<EOF
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-derive-product-requirements-document.md \
+        - <<EOF > ../codex-logs/codex-derive-product-requirements-document.log 2>&1
       Use \$derive-product-requirements-document to convert @docs/scopes/mvp-scope.md into a Product Requirements Document.
 
       Use the following answers without asking follow-up questions. If further clarification is still needed, use your best judgement and keep things simple.
@@ -918,7 +942,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-update-readme-files-2.md \
+        - <<'EOF' > ../codex-logs/codex-update-readme-files-2.log 2>&1
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1060,7 +1088,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<EOF
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-derive-vertical-slices.md \
+        - <<EOF > ../codex-logs/codex-derive-vertical-slices.log 2>&1
       Use \$derive-vertical-slices to convert @docs/requirements/product-requirements-document.md into ordered vertical slice documents.
 
       Use the following prepared clarification notes. If they say no prepared answers are needed, derive the slices from the PRD and ask only when a material slicing decision is still unclear.
@@ -1094,7 +1126,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-update-readme-files-3.md \
+        - <<'EOF' > ../codex-logs/codex-update-readme-files-3.log 2>&1
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1231,7 +1267,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<EOF
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-derive-path-to-production.md \
+        - <<EOF > ../codex-logs/codex-derive-path-to-production.log 2>&1
       Use \$derive-path-to-production to convert @docs/requirements/product-requirements-document.md and @docs/slices/ into a production readiness and release sequencing plan.
 
       Use the following answers without asking follow-up questions. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the production plan.
@@ -1252,7 +1292,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-update-readme-files-4.md \
+        - <<'EOF' > ../codex-logs/codex-update-readme-files-4.log 2>&1
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1389,7 +1433,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<EOF
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-capture-architecture-decisions.md \
+        - <<EOF > ../codex-logs/codex-capture-architecture-decisions.log 2>&1
       Use \$capture-architecture-decisions to scan @docs/ for ADR candidates and create or update Architecture Decision Records under @docs/adrs/.
 
       Use the following answers without asking follow-up questions. If a candidate is durable and the decision is clear from the source artefacts and repository context, create an accepted ADR. If a candidate is durable but the decision is unresolved, create a proposed ADR and record the uncertainty. If a candidate is not ADR-worthy, leave it in its source context and mention that in the final summary.
@@ -1410,7 +1458,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-update-readme-files-5.md \
+        - <<'EOF' > ../codex-logs/codex-update-readme-files-5.log 2>&1
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1563,7 +1615,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<EOF
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-derive-implementation-tasks.md \
+        - <<EOF > ../codex-logs/codex-derive-implementation-tasks.log 2>&1
       Use \$derive-implementation-tasks to convert @docs/slices/, @docs/production/path-to-production.md, and @docs/adrs/ into ordered implementation task Markdown files.
 
       Use the following answers without asking follow-up questions. Do not create remote tracker issues. Write local Markdown task files under @docs/tasks/. Treat relevant ADRs as implementation constraints and reference them only in tasks they materially affect. If further clarification is still needed, use your best judgement, choose the smallest conservative assumption that fits the repository and source artefacts, and record the assumption and unresolved decision in the affected task files.
@@ -1584,7 +1640,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-update-readme-files-6.md \
+        - <<'EOF' > ../codex-logs/codex-update-readme-files-6.log 2>&1
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
@@ -1720,7 +1780,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-list-incomplete-tasks.md \
+        - <<'EOF' > ../codex-logs/codex-list-incomplete-tasks.log 2>&1
       List the incomplete ready tasks in @docs/tasks/README.md without modifying files.
       EOF
     timeout: 5 minutes
@@ -1737,7 +1801,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-implement-task-1.md \
+        - <<'EOF' > ../codex-logs/codex-implement-task-1.log 2>&1
       Use $implement-task to implement the next incomplete ready task listed in @docs/tasks/README.md.
       EOF
     timeout: 30 minutes
@@ -1774,7 +1842,11 @@ entries:
 
   - type: Command
     commands: |
-      codex exec --ephemeral --sandbox workspace-write - <<'EOF'
+      codex exec \
+        --ephemeral \
+        --sandbox workspace-write \
+        --output-last-message ../codex-logs/codex-update-readme-files-7.md \
+        - <<'EOF' > ../codex-logs/codex-update-readme-files-7.log 2>&1
       Create or update the top-level `README.md` and any documentation `README.md` files required by `AGENTS.md`.
       EOF
     timeout: 2 minutes
