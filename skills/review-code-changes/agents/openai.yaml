@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Code Changes"
+  short_description: "Review diffs for production risks"
+  default_prompt: "Use $review-code-changes to review the current Git changes, commit range, patch, or branch diff as a Staff Software Engineer, focusing on high-impact correctness, architecture, security, performance, maintainability, test coverage, and production-readiness findings."
